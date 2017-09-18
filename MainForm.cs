@@ -233,7 +233,7 @@ namespace BOM_Data_Manager
                 assemblyToEdit.description = newForm.newComponentDescription;
                 db.SaveChanges();
                 logMessage("Info", newForm.newComponentName + " assembly edited.");
-                refreshPartsDataGridView();
+                refreshAssembliesDataGridView();
             }
         }
 
@@ -276,9 +276,9 @@ namespace BOM_Data_Manager
         private void showRootAssembliesCheck_CheckedChanged(object sender, EventArgs e)
         {
             refreshAssembliesDataGridView();
-        }
+        }       
 
-        private void MainForm_Click(object sender, EventArgs e)
+        private void tableLayoutPanel1_Click(object sender, EventArgs e)
         {
             logMessage("Mr. Clicky", "Feeling Clicky?");
         }

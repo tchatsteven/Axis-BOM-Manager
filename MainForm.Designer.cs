@@ -102,6 +102,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1840, 924);
             this.tableLayoutPanel1.TabIndex = 1;
+            this.tableLayoutPanel1.Click += new System.EventHandler(this.tableLayoutPanel1_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -208,7 +209,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 723F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1170F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel7, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 1, 0);
@@ -230,13 +231,13 @@
             this.tableLayoutPanel7.ColumnCount = 1;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.Controls.Add(this.label5, 0, 0);
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(1105, 0);
+            this.tableLayoutPanel7.Location = new System.Drawing.Point(658, 0);
             this.tableLayoutPanel7.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 2;
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(720, 661);
+            this.tableLayoutPanel7.Size = new System.Drawing.Size(1167, 661);
             this.tableLayoutPanel7.TabIndex = 2;
             // 
             // label5
@@ -252,7 +253,7 @@
             this.label5.Margin = new System.Windows.Forms.Padding(0);
             this.label5.Name = "label5";
             this.label5.Padding = new System.Windows.Forms.Padding(2);
-            this.label5.Size = new System.Drawing.Size(720, 34);
+            this.label5.Size = new System.Drawing.Size(1167, 34);
             this.label5.TabIndex = 0;
             this.label5.Text = "Assemble Assemblies";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -274,7 +275,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(899, 661);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(452, 661);
             this.tableLayoutPanel5.TabIndex = 0;
             this.tableLayoutPanel5.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel5_Paint);
             // 
@@ -291,7 +292,7 @@
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(2);
-            this.label3.Size = new System.Drawing.Size(899, 34);
+            this.label3.Size = new System.Drawing.Size(452, 34);
             this.label3.TabIndex = 0;
             this.label3.Text = "Create/Edit Parts and Assemblies";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -316,7 +317,7 @@
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10.78767F));
             this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 89.21233F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(893, 621);
+            this.tableLayoutPanel9.Size = new System.Drawing.Size(446, 621);
             this.tableLayoutPanel9.TabIndex = 1;
             // 
             // AssembliesListDataGridView
@@ -339,11 +340,11 @@
             this.AssembliesListDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.AssembliesListDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.AssembliesListDataGridView.EnableHeadersVisualStyles = false;
-            this.AssembliesListDataGridView.Location = new System.Drawing.Point(449, 102);
+            this.AssembliesListDataGridView.Location = new System.Drawing.Point(226, 102);
             this.AssembliesListDataGridView.Name = "AssembliesListDataGridView";
             this.AssembliesListDataGridView.RowHeadersVisible = false;
             this.AssembliesListDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.AssembliesListDataGridView.Size = new System.Drawing.Size(441, 516);
+            this.AssembliesListDataGridView.Size = new System.Drawing.Size(217, 516);
             this.AssembliesListDataGridView.TabIndex = 2;
             this.AssembliesListDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AssembliesListDataGridView_CellContentClick);
             // 
@@ -358,11 +359,11 @@
             this.tableLayoutPanel13.Controls.Add(this.DeleteAssemblyButton, 2, 0);
             this.tableLayoutPanel13.Controls.Add(this.createNewAssemblyButton, 0, 0);
             this.tableLayoutPanel13.Controls.Add(this.EditAssemblyButton, 1, 0);
-            this.tableLayoutPanel13.Location = new System.Drawing.Point(449, 3);
+            this.tableLayoutPanel13.Location = new System.Drawing.Point(226, 3);
             this.tableLayoutPanel13.Name = "tableLayoutPanel13";
             this.tableLayoutPanel13.RowCount = 1;
             this.tableLayoutPanel13.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel13.Size = new System.Drawing.Size(301, 31);
+            this.tableLayoutPanel13.Size = new System.Drawing.Size(217, 31);
             this.tableLayoutPanel13.TabIndex = 3;
             // 
             // DeleteAssemblyButton
@@ -427,12 +428,12 @@
             this.tableLayoutPanel12.Controls.Add(this.label8, 0, 0);
             this.tableLayoutPanel12.Controls.Add(this.tableLayoutPanel8, 1, 1);
             this.tableLayoutPanel12.Controls.Add(this.assembliesListFilterTextBox, 1, 0);
-            this.tableLayoutPanel12.Location = new System.Drawing.Point(449, 40);
+            this.tableLayoutPanel12.Location = new System.Drawing.Point(226, 40);
             this.tableLayoutPanel12.Name = "tableLayoutPanel12";
             this.tableLayoutPanel12.RowCount = 2;
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel12.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel12.Size = new System.Drawing.Size(441, 56);
+            this.tableLayoutPanel12.Size = new System.Drawing.Size(217, 56);
             this.tableLayoutPanel12.TabIndex = 3;
             // 
             // label8
@@ -464,16 +465,16 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(290, 28);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(66, 28);
             this.tableLayoutPanel8.TabIndex = 2;
             // 
             // showRootAssembliesCheck
             // 
             this.showRootAssembliesCheck.AutoSize = true;
             this.showRootAssembliesCheck.ForeColor = System.Drawing.Color.White;
-            this.showRootAssembliesCheck.Location = new System.Drawing.Point(97, 3);
+            this.showRootAssembliesCheck.Location = new System.Drawing.Point(24, 3);
             this.showRootAssembliesCheck.Name = "showRootAssembliesCheck";
-            this.showRootAssembliesCheck.Size = new System.Drawing.Size(142, 17);
+            this.showRootAssembliesCheck.Size = new System.Drawing.Size(39, 17);
             this.showRootAssembliesCheck.TabIndex = 3;
             this.showRootAssembliesCheck.Text = "Show Root Assemblies";
             this.showRootAssembliesCheck.UseVisualStyleBackColor = true;
@@ -485,7 +486,7 @@
             this.assembliesFilterIsCaseSensitive.ForeColor = System.Drawing.Color.White;
             this.assembliesFilterIsCaseSensitive.Location = new System.Drawing.Point(3, 3);
             this.assembliesFilterIsCaseSensitive.Name = "assembliesFilterIsCaseSensitive";
-            this.assembliesFilterIsCaseSensitive.Size = new System.Drawing.Size(88, 17);
+            this.assembliesFilterIsCaseSensitive.Size = new System.Drawing.Size(15, 17);
             this.assembliesFilterIsCaseSensitive.TabIndex = 2;
             this.assembliesFilterIsCaseSensitive.Text = "Case Sensitive";
             this.assembliesFilterIsCaseSensitive.UseVisualStyleBackColor = true;
@@ -496,7 +497,7 @@
             this.assembliesListFilterTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.assembliesListFilterTextBox.Location = new System.Drawing.Point(154, 3);
             this.assembliesListFilterTextBox.Name = "assembliesListFilterTextBox";
-            this.assembliesListFilterTextBox.Size = new System.Drawing.Size(284, 22);
+            this.assembliesListFilterTextBox.Size = new System.Drawing.Size(60, 22);
             this.assembliesListFilterTextBox.TabIndex = 1;
             this.assembliesListFilterTextBox.TextChanged += new System.EventHandler(this.assembliesListFilterTextBox_TextChanged);
             // 
@@ -524,7 +525,7 @@
             this.PartsListDataGridView.Name = "PartsListDataGridView";
             this.PartsListDataGridView.RowHeadersVisible = false;
             this.PartsListDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.PartsListDataGridView.Size = new System.Drawing.Size(440, 516);
+            this.PartsListDataGridView.Size = new System.Drawing.Size(217, 516);
             this.PartsListDataGridView.TabIndex = 0;
             // 
             // tableLayoutPanel10
@@ -543,7 +544,7 @@
             this.tableLayoutPanel10.RowCount = 2;
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(440, 56);
+            this.tableLayoutPanel10.Size = new System.Drawing.Size(217, 56);
             this.tableLayoutPanel10.TabIndex = 2;
             // 
             // label7
@@ -565,7 +566,7 @@
             this.partsListFilterTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.partsListFilterTextBox.Location = new System.Drawing.Point(123, 3);
             this.partsListFilterTextBox.Name = "partsListFilterTextBox";
-            this.partsListFilterTextBox.Size = new System.Drawing.Size(314, 22);
+            this.partsListFilterTextBox.Size = new System.Drawing.Size(91, 22);
             this.partsListFilterTextBox.TabIndex = 1;
             this.partsListFilterTextBox.TextChanged += new System.EventHandler(this.partsListFilterTextBox_TextChanged);
             // 
@@ -575,7 +576,7 @@
             this.partsFilterIsCaseSensitive.ForeColor = System.Drawing.Color.White;
             this.partsFilterIsCaseSensitive.Location = new System.Drawing.Point(123, 31);
             this.partsFilterIsCaseSensitive.Name = "partsFilterIsCaseSensitive";
-            this.partsFilterIsCaseSensitive.Size = new System.Drawing.Size(98, 17);
+            this.partsFilterIsCaseSensitive.Size = new System.Drawing.Size(91, 17);
             this.partsFilterIsCaseSensitive.TabIndex = 2;
             this.partsFilterIsCaseSensitive.Text = "Case Sensitive";
             this.partsFilterIsCaseSensitive.UseVisualStyleBackColor = true;
@@ -596,7 +597,7 @@
             this.tableLayoutPanel11.Name = "tableLayoutPanel11";
             this.tableLayoutPanel11.RowCount = 1;
             this.tableLayoutPanel11.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel11.Size = new System.Drawing.Size(220, 31);
+            this.tableLayoutPanel11.Size = new System.Drawing.Size(217, 31);
             this.tableLayoutPanel11.TabIndex = 2;
             // 
             // deletePartButton
@@ -734,7 +735,6 @@
             this.Text = "AXIS BOM Data Manager";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Click += new System.EventHandler(this.MainForm_Click);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();

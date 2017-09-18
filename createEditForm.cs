@@ -76,7 +76,7 @@ namespace BOM_Data_Manager
 
         private void createEditForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-
+            MessageBox.Show(e.KeyChar.ToString());
         }
 
         private void setComponentDescriptionTitle()

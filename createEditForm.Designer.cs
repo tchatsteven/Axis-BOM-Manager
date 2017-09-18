@@ -106,7 +106,7 @@
             this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.76413F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.23587F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 73F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
             this.tableLayoutPanel2.Controls.Add(this.componentNameLabel, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.componentDescriptionLabel, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.componentNameTextBox, 1, 1);
@@ -158,7 +158,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.componentNameTextBox.Location = new System.Drawing.Point(119, 44);
             this.componentNameTextBox.Name = "componentNameTextBox";
-            this.componentNameTextBox.Size = new System.Drawing.Size(297, 20);
+            this.componentNameTextBox.Size = new System.Drawing.Size(296, 20);
             this.componentNameTextBox.TabIndex = 2;
             // 
             // componentDescriptionTextBox
@@ -168,7 +168,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.componentDescriptionTextBox.Location = new System.Drawing.Point(119, 70);
             this.componentDescriptionTextBox.Name = "componentDescriptionTextBox";
-            this.componentDescriptionTextBox.Size = new System.Drawing.Size(297, 20);
+            this.componentDescriptionTextBox.Size = new System.Drawing.Size(296, 20);
             this.componentDescriptionTextBox.TabIndex = 3;
             // 
             // tableLayoutPanel3
@@ -187,7 +187,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(297, 31);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(296, 31);
             this.tableLayoutPanel3.TabIndex = 4;
             // 
             // cancelCreatePartButton
@@ -198,10 +198,11 @@
             this.cancelCreatePartButton.AutoSize = true;
             this.cancelCreatePartButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelCreatePartButton.BackColor = System.Drawing.Color.Gainsboro;
+            this.cancelCreatePartButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelCreatePartButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cancelCreatePartButton.Location = new System.Drawing.Point(151, 3);
             this.cancelCreatePartButton.Name = "cancelCreatePartButton";
-            this.cancelCreatePartButton.Size = new System.Drawing.Size(143, 25);
+            this.cancelCreatePartButton.Size = new System.Drawing.Size(142, 25);
             this.cancelCreatePartButton.TabIndex = 7;
             this.cancelCreatePartButton.Text = "Cancel";
             this.cancelCreatePartButton.UseVisualStyleBackColor = false;
@@ -226,9 +227,11 @@
             // 
             // createEditForm
             // 
+            this.AcceptButton = this.createPartOKButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.CancelButton = this.cancelCreatePartButton;
             this.ClientSize = new System.Drawing.Size(509, 251);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
