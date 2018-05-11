@@ -1,0 +1,14 @@
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\BOM Data Manager.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\BOM Data Manager.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\BOM Data Manager.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\EntityFramework.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\EntityFramework.SqlServer.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\EntityFramework.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\bin\Debug\EntityFramework.SqlServer.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM_Data_Manager.createEditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM_Data_Manager.MainForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM_Data_Manager.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.csprojResolveAssemblyReference.cache

@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Assembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AssemblyTypeID" Type="int" />
+  </EntityType>
+  <EntityType Name="AssemblyAtAssembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ParentID" Type="int" />
+    <Property Name="AssemblyID" Type="int" Nullable="false" />
+    <Property Name="FixtureID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AssemblyType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PartAtAssembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartRefID" Type="int" Nullable="false" />
+    <Property Name="AssRefID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PartTypes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartType" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Fixtures">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="100" />
+    <Property Name="FamilyName" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsDWEnabled" Type="bit" Nullable="false" />
+    <Property Name="ApplicationType" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="Directionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="HasSingleEmmiter" Type="bit" Nullable="false" />
+    <Property Name="DWGouverningProject" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Parts">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.bom.AssemblyTypeAtAssembly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="AssemblyTypeAtAssembly">
+    <Key>
+      <PropertyRef Name="Assembly_ID" />
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Assembly_ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="AssemblyTypeID" Type="int" />
+    <Property Name="AssemblyType_ID" Type="int" />
+    <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.bom.AssemblyView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="AssemblyView">
+    <Key>
+      <PropertyRef Name="T1_AssAtAssembly_ID" />
+      <PropertyRef Name="AssemblyID" />
+      <PropertyRef Name="FixtureID" />
+    </Key>
+    <Property Name="T1_AssAtAssembly_ID" Type="int" Nullable="false" />
+    <Property Name="ParentID" Type="int" />
+    <Property Name="AssemblyID" Type="int" Nullable="false" />
+    <Property Name="FixtureID" Type="int" Nullable="false" />
+    <Property Name="T4_FixtureCode_ID" Type="int" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" />
+    <Property Name="T2_Assembly_ID" Type="int" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" />
+    <Property Name="AssemblyTypeID" Type="int" />
+    <Property Name="T3_AssemblyType_ID" Type="int" />
+    <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Assembly_AssemblyType">
+    <End Role="AssemblyType" Type="Self.AssemblyType" Multiplicity="0..1" />
+    <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssemblyType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Assembly">
+        <PropertyRef Name="AssemblyTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_Assembly">
+    <End Role="Assembly" Type="Self.Assembly" Multiplicity="0..1" />
+    <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_Assembly1">
+    <End Role="Assembly" Type="Self.Assembly" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="AssemblyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_Fixtures">
+    <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fixtures">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="FixtureID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartAtAssembly_Assembly">
+    <End Role="Assembly" Type="Self.Assembly" Multiplicity="1" />
+    <End Role="PartAtAssembly" Type="Self.PartAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartAtAssembly">
+        <PropertyRef Name="AssRefID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartAtAssembly_Parts">
+    <End Role="Parts" Type="Self.Parts" Multiplicity="1" />
+    <End Role="PartAtAssembly" Type="Self.PartAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parts">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartAtAssembly">
+        <PropertyRef Name="PartRefID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Parts_Parts">
+    <End Role="PartTypes" Type="Self.PartTypes" Multiplicity="1" />
+    <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PartTypes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Parts">
+        <PropertyRef Name="TypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Assembly" EntityType="Self.Assembly" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="AssemblyAtAssembly" EntityType="Self.AssemblyAtAssembly" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="AssemblyType" EntityType="Self.AssemblyType" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="PartAtAssembly" EntityType="Self.PartAtAssembly" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="PartTypes" EntityType="Self.PartTypes" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="Fixtures" EntityType="Self.Fixtures" Schema="FixtureSetupCodes" store:Type="Tables" />
+    <EntitySet Name="Parts" EntityType="Self.Parts" Schema="Parts" store:Type="Tables" />
+    <EntitySet Name="AssemblyTypeAtAssembly" EntityType="Self.AssemblyTypeAtAssembly" store:Type="Views" store:Schema="bom">
+      <DefiningQuery>SELECT 
+    [AssemblyTypeAtAssembly].[Assembly_ID] AS [Assembly_ID], 
+    [AssemblyTypeAtAssembly].[Name] AS [Name], 
+    [AssemblyTypeAtAssembly].[AssemblyTypeID] AS [AssemblyTypeID], 
+    [AssemblyTypeAtAssembly].[AssemblyType_ID] AS [AssemblyType_ID], 
+    [AssemblyTypeAtAssembly].[AssemblyType] AS [AssemblyType]
+    FROM [bom].[AssemblyTypeAtAssembly] AS [AssemblyTypeAtAssembly]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="AssemblyView" EntityType="Self.AssemblyView" store:Type="Views" store:Schema="bom">
+      <DefiningQuery>SELECT 
+    [AssemblyView].[T1_AssAtAssembly_ID] AS [T1_AssAtAssembly_ID], 
+    [AssemblyView].[ParentID] AS [ParentID], 
+    [AssemblyView].[AssemblyID] AS [AssemblyID], 
+    [AssemblyView].[FixtureID] AS [FixtureID], 
+    [AssemblyView].[T4_FixtureCode_ID] AS [T4_FixtureCode_ID], 
+    [AssemblyView].[Code] AS [Code], 
+    [AssemblyView].[T2_Assembly_ID] AS [T2_Assembly_ID], 
+    [AssemblyView].[Name] AS [Name], 
+    [AssemblyView].[AssemblyTypeID] AS [AssemblyTypeID], 
+    [AssemblyView].[T3_AssemblyType_ID] AS [T3_AssemblyType_ID], 
+    [AssemblyView].[AssemblyType] AS [AssemblyType]
+    FROM [bom].[AssemblyView] AS [AssemblyView]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_Assembly_AssemblyType" Association="Self.FK_Assembly_AssemblyType">
+      <End Role="AssemblyType" EntitySet="AssemblyType" />
+      <End Role="Assembly" EntitySet="Assembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly" Association="Self.FK_AssemblyAtAssembly_Assembly">
+      <End Role="Assembly" EntitySet="Assembly" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly1" Association="Self.FK_AssemblyAtAssembly_Assembly1">
+      <End Role="Assembly" EntitySet="Assembly" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Self.FK_AssemblyAtAssembly_Fixtures">
+      <End Role="Fixtures" EntitySet="Fixtures" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Self.FK_PartAtAssembly_Assembly">
+      <End Role="Assembly" EntitySet="Assembly" />
+      <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Self.FK_PartAtAssembly_Parts">
+      <End Role="Parts" EntitySet="Parts" />
+      <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Parts_Parts" Association="Self.FK_Parts_Parts">
+      <End Role="PartTypes" EntitySet="PartTypes" />
+      <End Role="Parts" EntitySet="Parts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

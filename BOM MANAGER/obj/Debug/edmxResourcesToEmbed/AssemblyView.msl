@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="AXIS_AutomationEntities">
+    <EntitySetMapping Name="Assemblies">
+      <EntityTypeMapping TypeName="Model.Assembly">
+        <MappingFragment StoreEntitySet="Assembly">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyAtAssemblies">
+      <EntityTypeMapping TypeName="Model.AssemblyAtAssembly">
+        <MappingFragment StoreEntitySet="AssemblyAtAssembly">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyTypes">
+      <EntityTypeMapping TypeName="Model.AssemblyType">
+        <MappingFragment StoreEntitySet="AssemblyType">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="AssemblyType1" ColumnName="AssemblyType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyViews">
+      <EntityTypeMapping TypeName="Model.AssemblyView">
+        <MappingFragment StoreEntitySet="AssemblyView">
+          <ScalarProperty Name="T1_AssAtAssembly_ID" ColumnName="T1_AssAtAssembly_ID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+          <ScalarProperty Name="T4_FixtureCode_ID" ColumnName="T4_FixtureCode_ID" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="T2_Assembly_ID" ColumnName="T2_Assembly_ID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+          <ScalarProperty Name="T3_AssemblyType_ID" ColumnName="T3_AssemblyType_ID" />
+          <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartAtAssemblies">
+      <EntityTypeMapping TypeName="Model.PartAtAssembly">
+        <MappingFragment StoreEntitySet="PartAtAssembly">
+          <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
+          <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartTypes">
+      <EntityTypeMapping TypeName="Model.PartType">
+        <MappingFragment StoreEntitySet="PartTypes">
+          <ScalarProperty Name="PartType1" ColumnName="PartType" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Parts">
+      <EntityTypeMapping TypeName="Model.Part">
+        <MappingFragment StoreEntitySet="Parts">
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="PartName" ColumnName="PartName" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Fixtures">
+      <EntityTypeMapping TypeName="Model.Fixture">
+        <MappingFragment StoreEntitySet="Fixtures">
+          <ScalarProperty Name="DWGouverningProject" ColumnName="DWGouverningProject" />
+          <ScalarProperty Name="HasSingleEmmiter" ColumnName="HasSingleEmmiter" />
+          <ScalarProperty Name="Directionality" ColumnName="Directionality" />
+          <ScalarProperty Name="ApplicationType" ColumnName="ApplicationType" />
+          <ScalarProperty Name="IsDWEnabled" ColumnName="IsDWEnabled" />
+          <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyTypeAtAssemblies">
+      <EntityTypeMapping TypeName="Model.AssemblyTypeAtAssembly">
+        <MappingFragment StoreEntitySet="AssemblyTypeAtAssembly">
+          <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
+          <ScalarProperty Name="AssemblyType_ID" ColumnName="AssemblyType_ID" />
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Assembly_ID" ColumnName="Assembly_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
