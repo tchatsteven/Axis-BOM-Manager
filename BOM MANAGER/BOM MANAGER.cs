@@ -27,23 +27,9 @@ namespace BOM_MANAGER
             GetFixtureId();
             RefreshDataGridView_Assemblies();
         }
-
-        private void GetFixtureId()
-        {                        
-            productID_comboBox.DataSource = db.Fixtures.ToList();
-            productID_comboBox.DisplayMember = "Code";
-            //BomManagerFormMsg.NewMessage().AddText("Product ID has been Populated").PrependMessageType().Log();
-            //BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
-            
-            
-            //BomManagerFormMsg.NewMessage().IndentHanging().AddText("Product ID has been Populated").IsWarning.PrependMessageType();
-            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC1K");
-            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC2K").Log();
-        }
-
+                
         private void RefreshDataGridView_Assemblies()
-        {
-            
+        {            
             try
             {                   
                 dataGridView_Ass.DataSource = db.AssemblyTypeAtAssemblies.ToList();
@@ -155,6 +141,85 @@ namespace BOM_MANAGER
             string assemblyname = db.Assemblies.Find(currentAssemblyId).Name;
             db.SaveChanges();
 
+        }
+
+        private void GetFixtureId()
+        {
+            productID_comboBox.DataSource = db.Fixtures.ToList();
+            productID_comboBox.DisplayMember = "Code";
+            productID_comboBox.ValueMember = "id";            
+            //BomManagerFormMsg.NewMessage().AddText("Product ID has been Populated").PrependMessageType().Log();
+            //BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
+            //BomManagerFormMsg.NewMessage().IndentHanging().AddText("Product ID has been Populated").IsWarning.PrependMessageType();
+            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC1K");
+            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC2K").Log();           
+
+        }
+
+        private void ProductID_comboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            String MySelectedFixture = productID_comboBox.Text;//GetItemText(this.productID_comboBox.SelectedItem);
+
+            List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
+
+            Part_dataGridView.DataSource = filteredResult;
+
+            RefreshTreeView();
+            //    TreeView treeView = new TreeView();
+            //    AssemblyView AssemblyViewslist = new AssemblyView();
+
+            //    DataTable MyAssemblyviewFilter = db.AssemblyViews.AsEnumerable().Where(o => o.Code<string>("") == productID_comboBox.SelectedText).copy();
+
+            //DataRow[] RowsInAssemblyViews = db.AssemblyViews.Select(String.Format("ParentID = '{NULL}'", ParentID));
+
+            //Fixture_treeView.Nodes.Add(newNode);
+        }
+
+        private void RefreshTreeView()
+        {
+            String MySelectedFixture = productID_comboBox.Text;
+
+            List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
+
+            Dictionary<Int32, TreeNode> AssembliesDict = new Dictionary<Int32, TreeNode>();
+
+            foreach(AssemblyView assemblyView in filteredResult)
+            {
+
+                String NodeName = assemblyView.Name == "ROOT" ? assemblyView.Code : String.Format("{0} ({1})", assemblyView.Name, assemblyView.AssemblyType);
+                TreeNode NewTreeNode = new TreeNode()
+                {
+                    Text = NodeName,
+                    Tag = assemblyView
+                };
+
+
+                AssembliesDict.Add(assemblyView.AssemblyID, NewTreeNode);
+            }
+
+
+            foreach(KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
+            {
+                Int32 ParentIndex = ((AssemblyView)DictItem.Value.Tag).ParentID ?? 0;
+
+                if(ParentIndex != 0)
+                {
+                    AssembliesDict[ParentIndex].Nodes.Add(DictItem.Value);
+                }
+            }
+
+            Fixture_treeView.Nodes.Clear();
+            try
+            {
+                TreeNode RootNode = AssembliesDict.Where(o=> ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
+                Fixture_treeView.Nodes.Add(RootNode);
+                Fixture_treeView.ExpandAll();
+            }
+            catch
+            {
+
+            }
+            
         }
     }
 }

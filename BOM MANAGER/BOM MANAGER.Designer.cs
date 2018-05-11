@@ -127,7 +127,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1528, 783);
+            this.tabPage1.Size = new System.Drawing.Size(1329, 783);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Part Gen Tester";
             // 
@@ -143,7 +143,7 @@
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(1522, 777);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(1323, 777);
             this.tableLayoutPanel5.TabIndex = 2;
             // 
             // tableLayoutPanel6
@@ -162,7 +162,7 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(1516, 71);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(1317, 71);
             this.tableLayoutPanel6.TabIndex = 0;
             // 
             // groupBox1
@@ -173,7 +173,7 @@
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1076, 65);
+            this.groupBox1.Size = new System.Drawing.Size(934, 65);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Ordering Code";
@@ -183,7 +183,7 @@
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Location = new System.Drawing.Point(3, 19);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1070, 23);
+            this.textBox1.Size = new System.Drawing.Size(928, 23);
             this.textBox1.TabIndex = 0;
             // 
             // button1
@@ -191,9 +191,9 @@
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.BackColor = System.Drawing.SystemColors.Control;
             this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Location = new System.Drawing.Point(1085, 24);
+            this.button1.Location = new System.Drawing.Point(943, 24);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 23);
+            this.button1.Size = new System.Drawing.Size(119, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Get Parts";
             this.button1.UseVisualStyleBackColor = false;
@@ -206,7 +206,7 @@
             this.treeView1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.treeView1.Location = new System.Drawing.Point(3, 80);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(1516, 694);
+            this.treeView1.Size = new System.Drawing.Size(1317, 694);
             this.treeView1.TabIndex = 1;
             // 
             // tabPage2
@@ -585,6 +585,7 @@
             this.productID_comboBox.Name = "productID_comboBox";
             this.productID_comboBox.Size = new System.Drawing.Size(431, 25);
             this.productID_comboBox.TabIndex = 1;
+            this.productID_comboBox.SelectedIndexChanged += new System.EventHandler(this.ProductID_comboBox_SelectedIndexChanged);
             // 
             // label4
             // 
