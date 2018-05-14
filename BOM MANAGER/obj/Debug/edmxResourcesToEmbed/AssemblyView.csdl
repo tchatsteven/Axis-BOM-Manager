@@ -126,6 +126,11 @@
       <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
     </AssociationSet>
     <EntitySet Name="AssemblyTypeAtAssemblies" EntityType="Model.AssemblyTypeAtAssembly" />
+    <AssociationSet Name="FK_PartAtAssembly_Fixtures" Association="Model.FK_PartAtAssembly_Fixtures">
+      <End Role="Fixture" EntitySet="Fixtures" />
+      <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
+    </AssociationSet>
+    <EntitySet Name="PartViews" EntityType="Model.PartView" />
   </EntityContainer>
   <EntityType Name="PartAtAssembly">
     <Key>
@@ -136,6 +141,8 @@
     <Property Name="AssRefID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Assembly" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="PartAtAssembly" ToRole="Assembly" />
     <NavigationProperty Name="Part" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="PartAtAssembly" ToRole="Part" />
+    <Property Name="FixtureID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Fixture" Relationship="Model.FK_PartAtAssembly_Fixtures" FromRole="PartAtAssembly" ToRole="Fixture" />
   </EntityType>
   <EntityType Name="PartType">
     <Key>
@@ -205,6 +212,7 @@
     <Property Name="HasSingleEmmiter" Type="Boolean" Nullable="false" />
     <Property Name="DWGouverningProject" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
+    <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Fixtures" FromRole="Fixture" ToRole="PartAtAssembly" />
   </EntityType>
   <Association Name="FK_AssemblyAtAssembly_Fixtures">
     <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
@@ -230,5 +238,48 @@
     <Property Name="AssemblyTypeID" Type="Int32" />
     <Property Name="AssemblyType_ID" Type="Int32" />
     <Property Name="AssemblyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_PartAtAssembly_Fixtures">
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1" />
+    <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartAtAssembly">
+        <PropertyRef Name="FixtureID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PartView">
+    <Key>
+      <PropertyRef Name="id" />
+      <PropertyRef Name="PartRefID" />
+      <PropertyRef Name="AssRefID" />
+      <PropertyRef Name="FixtureID" />
+      <PropertyRef Name="PART_ID" />
+      <PropertyRef Name="PartName" />
+      <PropertyRef Name="TypeID" />
+      <PropertyRef Name="TYPE_ID" />
+      <PropertyRef Name="PartType" />
+      <PropertyRef Name="ASSEMBLY_ID" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="FIXTURE_ID" />
+      <PropertyRef Name="Code" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="PartRefID" Type="Int32" Nullable="false" />
+    <Property Name="AssRefID" Type="Int32" Nullable="false" />
+    <Property Name="FixtureID" Type="Int32" Nullable="false" />
+    <Property Name="PART_ID" Type="Int32" Nullable="false" />
+    <Property Name="PartName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="TYPE_ID" Type="Int32" Nullable="false" />
+    <Property Name="PartType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ASSEMBLY_ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AssemblyTypeID" Type="Int32" />
+    <Property Name="FIXTURE_ID" Type="Int32" Nullable="false" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

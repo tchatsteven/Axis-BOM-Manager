@@ -5,22 +5,24 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="1051d55e4ac94aee9d6c989c5cb7d3b6" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.Assembly" Width="1.5" PointX="4.875" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AssemblyAtAssembly" Width="1.5" PointX="6.875" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AssemblyType" Width="1.75" PointX="2.625" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="Model.AssemblyView" Width="2.625" PointX="2.5" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Assembly" Width="1.5" PointX="3.375" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyAtAssembly" Width="2" PointX="5.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyType" Width="1.75" PointX="3.375" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyView" Width="2" PointX="3.375" PointY="7.75" IsExpanded="true" />
         <AssociationConnector Association="Model.FK_Assembly_AssemblyType" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Assembly" ManuallyRouted="false" />
         <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Assembly1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="Model.PartAtAssembly" Width="1.5" PointX="4.375" PointY="3.75" />
-        <EntityTypeShape EntityType="Model.PartType" Width="2.125" PointX="8.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.PartAtAssembly" Width="1.5" PointX="3.375" PointY="5.25" />
+        <EntityTypeShape EntityType="Model.PartType" Width="2.125" PointX="7.375" PointY="5.75" />
         <AssociationConnector Association="Model.FK_PartAtAssembly_Assembly" />
-        <EntityTypeShape EntityType="Model.Part" Width="1.5" PointX="6.5" PointY="3.5" />
+        <EntityTypeShape EntityType="Model.Part" Width="1.5" PointX="5.375" PointY="5.5" />
         <AssociationConnector Association="Model.FK_PartAtAssembly_Parts" />
         <AssociationConnector Association="Model.FK_Parts_Parts" />
-        <EntityTypeShape EntityType="Model.Fixture" Width="1.5" PointX="8.75" PointY="0.5" />
+        <EntityTypeShape EntityType="Model.Fixture" Width="1.5" PointX="9" PointY="1.875" />
         <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Fixtures" />
-        <EntityTypeShape EntityType="Model.AssemblyTypeAtAssembly" Width="2.625" PointX="5.625" PointY="6.25" />
+        <EntityTypeShape EntityType="Model.AssemblyTypeAtAssembly" Width="2.125" PointX="5.75" PointY="7.875" />
+        <AssociationConnector Association="Model.FK_PartAtAssembly_Fixtures" />
+        <EntityTypeShape EntityType="Model.PartView" Width="2" PointX="8.25" PointY="7.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

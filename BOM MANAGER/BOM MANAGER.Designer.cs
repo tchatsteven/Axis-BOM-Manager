@@ -57,7 +57,7 @@
             this.DeletePart = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.tableLayoutPanel15 = new System.Windows.Forms.TableLayoutPanel();
-            this.Part_dataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridView_Part = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tableLayoutPanel13 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel16 = new System.Windows.Forms.TableLayoutPanel();
@@ -90,7 +90,7 @@
             this.tableLayoutPanel11.SuspendLayout();
             this.tableLayoutPanel12.SuspendLayout();
             this.tableLayoutPanel15.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Part_dataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Part)).BeginInit();
             this.tableLayoutPanel13.SuspendLayout();
             this.tableLayoutPanel16.SuspendLayout();
             this.tableLayoutPanel17.SuspendLayout();
@@ -467,7 +467,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel15.ColumnCount = 1;
             this.tableLayoutPanel15.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel15.Controls.Add(this.Part_dataGridView, 0, 1);
+            this.tableLayoutPanel15.Controls.Add(this.dataGridView_Part, 0, 1);
             this.tableLayoutPanel15.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel15.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel15.Name = "tableLayoutPanel15";
@@ -477,18 +477,21 @@
             this.tableLayoutPanel15.Size = new System.Drawing.Size(735, 287);
             this.tableLayoutPanel15.TabIndex = 1;
             // 
-            // Part_dataGridView
+            // dataGridView_Part
             // 
-            this.Part_dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.dataGridView_Part.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Part_dataGridView.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
-            this.Part_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Part_dataGridView.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Part_dataGridView.Location = new System.Drawing.Point(3, 31);
-            this.Part_dataGridView.Name = "Part_dataGridView";
-            this.Part_dataGridView.Size = new System.Drawing.Size(729, 253);
-            this.Part_dataGridView.TabIndex = 1;
+            this.dataGridView_Part.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView_Part.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
+            this.dataGridView_Part.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_Part.Cursor = System.Windows.Forms.Cursors.Default;
+            this.dataGridView_Part.Location = new System.Drawing.Point(3, 31);
+            this.dataGridView_Part.Name = "dataGridView_Part";
+            this.dataGridView_Part.RowHeadersVisible = false;
+            this.dataGridView_Part.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView_Part.Size = new System.Drawing.Size(729, 253);
+            this.dataGridView_Part.TabIndex = 1;
             // 
             // label2
             // 
@@ -777,7 +780,7 @@
             this.tableLayoutPanel12.ResumeLayout(false);
             this.tableLayoutPanel15.ResumeLayout(false);
             this.tableLayoutPanel15.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Part_dataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Part)).EndInit();
             this.tableLayoutPanel13.ResumeLayout(false);
             this.tableLayoutPanel16.ResumeLayout(false);
             this.tableLayoutPanel16.PerformLayout();
@@ -822,7 +825,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
         private System.Windows.Forms.Button NewPart;
         private System.Windows.Forms.Button DeletePart;
-        private System.Windows.Forms.DataGridView Part_dataGridView;
+        private System.Windows.Forms.DataGridView dataGridView_Part;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
         private System.Windows.Forms.Label label1;

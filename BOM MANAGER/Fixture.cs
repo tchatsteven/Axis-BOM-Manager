@@ -18,6 +18,7 @@ namespace BOM_MANAGER
         public Fixture()
         {
             this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
+            this.PartAtAssemblies = new HashSet<PartAtAssembly>();
         }
     
         public int id { get; set; }
@@ -32,5 +33,7 @@ namespace BOM_MANAGER
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
     }
 }

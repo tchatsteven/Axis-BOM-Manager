@@ -114,6 +114,9 @@
     <Compile Include="PartType.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartView.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AssemblyTypeForm.resx">

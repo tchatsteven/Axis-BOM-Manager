@@ -26,25 +26,59 @@ namespace BOM_MANAGER
         {
             GetFixtureId();
             RefreshDataGridView_Assemblies();
+            RefreshDataGridView_Part();
         }
                 
         private void RefreshDataGridView_Assemblies()
-        {            
+        {
             try
-            {                   
+            {
                 dataGridView_Ass.DataSource = db.AssemblyTypeAtAssemblies.ToList();
-               
+
                 //hide columns here
                 dataGridView_Ass.Columns[0].Visible = false;
                 dataGridView_Ass.Columns[2].Visible = false;
                 dataGridView_Ass.Columns[3].Visible = false;
 
-                //BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
-                
+                BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
+
             }
             catch
             {
                 BomManagerFormMsg.NewMessage().AddText("Refreshing Assembly Table failed").PrependMessageType().Log();
+            }
+            eventLog_richTextBox.ScrollToCaret();
+        }
+
+        private void RefreshDataGridView_Part()
+        {
+            try
+            {
+                dataGridView_Part.DataSource = db.PartViews.ToList();
+
+                ////hide columns here
+                dataGridView_Part.Columns[0].Visible = false;
+                dataGridView_Part.Columns[1].Visible = false;
+                dataGridView_Part.Columns[2].Visible = false;
+                dataGridView_Part.Columns[3].Visible = false;
+                dataGridView_Part.Columns[4].Visible = false;
+                //Part_dataGridView.Columns[5].Visible = false;
+                dataGridView_Part.Columns[6].Visible = false;
+                dataGridView_Part.Columns[7].Visible = false;
+                //Part_dataGridView.Columns[8].Visible = false;
+                dataGridView_Part.Columns[9].Visible = false;
+                dataGridView_Part.Columns[10].Visible = false;
+                dataGridView_Part.Columns[11].Visible = false;
+                dataGridView_Part.Columns[12].Visible = false;
+                //Part_dataGridView.Columns[13].Visible = false;
+                //dataGridView_Part.Columns[14].Visible = false;
+
+                BomManagerFormMsg.NewMessage().AddText(" Part Table has been Populated").PrependMessageType().Log();
+
+            }
+            catch
+            {
+                BomManagerFormMsg.NewMessage().AddText("Refreshing Part Table failed").PrependMessageType().Log();
             }
             eventLog_richTextBox.ScrollToCaret();
         }
@@ -158,50 +192,55 @@ namespace BOM_MANAGER
 
         private void ProductID_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            String MySelectedFixture = productID_comboBox.Text;//GetItemText(this.productID_comboBox.SelectedItem);
+            String MySelectedFixture = productID_comboBox.Text;
 
-            List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
-
-            Part_dataGridView.DataSource = filteredResult;
+            /*////Filter the Assembly View table to keep only the selected Product ID CODE 
+            ////To view it in the Part DataGridView.
+            //List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
+            ////Parts DataGridView
+            //Part_dataGridView.DataSource = filteredResult;*/
 
             RefreshTreeView();
-            //    TreeView treeView = new TreeView();
-            //    AssemblyView AssemblyViewslist = new AssemblyView();
-
-            //    DataTable MyAssemblyviewFilter = db.AssemblyViews.AsEnumerable().Where(o => o.Code<string>("") == productID_comboBox.SelectedText).copy();
-
-            //DataRow[] RowsInAssemblyViews = db.AssemblyViews.Select(String.Format("ParentID = '{NULL}'", ParentID));
-
-            //Fixture_treeView.Nodes.Add(newNode);
+           
         }
 
         private void RefreshTreeView()
         {
+            //Get the Product ID selected
             String MySelectedFixture = productID_comboBox.Text;
 
+            //Filter the Assembly View table to keep only the selected Product ID CODE 
+            //This Filtered list is stored as the DICTIONARY ID
             List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
 
+            //Dictionary Created
             Dictionary<Int32, TreeNode> AssembliesDict = new Dictionary<Int32, TreeNode>();
 
+            //Goes through each line in the filtered list to add data into the Dictionary 
             foreach(AssemblyView assemblyView in filteredResult)
             {
-
+                //Check if the Name of assembly in view is ROOT, Assign the Assembly View Code as It Name
+                //Else assign NodeName as assemblyView.Name and put the type in brackets beside it. 
                 String NodeName = assemblyView.Name == "ROOT" ? assemblyView.Code : String.Format("{0} ({1})", assemblyView.Name, assemblyView.AssemblyType);
+
+                //create new TreeNode instance to assign the NodeName and assemblyView as Tag
                 TreeNode NewTreeNode = new TreeNode()
                 {
                     Text = NodeName,
                     Tag = assemblyView
                 };
 
-
+                //Add every Row of the Filtered assemblyView to our Dictionary having each line with a Unique ID (TKEY VALUE)
                 AssembliesDict.Add(assemblyView.AssemblyID, NewTreeNode);
             }
 
-
-            foreach(KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
+            //Goes through each line in the Dictionary according to their Key Value Pair and add TreeNodes
+            foreach (KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
             {
+                //Since in the View we have Parent ID as NULL we want to add a node anytime the parent ID is not NULL 
                 Int32 ParentIndex = ((AssemblyView)DictItem.Value.Tag).ParentID ?? 0;
 
+                //This if Condition indent the Tree view if the Parent ID is not Null. 
                 if(ParentIndex != 0)
                 {
                     AssembliesDict[ParentIndex].Nodes.Add(DictItem.Value);
@@ -211,6 +250,7 @@ namespace BOM_MANAGER
             Fixture_treeView.Nodes.Clear();
             try
             {
+                //Add the tree Node to the Form
                 TreeNode RootNode = AssembliesDict.Where(o=> ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
                 Fixture_treeView.Nodes.Add(RootNode);
                 Fixture_treeView.ExpandAll();

@@ -12,15 +12,21 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class PartAtAssembly
+    public partial class PartView
     {
         public int id { get; set; }
         public int PartRefID { get; set; }
         public int AssRefID { get; set; }
         public int FixtureID { get; set; }
-    
-        public virtual Assembly Assembly { get; set; }
-        public virtual Part Part { get; set; }
-        public virtual Fixture Fixture { get; set; }
+        public int PART_ID { get; set; }
+        public string PartName { get; set; }
+        public int TypeID { get; set; }
+        public int TYPE_ID { get; set; }
+        public string PartType { get; set; }
+        public int ASSEMBLY_ID { get; set; }
+        public string Name { get; set; }
+        public Nullable<int> AssemblyTypeID { get; set; }
+        public int FIXTURE_ID { get; set; }
+        public string Code { get; set; }
     }
 }

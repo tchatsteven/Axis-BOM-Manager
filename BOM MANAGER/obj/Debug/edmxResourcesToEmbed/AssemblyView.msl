@@ -48,6 +48,7 @@
     <EntitySetMapping Name="PartAtAssemblies">
       <EntityTypeMapping TypeName="Model.PartAtAssembly">
         <MappingFragment StoreEntitySet="PartAtAssembly">
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
           <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
           <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
           <ScalarProperty Name="id" ColumnName="id" />
@@ -94,6 +95,26 @@
           <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Assembly_ID" ColumnName="Assembly_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartViews">
+      <EntityTypeMapping TypeName="Model.PartView">
+        <MappingFragment StoreEntitySet="PartView">
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="FIXTURE_ID" ColumnName="FIXTURE_ID" />
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ASSEMBLY_ID" ColumnName="ASSEMBLY_ID" />
+          <ScalarProperty Name="PartType" ColumnName="PartType" />
+          <ScalarProperty Name="TYPE_ID" ColumnName="TYPE_ID" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="PartName" ColumnName="PartName" />
+          <ScalarProperty Name="PART_ID" ColumnName="PART_ID" />
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+          <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
+          <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

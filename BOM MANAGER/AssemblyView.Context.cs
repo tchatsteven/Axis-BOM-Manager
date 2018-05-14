@@ -34,5 +34,6 @@ namespace BOM_MANAGER
         public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<Fixture> Fixtures { get; set; }
         public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
+        public virtual DbSet<PartView> PartViews { get; set; }
     }
 }
