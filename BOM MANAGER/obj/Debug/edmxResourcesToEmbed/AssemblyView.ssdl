@@ -60,7 +60,7 @@
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PartName" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="TypeID" Type="int" Nullable="false" />
+    <Property Name="TypeID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'AXIS Automation.bom.AssemblyTypeAtAssembly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -94,6 +94,19 @@ warning 6002: The table/view 'AXIS Automation.bom.AssemblyView' does not have a 
     <Property Name="AssemblyTypeID" Type="int" />
     <Property Name="T3_AssemblyType_ID" Type="int" />
     <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.bom.PartTypeAtPart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="PartTypeAtPart">
+    <Key>
+      <PropertyRef Name="Part_ID" />
+      <PropertyRef Name="PartName" />
+    </Key>
+    <Property Name="Part_ID" Type="int" Nullable="false" />
+    <Property Name="PartName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeID" Type="int" />
+    <Property Name="PartType_ID" Type="int" />
+    <Property Name="PartType" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'AXIS Automation.bom.PartView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -221,7 +234,7 @@ warning 6002: The table/view 'AXIS Automation.bom.PartView' does not have a prim
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Parts_Parts">
-    <End Role="PartTypes" Type="Self.PartTypes" Multiplicity="1" />
+    <End Role="PartTypes" Type="Self.PartTypes" Multiplicity="0..1" />
     <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="PartTypes">
@@ -263,6 +276,15 @@ warning 6002: The table/view 'AXIS Automation.bom.PartView' does not have a prim
     [AssemblyView].[T3_AssemblyType_ID] AS [T3_AssemblyType_ID], 
     [AssemblyView].[AssemblyType] AS [AssemblyType]
     FROM [bom].[AssemblyView] AS [AssemblyView]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="PartTypeAtPart" EntityType="Self.PartTypeAtPart" store:Type="Views" store:Schema="bom">
+      <DefiningQuery>SELECT 
+    [PartTypeAtPart].[Part_ID] AS [Part_ID], 
+    [PartTypeAtPart].[PartName] AS [PartName], 
+    [PartTypeAtPart].[TypeID] AS [TypeID], 
+    [PartTypeAtPart].[PartType_ID] AS [PartType_ID], 
+    [PartTypeAtPart].[PartType] AS [PartType]
+    FROM [bom].[PartTypeAtPart] AS [PartTypeAtPart]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="PartView" EntityType="Self.PartView" store:Type="Views" store:Schema="bom">
       <DefiningQuery>SELECT 

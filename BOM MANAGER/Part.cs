@@ -22,7 +22,7 @@ namespace BOM_MANAGER
     
         public int id { get; set; }
         public string PartName { get; set; }
-        public int TypeID { get; set; }
+        public Nullable<int> TypeID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }

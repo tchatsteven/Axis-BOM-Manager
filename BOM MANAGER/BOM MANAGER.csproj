@@ -96,11 +96,11 @@
     <Compile Include="BOM MANAGER.Designer.cs">
       <DependentUpon>BOM MANAGER.cs</DependentUpon>
     </Compile>
-    <Compile Include="CreatOrEditForm.cs">
+    <Compile Include="Assembly_CreatOrEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CreatOrEditForm.Designer.cs">
-      <DependentUpon>CreatOrEditForm.cs</DependentUpon>
+    <Compile Include="Assembly_CreatOrEditForm.Designer.cs">
+      <DependentUpon>Assembly_CreatOrEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Fixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
@@ -114,8 +114,23 @@
     <Compile Include="PartType.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="PartTypeAtPart.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PartTypeForm.Designer.cs">
+      <DependentUpon>PartTypeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PartView.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Part_CreateOrEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Part_CreateOrEditForm.Designer.cs">
+      <DependentUpon>Part_CreateOrEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -125,8 +140,14 @@
     <EmbeddedResource Include="BOM MANAGER.resx">
       <DependentUpon>BOM MANAGER.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CreatOrEditForm.resx">
-      <DependentUpon>CreatOrEditForm.cs</DependentUpon>
+    <EmbeddedResource Include="Assembly_CreatOrEditForm.resx">
+      <DependentUpon>Assembly_CreatOrEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PartTypeForm.resx">
+      <DependentUpon>PartTypeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Part_CreateOrEditForm.resx">
+      <DependentUpon>Part_CreateOrEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

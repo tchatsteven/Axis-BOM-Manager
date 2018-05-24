@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace BOM_MANAGER
 {
-    public partial class CreatOrEditForm : Form
+    public partial class Assembly_CreatOrEditForm : Form
     {
         RTFMessenger.RTFMessenger EditFormMsg;
         AXIS_AutomationEntities db = new AXIS_AutomationEntities();
         Assembly NewAssembly = null;
 
-        //Constructor for NEW
-        public CreatOrEditForm( )
+        //Constructor for NEW BUTTON
+        public Assembly_CreatOrEditForm( )
         {            
             InitializeComponent();
             EditFormMsg = new RTFMessenger.RTFMessenger(AssyType_TextBox, true) { DefaulSpaceAfter = 0 }; 
@@ -27,21 +27,30 @@ namespace BOM_MANAGER
         }
 
         //Constructor for EDITING assembly
-        public CreatOrEditForm( String AssemblyNameToEdit )
+        public Assembly_CreatOrEditForm( String AssemblyNameToEdit )
         {
             InitializeComponent();
             EditFormMsg = new RTFMessenger.RTFMessenger(AssyType_TextBox, true) { DefaulSpaceAfter = 0 };
             LoadAssemblyType();
             NewAssemblyNameTextBox.Text = AssemblyNameToEdit;
             NewAssembly = db.Assemblies.Where(o => o.Name == AssemblyNameToEdit).First();
+            LoadAssemblyType();
         }
 
         private void LoadAssemblyType()
         {
-            Assy_Type_ComboBox.DataSource = db.AssemblyTypes.ToList();
-            Assy_Type_ComboBox.DisplayMember = "AssemblyType1";
-            Assy_Type_ComboBox.ValueMember = "id";
-        }
+            try
+            {
+                Assy_Type_ComboBox.DataSource = db.AssemblyTypes.ToList();
+                Assy_Type_ComboBox.DisplayMember = "AssemblyType1";
+                Assy_Type_ComboBox.ValueMember = "id";
+                //EditFormMsg.NewMessage().AddText("Assembly Type Successfully Loaded").PrependMessageType().Log();
+            }
+            catch
+            {
+                EditFormMsg.NewMessage().AddText("Assembly Type Failed to Load").PrependMessageType().Log();
+            }
+        }   
 
         private void OKButton_Click(object sender, EventArgs e)
         {
@@ -73,7 +82,7 @@ namespace BOM_MANAGER
                 DeleteAssemblyTypeButton.Enabled = false;
 
             }
-            else if(!FormIsValid)
+            else
             {
                 OKButton.Enabled =  false;
                 NewAssemblyTypeButton.Enabled = true;
@@ -87,7 +96,20 @@ namespace BOM_MANAGER
         {
             get
             {
-                return !AssemblyNameFieldIsEmpty;
+                return (!AssemblyNameFieldIsEmpty && !NameExists);
+            }
+        }
+
+        private Boolean NameExists
+        {
+            get
+            {
+                Boolean MyTest = db.Assemblies.Any(o => o.Name == NewAssemblyNameTextBox.Text);
+                if (MyTest)
+                {
+                    EditFormMsg.NewMessage().AddText("Assembly already Exists").IsError().PrependMessageType().Log();
+                }
+                return MyTest;
             }
         }
 
@@ -108,7 +130,6 @@ namespace BOM_MANAGER
 
             if (AssemblyTypeForm == DialogResult.OK)
             {
-
                 EditFormMsg.NewMessage().AddText("Assembly Type Successfully Added").PrependMessageType().Log();
             }
             else if(AssemblyTypeForm == DialogResult.Cancel)

@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace BOM_MANAGER
 {
-    public partial class AssemblyTypeForm : Form
+    public partial class PartTypeForm : Form
     {
         AXIS_AutomationEntities db = new AXIS_AutomationEntities();
-        public AssemblyTypeForm()
+        public PartTypeForm()
         {
             InitializeComponent();
             ValidateForm();
@@ -21,18 +21,16 @@ namespace BOM_MANAGER
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            NewAssemblyTypeTextBox.CharacterCasing = CharacterCasing.Upper;
-            AssemblyType NewAssemblyType = new AssemblyType()
-            {                
-                AssemblyType1 = NewAssemblyTypeTextBox.Text
+            PartType NewPartType = new PartType()
+            {
+                PartType1 = NewPartTypeTextBox.Text                
 
             };
 
-            db.AssemblyTypes.Add(NewAssemblyType);
+            db.PartTypes.Add(NewPartType);
             db.SaveChanges();
             DialogResult = DialogResult.OK;
             Close();
-
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -55,10 +53,10 @@ namespace BOM_MANAGER
 
         private Boolean AssemblyNameFieldIsEmpty
         {
-            get { return NewAssemblyTypeTextBox.Text == String.Empty; }
-        }         
+            get { return NewPartTypeTextBox.Text == String.Empty; }
+        }
 
-        private void NewAssemblyTypeTextBox_KeyUp(object sender, KeyEventArgs e)
+        private void NewPartTypeTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             ValidateForm();
         }

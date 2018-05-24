@@ -8,4 +8,3 @@ Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Messenger\bin\Debug\RTFMesse
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Messenger\bin\Debug\RTFMessenger.pdb
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Messenger\obj\Debug\RTFMessenger.dll
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Messenger\obj\Debug\RTFMessenger.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Messenger\obj\Debug\Messenger.csprojResolveAssemblyReference.cache
