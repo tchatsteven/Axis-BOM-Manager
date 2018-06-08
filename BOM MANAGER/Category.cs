@@ -12,27 +12,21 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class Fixture
+    public partial class Category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Fixture()
+        public Category()
         {
-            this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
             this.CategoryAtFixtures = new HashSet<CategoryAtFixture>();
         }
     
         public int id { get; set; }
-        public string Code { get; set; }
-        public string Description { get; set; }
-        public string FamilyName { get; set; }
-        public bool IsDWEnabled { get; set; }
-        public string ApplicationType { get; set; }
-        public string Directionality { get; set; }
-        public bool HasSingleEmmiter { get; set; }
-        public string DWGouverningProject { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public bool IsMultiselect { get; set; }
+        public string Footnote { get; set; }
+        public bool IsOptional { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CategoryAtFixture> CategoryAtFixtures { get; set; }
     }

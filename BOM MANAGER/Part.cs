@@ -23,7 +23,10 @@ namespace BOM_MANAGER
         public int id { get; set; }
         public string PartName { get; set; }
         public Nullable<int> TypeID { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> FixFamilyID { get; set; }
     
+        public virtual FamilyName FamilyName { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
         public virtual PartType PartType { get; set; }

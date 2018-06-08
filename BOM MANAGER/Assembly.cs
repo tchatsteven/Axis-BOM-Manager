@@ -19,7 +19,6 @@ namespace BOM_MANAGER
         {
             this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
             this.AssemblyAtAssemblies1 = new HashSet<AssemblyAtAssembly>();
-            this.PartAtAssemblies = new HashSet<PartAtAssembly>();
         }
     
         public int id { get; set; }
@@ -31,7 +30,5 @@ namespace BOM_MANAGER
         public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
     }
 }

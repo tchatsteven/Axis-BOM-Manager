@@ -26,24 +26,48 @@ namespace BOM_MANAGER
         }
 
         //Constructor for EDIT BUTTON
-        public Part_CreateOrEditForm( String partNameToEdit)
+        public Part_CreateOrEditForm( String partNameToEdit, String description, String partTypeToEdit, String FamilyName)
         {
             InitializeComponent();
-            EditFormMsg = new RTFMessenger.RTFMessenger(PartType_TextBox, true) { DefaulSpaceAfter = 0 };
-            LoadAssemblyType();
+            EditFormMsg = new RTFMessenger.RTFMessenger(PartType_TextBox, true) { DefaulSpaceAfter = 0 };            
             NewPartNameTextBox.Text = partNameToEdit;
+            PartNameDescriptionTextBox.Text = description;            
             NewPart = db.Parts.Where(o => o.PartName == partNameToEdit).First();
-            LoadAssemblyType();
+            LoadAssemblyType(partTypeToEdit, FamilyName);
         }
 
         private void LoadAssemblyType()
         {
             try
             {
-                Part_Type_ComboBox.DataSource = db.PartTypes.ToList();
+                Part_Type_ComboBox.DataSource = db.PartTypes.OrderBy(o => o.PartType1).ToList();
                 Part_Type_ComboBox.DisplayMember = "PartType1";
                 Part_Type_ComboBox.ValueMember = "id";
-                //EditFormMsg.NewMessage().AddText("Part Type Successfully Loaded to ComboBox").PrependMessageType().Log();
+                
+                FixFamily_ComboBox.DataSource = db.FamilyNames.OrderBy(o => o.FamilyName1).ToList();
+                FixFamily_ComboBox.DisplayMember = "FamilyName1";
+                //FixFamily_ComboBox.ValueMember = "id";
+
+            }
+            catch
+            {
+                EditFormMsg.NewMessage().AddText("Part Type Failed to Load to ComboBox").PrependMessageType().Log();
+            }
+        }
+
+        private void LoadAssemblyType(String PartToEditComboboxSelectedText, String FamilyNameToEditComboboxSelectedText)
+        {
+            try
+            {
+                Part_Type_ComboBox.DataSource = db.PartTypes.OrderBy(o=>o.PartType1).ToList();
+                Part_Type_ComboBox.DisplayMember = "PartType1";
+                Part_Type_ComboBox.ValueMember = "id";
+                Part_Type_ComboBox.Text = PartToEditComboboxSelectedText;
+
+                FixFamily_ComboBox.DataSource = db.FamilyNames.OrderBy(o => o.FamilyName1).ToList();
+                FixFamily_ComboBox.DisplayMember = "FamilyName1";
+                FixFamily_ComboBox.ValueMember = "id";
+                FixFamily_ComboBox.Text = FamilyNameToEditComboboxSelectedText;
             }
             catch
             {
@@ -58,14 +82,25 @@ namespace BOM_MANAGER
                 NewPart = new Part();
                 db.Parts.Add(NewPart);
             }
+            try
+            {
+                NewPart.PartName = NewPartNameTextBox.Text;
+                NewPart.Description = PartNameDescriptionTextBox.Text;
+                NewPart.TypeID = (Int32)Part_Type_ComboBox.SelectedValue;
 
-            NewPart.PartName = NewPartNameTextBox.Text;
-            NewPart.TypeID = (Int32)Part_Type_ComboBox.SelectedValue;
+                String currentFixFamily = FixFamily_ComboBox.Text;
+                Int32 fixFamilyIndex = db.FamilyNames.Where(o => o.FamilyName1 == currentFixFamily).First().id;                          
+                NewPart.FixFamilyID = fixFamilyIndex;
 
+                db.SaveChanges();
+                DialogResult = DialogResult.OK;
+                Close();
 
-            db.SaveChanges();
-            DialogResult = DialogResult.OK;
-            Close();
+            }
+            catch
+            {
+                EditFormMsg.NewMessage().AddText("Part not Added to Database").IsError().PrependMessageType().Log();
+            }
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -133,7 +168,7 @@ namespace BOM_MANAGER
             }
             else if(PartTypeForm == DialogResult.Cancel)
             {
-                EditFormMsg.NewMessage().AddText("Part Type not Added to Database").PrependMessageType().Log();
+                EditFormMsg.NewMessage().AddText("Part Type not Added to Database").IsError().PrependMessageType().Log();
             }
 
             PartType_TextBox.ScrollToCaret();
@@ -155,12 +190,24 @@ namespace BOM_MANAGER
 
         private void DeletePartTypeFromDB(Int32 PartTypeId)
         {
-            db.PartTypes.Remove(db.PartTypes.Find(PartTypeId));
+            //Int32 PartTypeID = db.PartTypes.Find(PartTypeId).id;//comment this out
             String partTypeName = db.PartTypes.Find(PartTypeId).PartType1;
-            db.SaveChanges();
-            EditFormMsg.NewMessage().AddText("Part Type: " + partTypeName + " has been deleted from Database").PrependMessageType().Log();
-            // reload Assembly Types after deletion from DB
-            LoadAssemblyType();
+            Boolean HaveAssociation = db.Parts.Any(o=> PartTypeId == o.TypeID);
+
+            if (!HaveAssociation)
+            {
+                db.PartTypes.Remove(db.PartTypes.Find(PartTypeId));
+                //db.SaveChanges();
+                EditFormMsg.NewMessage().AddText("Part Type " + partTypeName + " has been deleted from Database").PrependMessageType().Log();
+                // reload Assembly Types after deletion from DB
+                LoadAssemblyType();
+
+            }
+            else
+            {
+                EditFormMsg.NewMessage().AddText("Part Type " + partTypeName + " has not been deleted due to Association in Part Table").IsError().PrependMessageType().Log();
+            }
+
         }
 
         

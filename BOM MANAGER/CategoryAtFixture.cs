@@ -12,14 +12,19 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class PartAtAssembly
+    public partial class CategoryAtFixture
     {
         public int id { get; set; }
-        public int PartRefID { get; set; }
-        public int AssRefID { get; set; }
-        public int FixtureID { get; set; }
+        public int CategoryId { get; set; }
+        public int FixtureId { get; set; }
+        public int DisplayOrder { get; set; }
+        public bool IsOptionalOverride { get; set; }
+        public string FootnoteOverride { get; set; }
+        public bool IsMultiselectOverride { get; set; }
+        public bool IsObsolete { get; set; }
+        public Nullable<int> DefaultFallbackSelection { get; set; }
     
-        public virtual AssemblyAtAssembly AssemblyAtAssembly { get; set; }
-        public virtual Part Part { get; set; }
+        public virtual Fixture Fixture { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

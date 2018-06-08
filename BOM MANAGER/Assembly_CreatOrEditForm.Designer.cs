@@ -176,12 +176,13 @@
             // AssyType_TextBox
             // 
             this.AssyType_TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AssyType_TextBox.HideSelection = false;
             this.AssyType_TextBox.Location = new System.Drawing.Point(3, 16);
             this.AssyType_TextBox.Margin = new System.Windows.Forms.Padding(0);
             this.AssyType_TextBox.Name = "AssyType_TextBox";
             this.AssyType_TextBox.ReadOnly = true;
             this.AssyType_TextBox.Size = new System.Drawing.Size(341, 70);
-            this.AssyType_TextBox.TabIndex = 0;
+            this.AssyType_TextBox.TabIndex = 1;
             this.AssyType_TextBox.Text = "";
             // 
             // tableLayoutPanel5

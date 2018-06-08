@@ -102,7 +102,28 @@
     <Compile Include="Assembly_CreatOrEditForm.Designer.cs">
       <DependentUpon>Assembly_CreatOrEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BOM.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Category.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CategoryAtFixture.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CategoryAtFixtureView.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FamilyName.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
     <Compile Include="Fixture.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FixtureSetupCodeParserTemplate.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ParameterAtCategoryAtFixtureView.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="Part.cs">

@@ -12,17 +12,17 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class PartView
+    public partial class BOM
     {
-        public int id { get; set; }
-        public int PartRefID { get; set; }
-        public int AssRefID { get; set; }
-        public int FixtureID { get; set; }
-        public Nullable<int> AssyAtassmbly_ID { get; set; }
+        public int AssyAtAssembly_ID { get; set; }
         public Nullable<int> ParentID { get; set; }
-        public Nullable<int> AssemblyID { get; set; }
-        public Nullable<int> FixtureCodeID { get; set; }
-        public Nullable<int> Assembly_ID { get; set; }
+        public int AssemblyID { get; set; }
+        public int FixtureID { get; set; }
+        public Nullable<int> PartAtAssembly_ID { get; set; }
+        public Nullable<int> PartRefID { get; set; }
+        public Nullable<int> AssRefID { get; set; }
+        public Nullable<int> FixRefID { get; set; }
+        public Nullable<int> id { get; set; }
         public string Name { get; set; }
         public Nullable<int> AssemblyTypeID { get; set; }
         public Nullable<int> AssyType_ID { get; set; }
@@ -31,9 +31,9 @@ namespace BOM_MANAGER
         public string PartName { get; set; }
         public Nullable<int> TypeID { get; set; }
         public string Description { get; set; }
-        public Nullable<int> PartTypes_ID { get; set; }
+        public Nullable<int> PartsType_ID { get; set; }
         public string PartType { get; set; }
-        public Nullable<int> Fixture_ID { get; set; }
+        public Nullable<int> Fixtures_ID { get; set; }
         public string Code { get; set; }
         public Nullable<int> FixFamilyID { get; set; }
     }

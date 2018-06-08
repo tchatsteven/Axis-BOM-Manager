@@ -12,38 +12,79 @@ namespace BOM_MANAGER
 {
     public partial class BOM_MANAGER : Form
     {
+        /****************************************************************************************************************************************************************/
+        /*                                                                                                                                                              */
+        /*                                                              PART / ASSEMBLY TAB                                                                             */
+        /*                                                                                                                                                              */
+        /****************************************************************************************************************************************************************/
+
+
         RTFMessenger.RTFMessenger BomManagerFormMsg;
+        RTFMessenger.RTFMessenger PartRules;
         AXIS_AutomationEntities db;
-        
+                
         public BOM_MANAGER()
         {
             InitializeComponent();
             db = new AXIS_AutomationEntities();
             BomManagerFormMsg = new RTFMessenger.RTFMessenger(eventLog_richTextBox, true) { DefaulSpaceAfter = 0 };
+            PartRules = new RTFMessenger.RTFMessenger(eventLog_PR_richTextBox, true) { DefaulSpaceAfter = 0 };
         }
 
         private void BOM_MANAGER_Load(object sender, EventArgs e)
-        {
-            
+        { 
             GetFixtureId();
             SyncRootAssemblies();
             RefreshDataGridView_Assemblies();
             RefreshDataGridView_Part();
-            RefreshTreeView();
-            
+                        
         }
 
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            String MySelectedFixture = productID_comboBox.Text;
+            RefreshDataGridView_Assemblies();
+            RefreshDataGridView_Part();
+            RefreshTreeView();
+            
+            if ( tabControl1.SelectedTab == tabPage2)
+            {
+                AssyAssociationcheck();
+                PartAssociationcheck();
+            }
+
+
+            //////////////////////////////////////PART Rules Tab////////////////////////////////////////////////
+            else if (tabControl1.SelectedTab == tabPage3)
+            {                
+                Load_Category_ComboBox();
+                Load_Parameter_ComboBox();
+            }
+           
+
+            
+        }
+        
+        private void ProductID_comboBox_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            RefreshTreeView();
+
+        }
+        
         private void GetFixtureId()
         {
-            productID_comboBox.DataSource = db.Fixtures.ToList();
+            productID_comboBox.DataSource = db.Fixtures.OrderBy(o => o.Code).ToList();
             productID_comboBox.ValueMember = "id";            
             productID_comboBox.DisplayMember = "Code";
-            //BomManagerFormMsg.NewMessage().AddText("Product ID has been Populated").PrependMessageType().Log();
-            //BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
-            //BomManagerFormMsg.NewMessage().IndentHanging().AddText("Product ID has been Populated").IsWarning.PrependMessageType();
-            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC1K");
-            //BomManagerFormMsg.CurrentMessage.NewLine().AddText("DIC2K").Log();           
 
+            ComboBoxFixtureFamily.DataSource = db.FamilyNames.Select(o => o.FamilyName1).ToList();
+            ComboBoxFixtureFamily.DisplayMember = "FamilyName1";
+
+            //PART RULE TAB
+            productID_comboBox_PR.DataSource = db.Fixtures.OrderBy(o => o.Code).ToList();
+            productID_comboBox_PR.ValueMember = "id";
+            productID_comboBox_PR.DisplayMember = "Code";
+                        
         }
 
         private void SyncRootAssemblies()
@@ -106,17 +147,27 @@ namespace BOM_MANAGER
         private void RefreshDataGridView_Part()
         {
             try
-            {
-                dataGridView_Part.DataSource = db.PartTypeAtParts.ToList();
+            {              
+               
+                String Combotext = ComboBoxFixtureFamily.Text;
+
+
+                dataGridView_Part.DataSource = db.PartTypeAtParts.OrderBy(o => o.PartType).Where(o=>o.FamilyName == Combotext).OrderBy(p=>p.PartName).ToList();
 
                 ////hide columns here
                 dataGridView_Part.Columns[0].Visible = false;
                 //dataGridView_Part.Columns[1].Visible = false;
                 dataGridView_Part.Columns[2].Visible = false;
                 dataGridView_Part.Columns[3].Visible = false;
+                //dataGridView_Part.Columns[4].Visible = false;
+                dataGridView_Part.Columns[5].Visible = false;
+                //dataGridView_Part.Columns[6].Visible = false;
+                dataGridView_Part.Columns[7].Visible = false;
+                //dataGridView_Part.Columns[8].Visible = false;
+                dataGridView_Part.Columns[9].Visible = false;
+                dataGridView_Part.AutoResizeColumns();
 
-                //BomManagerFormMsg.NewMessage().AddText(" Part Table has been Populated").PrependMessageType().Log();
-
+                
                 eventLog_richTextBox.ScrollToCaret();
             }
             catch
@@ -124,7 +175,7 @@ namespace BOM_MANAGER
                 BomManagerFormMsg.NewMessage().AddText("Refreshing Part Table failed").PrependMessageType().Log();
             }
         }
-
+               
         private void NewAssembly_Click(object sender, EventArgs e)
         {
            
@@ -138,14 +189,14 @@ namespace BOM_MANAGER
                 if (NewForm == DialogResult.OK)
                 {                    
                     BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Added").PrependMessageType().Log();
+                    db = new AXIS_AutomationEntities();
+                    RefreshDataGridView_Assemblies();
+                    eventLog_richTextBox.ScrollToCaret();
                 }
                 else if (NewForm == DialogResult.Cancel)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Adding New Assembly Cancelled").PrependMessageType().Log();
                 }
-                db = new AXIS_AutomationEntities();
-                RefreshDataGridView_Assemblies();
-                eventLog_richTextBox.ScrollToCaret();
             }
             catch
             {
@@ -165,13 +216,16 @@ namespace BOM_MANAGER
                 if (NewForm == DialogResult.OK)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Part Successfully Added").PrependMessageType().Log();
+
+                    db = new AXIS_AutomationEntities();
+                    RefreshDataGridView_Part();
                 }
                 else if (NewForm == DialogResult.Cancel)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Adding New Part Cancelled").PrependMessageType().Log();
                 }
-                db = new AXIS_AutomationEntities();
-                RefreshDataGridView_Part();
+
+                //Int32 index = 0;
                 eventLog_richTextBox.ScrollToCaret();
             }
             catch
@@ -183,6 +237,7 @@ namespace BOM_MANAGER
         private void EditAssembly_Click(object sender, EventArgs e)
         {
             String editAssemblyName;
+            
                        
             Int32 currentAssemblyId = Int32.Parse(dataGridView_Ass.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
             Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
@@ -196,14 +251,15 @@ namespace BOM_MANAGER
                 if (NewForm == DialogResult.OK)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Edited").PrependMessageType().Log();
+                    db = new AXIS_AutomationEntities();
+                    RefreshDataGridView_Assemblies();
+                    RefreshTreeView();
                     
                 }
                 else if (NewForm == DialogResult.Cancel)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Editing Assembly Cancelled").PrependMessageType().Log();
                 }
-                db = new AXIS_AutomationEntities();
-                RefreshDataGridView_Assemblies();
                 eventLog_richTextBox.ScrollToCaret();
             }
             catch
@@ -215,12 +271,27 @@ namespace BOM_MANAGER
         private void EditPart_Click(object sender, EventArgs e)
         {
             String editPartName;
-
+            String editDescription;
+            Int32 editPartTypeIndex;
+            String editPartType;
+            String editFamilyName;
+            Int32 editFamilyNameIndex;
+                                 
             Int32 currentPartId = Int32.Parse(dataGridView_Part.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            Part partToEdit = db.Parts.Find(currentPartId);
-            editPartName = partToEdit.PartName;
+            Part partToEdit = db.Parts.Find(currentPartId);//.Find(currentPartId);
 
-            Part_CreateOrEditForm editPartForm = new Part_CreateOrEditForm(editPartName);
+            editDescription = partToEdit.Description;
+            editPartName = partToEdit.PartName;
+            editPartTypeIndex = partToEdit.TypeID ?? 0;
+            editFamilyNameIndex = partToEdit.FixFamilyID ?? 0;
+
+            PartType partTypeToEdit = db.PartTypes.Find(editPartTypeIndex);
+            editPartType = partTypeToEdit.PartType1;
+
+            FamilyName familytypeToEdit = db.FamilyNames.Find(editFamilyNameIndex);
+            editFamilyName = familytypeToEdit.FamilyName1;
+
+            Part_CreateOrEditForm editPartForm = new Part_CreateOrEditForm(editPartName, editDescription, editPartType, editFamilyName);
 
             DialogResult NewForm = editPartForm.ShowDialog();
             try
@@ -228,13 +299,16 @@ namespace BOM_MANAGER
                 if(NewForm == DialogResult.OK)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Part Successfully Edited").PrependMessageType().Log();
+
+                    db = new AXIS_AutomationEntities();
+                    RefreshDataGridView_Part();
+                    
+                    RefreshTreeView();
                 }
                 else if (NewForm == DialogResult.Cancel)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Editing Part Cancelled").PrependMessageType().Log();
                 }
-                db = new AXIS_AutomationEntities();
-                RefreshDataGridView_Part();
                 eventLog_richTextBox.ScrollToCaret();
             }
             catch
@@ -271,6 +345,9 @@ namespace BOM_MANAGER
                             string assemblyname = db.Assemblies.Find(currentAssemblyId).Name;
                             db.SaveChanges();
 
+                            RefreshDataGridView_Assemblies();
+                            RefreshTreeView();
+
                             //do not show message if assembly has not been deleted.
                             BomManagerFormMsg.NewMessage().AddText("Assembly : "+ assemblyNameToDelete + " has been deleted from TreeView and Database").PrependMessageType().Log();
                         }
@@ -280,8 +357,6 @@ namespace BOM_MANAGER
                         }
 
                     }
-                    RefreshDataGridView_Assemblies();
-                    RefreshTreeView();
 
                     
                 }
@@ -302,19 +377,52 @@ namespace BOM_MANAGER
 
             if(deletingMsg == DialogResult.Yes)
             {
-                foreach(DataGridViewRow currentDeletionRow in dataGridView_Part.SelectedRows)
+                try
                 {
-                    Delete_Function_Part(currentDeletionRow);
-                }
-                RefreshDataGridView_Part();
+                    foreach(DataGridViewRow currentDeletionRow in dataGridView_Part.SelectedRows)
+                    {
+                        //Delete_Function_Ass(currentDeletionRow);
+                        Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["Part_ID"].Value.ToString());
+                        Part partToDelete = db.Parts.Find(currentPartId);
+                        String partyNameToDelete = db.Parts.Find(currentPartId).PartName;
 
-                BomManagerFormMsg.NewMessage().AddText("Part has been deleted from Database").PrependMessageType().Log();
+                        Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartRefID == currentPartId);
+                        if (!myAssociation)
+                        {
+                            //Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["Part_ID"].Value.ToString());
+                            //Part partToDelete = db.Parts.Find(currentPartId);
+                            //String partNameToDelete = db.Parts.Find(currentPartId).PartName;
+
+                            db.Parts.Remove(db.Parts.Find(currentPartId));
+                            string assemblyname = db.Parts.Find(currentPartId).PartName;
+                            db.SaveChanges();
+
+                            RefreshDataGridView_Part();
+                            RefreshTreeView();
+
+                            BomManagerFormMsg.NewMessage().AddText("Part: " + partyNameToDelete + " has been deleted from TreeView and Database due to Association").PrependMessageType().Log();
+
+                        }
+                        else
+                        {
+                            BomManagerFormMsg.NewMessage().AddText("Part: " + partyNameToDelete + " has not been deleted from TreeView and Database due to Association").IsError().PrependMessageType().Log();
+                        }
+                    }
+                    
+
+                    
+
+                }
+                catch
+                {
+                    BomManagerFormMsg.NewMessage().AddText("Parts with associations cannot be deleted from  Database").IsError().PrependMessageType().Log();
+                }
             }
         }
 
-        private void Associationcheck()
+        private void AssyAssociationcheck()
         {
-            if (CheckIsValid)
+            if (CheckAssyIsValid)
             {
                 DeleteAssembly.Enabled = true;
 
@@ -327,7 +435,22 @@ namespace BOM_MANAGER
 
         }
 
-        private Boolean CheckIsValid
+        private void PartAssociationcheck()
+        {
+            if (CheckPartIsValid)
+            {
+                DeletePart.Enabled = true;
+
+            }
+            else
+            {
+                DeletePart.Enabled = false;
+
+            }
+
+        }
+
+        private Boolean CheckAssyIsValid
         {
             get
             {
@@ -340,151 +463,43 @@ namespace BOM_MANAGER
             get
             {
                 Int32 rowIndex = dataGridView_Ass.CurrentCell.RowIndex;
-                Int32 Teststring = Int32.Parse(dataGridView_Ass.Rows[rowIndex].Cells[0].Value.ToString());
+                Int32 Teststring = Int32.Parse(dataGridView_Ass.Rows[rowIndex].Cells["Assembly_ID"].Value.ToString());
                 Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == Teststring);
                 if (myAssociation)
                 {
-                    //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to association").IsWarning().PrependMessageType().Log();
+                    //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to assembly association").IsWarning().PrependMessageType().Log();
                 }
                 return myAssociation;
             }
         }
 
-        //private void Delete_Function_Ass(DataGridViewRow currentDeletionRow)
-        //{
-        //    Int32 currentAssemblyId = Int32.Parse(currentDeletionRow.Cells["Assembly_ID"].Value.ToString());
-        //    Assembly AssemblyToDelete = db.Assemblies.Find(currentAssemblyId);
-        //    String assemblyNameToDelete = db.Assemblies.Find(currentAssemblyId).Name;            
-
-        //    db.Assemblies.Remove(db.Assemblies.Find(currentAssemblyId));
-        //    string assemblyname = db.Assemblies.Find(currentAssemblyId).Name;
-        //    //db.SaveChanges();
-
-        //}
-
-        private void Delete_Function_Part(DataGridViewRow currentDeletionRow)
+        private Boolean CheckPartIsValid
         {
-            Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["Part_ID"].Value.ToString());
-            Part partToDelete = db.Parts.Find(currentPartId);
-            String partNameToDelete = db.Parts.Find(currentPartId).PartName;
-
-            db.Parts.Remove(db.Parts.Find(currentPartId));
-            string assemblyname = db.Parts.Find(currentPartId).PartName;
-            db.SaveChanges();
-
-        }
-        
-        private void ProductID_comboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            String MySelectedFixture = productID_comboBox.Text;
-                        
-            RefreshTreeView();
-           
-        }
-
-        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            String MySelectedFixture = productID_comboBox.Text;
-            RefreshDataGridView_Assemblies();
-            RefreshTreeView();
-            Associationcheck();
-        }
-
-        private void RefreshTreeView()
-        {
-            //Get the Product ID selected
-            String MySelectedFixture = productID_comboBox.Text;
-
-            //Filter the Assembly View table to keep only the selected Product ID CODE 
-            //This Filtered list is stored as the DICTIONARY ID
-            List<AssemblyView> filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
-
-            //Dictionary Created
-            Dictionary<Int32, TreeNode> AssembliesDict = new Dictionary<Int32, TreeNode>();
-
-            //Goes through each line in the filtered list to add data into the Dictionary 
-            foreach(AssemblyView assemblyView in filteredResult)
+            get
             {
-                //Check if the Name of assembly in view is ROOT, Assign the Assembly View Code as It Name
-                //Else assign NodeName as assemblyView.Name and put the type in brackets beside it. 
-                String NodeName = assemblyView.Name == "ROOT" ? assemblyView.Code : String.Format("{0} ({1})", assemblyView.Name, assemblyView.AssemblyType);
-
-                //create new TreeNode instance to assign the NodeName and assemblyView as Tag
-                TreeNode NewTreeNode = new TreeNode()
-                {
-                    Text = NodeName,
-                    Tag = assemblyView
-                };
-
-                //Add every Row of the Filtered assemblyView to our Dictionary having each line with a Unique ID (TKEY VALUE)             
-                AssembliesDict.Add(assemblyView.AssemblyID, NewTreeNode);
-
-                
+                return (!PartsHasNoAssociations);
             }
+        }
 
-            //Goes through each line in the Dictionary according to their Key Value Pair and add TreeNodes
-            foreach (KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
-            {
-                //Since in the View we have Parent ID as NULL we want to add a node anytime the parent ID is not NULL 
-                Int32 ParentIndex = ((AssemblyView)DictItem.Value.Tag).ParentID ?? 0;
-
-                //This if Condition indent the Tree view if the Parent ID is not Null. 
-                if(ParentIndex != 0)
+        private Boolean PartsHasNoAssociations
+        {
+            get
+            {                
+                Int32 rowIndex = dataGridView_Part.CurrentCell.RowIndex;
+                Int32 Teststring = Int32.Parse(dataGridView_Part.Rows[rowIndex].Cells["Part_ID"].Value.ToString());
+                Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartRefID == Teststring);
+                if (myAssociation)
                 {
-                    AssembliesDict[ParentIndex].Nodes.Add(DictItem.Value);
+                    //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to Part association").IsWarning().PrependMessageType().Log();
                 }
+                return myAssociation;
             }
-
-            //get parts table(create dictionary of parts), change to tree nodes, and insert tree node into parent from Dictionary AssembliesDict
-
-
-
-            Fixture_treeView.Nodes.Clear();
-            try
-            {
-                //Add the tree Node to the Form
-                TreeNode RootNode = AssembliesDict.Where(o=> ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
-                Fixture_treeView.Nodes.Add(RootNode);
-                Fixture_treeView.ExpandAll();
-            }
-            catch
-            {
-               
-            }
-            
-        }
-
-        private void DataGridView_Part_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        }                         
+       
+        private void ComboBoxFixtureFamily_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string headerText = dataGridView_Part.Columns[e.ColumnIndex].HeaderText;
-
-            try
-            {
-                if (headerText == "PartType")
-                {
-                    dataGridView_Part.DataSource = db.PartTypeAtParts.OrderBy(o => o.PartType).ToList();
-                    BomManagerFormMsg.NewMessage().AddText("Table Sorted By Part Type").PrependMessageType().Log();
-                }
-                else if(headerText == "PartName" )
-                {
-                    dataGridView_Part.DataSource = db.PartTypeAtParts.OrderBy(o => o.PartName).ToList();
-                    BomManagerFormMsg.NewMessage().AddText("Table Sorted By Part Name").PrependMessageType().Log();
-
-                }
-                else
-                {
-                    dataGridView_Part.DataSource = db.PartTypeAtParts.OrderBy(o => o.PartType_ID).ToList();
-                    BomManagerFormMsg.NewMessage().AddText("Table Sorted By Product ID").PrependMessageType().Log();
-                }               
-
-            }
-            catch
-            {
-                BomManagerFormMsg.NewMessage().AddText("Table Sorted By PartType failed").PrependMessageType().Log();
-            }
-                        
-            eventLog_richTextBox.ScrollToCaret();
-        }
+            RefreshDataGridView_Part();
+        }           
 
         private void AddButton_AssyToAssy_TreeView_Click(object sender, EventArgs e)
         {
@@ -532,7 +547,8 @@ namespace BOM_MANAGER
                 BomManagerFormMsg.NewMessage().AddText("Assembly : " + assemblyNameToAdd + " has been added to TreeView").PrependMessageType().Log();
 
                 //Check Associations
-                Associationcheck();
+                AssyAssociationcheck();
+                PartAssociationcheck();
             }            
             else
             {
@@ -551,46 +567,69 @@ namespace BOM_MANAGER
             {
                 try
                 {
-                    Recursive_Delete_Function(Fixture_treeView.SelectedNode);
+                    Assy_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                     db.SaveChanges();
                     //RefreshTreeView();
                     Fixture_treeView.SelectedNode.Remove();
 
                     //Association Check
-                    Associationcheck();
+                    AssyAssociationcheck();
+                    PartAssociationcheck();
 
-                    BomManagerFormMsg.NewMessage().AddText("Assembly has been deleted from Tree view").PrependMessageType().Log();
+                    //BomManagerFormMsg.NewMessage().AddText("Assembly has been deleted from Tree view").PrependMessageType().Log();
                 }
                 catch
                 {
-                    BomManagerFormMsg.NewMessage().AddText("Assembly has not been deleted from Database").PrependMessageType().Log();
+                    BomManagerFormMsg.NewMessage().AddText("Assembly has not been deleted from Database. Remove Associated Parts First").IsError().PrependMessageType().Log();
                 }
             }
             
         }
 
-        private void Recursive_Delete_Function(TreeNode selectedNode)
+        private void Assy_Recursive_Delete_Function(TreeNode selectedNode)
         {
 
             if (selectedNode.Nodes.Count != 0)
             {
                 foreach (TreeNode childNode in selectedNode.Nodes)
                 {
-                    Recursive_Delete_Function(childNode);
+                    Assy_Recursive_Delete_Function(childNode);
                 }               
             }
 
-            //delete stuff
-            Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).T1_AssAtAssembly_ID;
-            AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
-            if (deletionTarget.ParentID is null)
+            try
             {
-                BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
+                Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).id;
+                String CurrentAssemblyViewName = ((AssemblyView)selectedNode.Tag).Name;
+                AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
+                if (deletionTarget.ParentID is null)
+                {
+                    BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
+                }
+                else
+                {
+                    db.AssemblyAtAssemblies.Remove(deletionTarget);
+                    BomManagerFormMsg.NewMessage().AddText("Assembly " + CurrentAssemblyViewName  + " has been deleted from Tree view").PrependMessageType().Log();
+
+                }                
             }
-            else
+            catch
             {
-                db.AssemblyAtAssemblies.Remove(deletionTarget);
+                //BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
+            }
+            try
+            {
+                Int32 currentPartId = ((PartView)selectedNode.Tag).id;
+                String currentPartNameId = ((PartView)selectedNode.Tag).PartName;
+                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentPartId);
+
+                db.PartAtAssemblies.Remove(deletionTarget);
+
+                BomManagerFormMsg.NewMessage().AddText("Parts " + currentPartNameId + " has been deleted from Tree view").PrependMessageType().Log();
+            }
+            catch
+            {
 
             }
 
@@ -598,7 +637,291 @@ namespace BOM_MANAGER
 
         private void DataGridView_Ass_MouseClick(object sender, MouseEventArgs e)
         {
-            Associationcheck();
+            AssyAssociationcheck();
+            
+        }
+
+        private void DataGridView_Part_MouseClick(object sender, MouseEventArgs e)
+        {
+            PartAssociationcheck();
+        }
+
+        private void AddButton_PartToAssy_TreeView_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AssemblyView SelectedAssemblyNode = (AssemblyView)Fixture_treeView.SelectedNode.Tag;
+                Int32? CurrentParentId = SelectedAssemblyNode.ParentID;
+                Int32? CurrentAssemblyId = SelectedAssemblyNode.id;
+                Int32? CurrentFixtureCodeId = SelectedAssemblyNode.FixtureID;
+
+                foreach (DataGridViewRow currentSelectedRow in dataGridView_Part.SelectedRows)
+                {
+                    //Function to Save Assy to parent
+                    AddPartsToTreeView(currentSelectedRow, CurrentParentId, CurrentAssemblyId, CurrentFixtureCodeId);
+                }
+            }
+            catch
+            {
+                BomManagerFormMsg.NewMessage().AddText("No Fixture/Assembly Selected in the TreeView. Parts cannot be added to other Parts.").IsError().PrependMessageType().Log();
+            }
+            RefreshTreeView();
+
+        }
+
+        private void AddPartsToTreeView(DataGridViewRow currentSelectedRow, Int32? parentId, Int32? assemblyId, Int32? FixtureId)
+        {
+            Int32 currentPartId = Int32.Parse(currentSelectedRow.Cells["Part_ID"].Value.ToString());
+            //PartTypeAtParts
+            String PartNameToAdd = db.Parts.Find(currentPartId).PartName;
+
+            try
+            {
+                PartAtAssembly NewPartAtAssembly = new PartAtAssembly();
+
+                db.PartAtAssemblies.Add(NewPartAtAssembly);
+
+                NewPartAtAssembly.PartRefID = currentPartId;
+                NewPartAtAssembly.AssRefID = (Int32)assemblyId;
+                NewPartAtAssembly.FixtureID = (Int32)FixtureId;
+                db.SaveChanges();
+
+                //do not show message if assembly has not been deleted.
+                BomManagerFormMsg.NewMessage().AddText("Part : " + PartNameToAdd + " has been added to TreeView and DataBase").PrependMessageType().Log();
+
+                //Check Associations
+                AssyAssociationcheck();
+                PartAssociationcheck();
+            }
+            catch
+            {
+                BomManagerFormMsg.NewMessage().AddText("Part: " + PartNameToAdd + " has not been added").IsError().PrependMessageType().Log();
+            }
+        }
+
+        private void Remove_PartToAssy_TreeView_Click(object sender, EventArgs e)
+        {            
+            try
+            {
+                Part_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
+
+                db.SaveChanges();
+                              
+                RefreshTreeView();
+                //Fixture_treeView.SelectedNode.Remove();
+
+                //Association Check
+                AssyAssociationcheck();
+                PartAssociationcheck();
+            }
+            catch
+            {
+                BomManagerFormMsg.NewMessage().AddText("Part has not been deleted from treeview or Database").IsError().PrependMessageType().Log();
+            }
+            
+        }
+
+        private void Part_Recursive_Delete_Function(TreeNode selectedNode)
+        {
+            Int32 numberOfInnerNodes = selectedNode.Nodes.Count;
+
+            foreach (TreeNode childNode in selectedNode.Nodes)
+            {
+                Part_Recursive_Delete_Function(childNode);
+            }
+
+            try
+            {
+                Int32 currentPartId = ((PartView)selectedNode.Tag).id;
+                String currentPartNameId = ((PartView)selectedNode.Tag).PartName;
+                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentPartId);
+                
+                db.PartAtAssemblies.Remove(deletionTarget);
+
+                BomManagerFormMsg.NewMessage().AddText("Parts " + currentPartNameId + " has been deleted from Tree view").PrependMessageType().Log();
+            }
+
+            catch
+            {
+                //BomManagerFormMsg.NewMessage().AddText("Parts " /*+ currentPartNameId*/ + " has not been deleted from Tree view").PrependMessageType().Log();
+            }
+
+            try
+            {
+                Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).id;
+                AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
+            }
+
+            catch
+            {
+                //BomManagerFormMsg.NewMessage().AddText("Assembly has not been deleted from Tree view").PrependMessageType().Log();
+            }
+
+        }
+        
+        private void RefreshTreeView()
+        {
+            String MySelectedFixture;
+
+            if (tabControl1.SelectedTab == tabPage2)
+            {
+                MySelectedFixture = productID_comboBox.Text;
+            }
+            else 
+            {
+                MySelectedFixture = productID_comboBox_PR.Text;
+            }
+           
+            List<AssemblyView> assy_filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
+            List<PartView> part_filteredResult = db.PartViews.OrderBy(o => o.PartName).Where(p => p.Code == MySelectedFixture).ToList();
+
+            Dictionary<Int32, TreeNode> AssembliesDict = new Dictionary<Int32, TreeNode>();
+            
+            foreach (AssemblyView assemblyView in assy_filteredResult)
+            {
+                Int32 assyIdAtAssemblyView = assemblyView.id;
+                String assy_NodeName = assemblyView.Name == "ROOT" ? assemblyView.Code : String.Format("{0} ({1})", assemblyView.Name, assemblyView.AssemblyType);
+                TreeNode Parent_treeNode = new TreeNode()
+                {
+                    Text = assy_NodeName,
+                    Tag = assemblyView
+                };
+
+                //Recursive Function for childnodes
+                GetChildTreeNodes(Parent_treeNode, part_filteredResult, assyIdAtAssemblyView);
+                AssembliesDict.Add(assemblyView.AssemblyID, Parent_treeNode);
+            }                       
+
+            foreach (KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
+            {
+                Int32 ParentIndex = ((AssemblyView)DictItem.Value.Tag).ParentID ?? 0;
+
+                if (ParentIndex != 0)
+                {
+                    AssembliesDict[ParentIndex].Nodes.Add(DictItem.Value);
+
+                }
+            }
+
+            Fixture_treeView.Nodes.Clear();
+            Fixture_treeView_PR.Nodes.Clear();
+
+            if (tabControl1.SelectedTab == tabPage2)
+            {
+                try
+                {
+                    //Add the tree Node to the TAB PARTS/ASSEMBLY
+                    TreeNode Assy_RootNode = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
+                    Fixture_treeView.Nodes.Add(Assy_RootNode);
+                    Fixture_treeView.ExpandAll();
+
+                }
+                catch
+                {
+                    BomManagerFormMsg.NewMessage().AddText("Tree view adding failed").IsError().PrependMessageType().Log();
+                }
+
+            }
+
+            else if (tabControl1.SelectedTab == tabPage3)
+            {
+                try
+                {
+                    //Add the tree Node to the TAB PARTS RULES
+                    TreeNode Assy_RootNode_PR = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
+                    Fixture_treeView_PR.Nodes.Add(Assy_RootNode_PR);
+                    Fixture_treeView_PR.ExpandAll();
+
+                }
+                catch
+                {
+                    PartRules.NewMessage().AddText("Tree view adding failed").IsError().PrependMessageType().Log();
+                }
+            }
+
+        }
+
+        private void GetChildTreeNodes(TreeNode Parent_treeNode, List<PartView> part_filteredResult, Int32 currentAssyId)
+        {
+
+            foreach (PartView partview in part_filteredResult)
+            {
+                Int32 assyIdAtPartView = partview.AssRefID;
+                                
+                if(currentAssyId == assyIdAtPartView)
+                {
+                    String part_NodeName = String.Format("{0} - {1}", partview.PartName, partview.PartType );// partview.Description);
+                    TreeNode childTreeNode = new TreeNode();
+                    childTreeNode.Text = part_NodeName;
+                    childTreeNode.Tag = partview;
+
+                    Parent_treeNode.Nodes.Add(childTreeNode);
+                }
+                                
+            }
+            Dictionary<Int32, TreeNode> PartsDict = new Dictionary<Int32, TreeNode>();
+
+            foreach (KeyValuePair<Int32, TreeNode> PartItem in PartsDict)
+            {
+                Int32 ParentIndex = ((PartView)PartItem.Value.Tag).id;
+
+                if (ParentIndex != 0)
+                {
+                    PartsDict[ParentIndex].Nodes.Add(PartItem.Value);
+
+                }
+            }      
+            
+        }
+        
+
+
+
+        /****************************************************************************************************************************************************************/
+        /*                                                                                                                                                              */
+        /*                                                              PART RULES TAB                                                                                  */
+        /*                                                                                                                                                              */
+        /****************************************************************************************************************************************************************/
+
+
+
+        private void ProductID_comboBox_PR_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            RefreshTreeView();            
+            Load_Category_ComboBox();
+            Load_Parameter_ComboBox();
+        }
+
+        private void Load_Category_ComboBox()
+        {
+            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            CategoryPR_comboBox.DataSource = db.CategoryAtFixtureViews.AsNoTracking().Where(o => o.FixtureId.ToString() == productId_PR ).OrderBy(o => o.DisplayOrder).ToList();
+            CategoryPR_comboBox.ValueMember = "CategoryId";
+            CategoryPR_comboBox.DisplayMember = "Name";
+
+           
+        }
+
+        private void Load_Parameter_ComboBox()
+        {
+            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            String categoryId_PR = CategoryPR_comboBox.SelectedValue.ToString();
+            ParameterPR_comboBox.DataSource = db.ParameterAtCategoryAtFixtureViews.Where(o => o.id.ToString() == productId_PR  && o.CategoryId.ToString() == categoryId_PR).ToList();
+            ParameterPR_comboBox.ValueMember = "ParameterId";
+            ParameterPR_comboBox.DisplayMember = "ParameterCode";
+
+            if (CategoryPR_comboBox.Text == "PRODUCT ID")
+            {
+                ParameterPR_comboBox.DataSource = db.Fixtures.Where(o => o.id.ToString() == productId_PR).ToList();
+                ParameterPR_comboBox.ValueMember = "id";
+                ParameterPR_comboBox.DisplayMember = "Code";
+            }
+        }
+
+        private void ComboBoxCategory_PR_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+
+            Load_Parameter_ComboBox();
         }
     }
 }

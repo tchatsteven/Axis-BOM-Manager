@@ -19,5 +19,10 @@ namespace BOM_MANAGER
         public Nullable<int> TypeID { get; set; }
         public Nullable<int> PartType_ID { get; set; }
         public string PartType { get; set; }
+        public Nullable<int> FixFamilyID { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> FamilyName_ID { get; set; }
+        public string FamilyName { get; set; }
+        public Nullable<int> FixtureFamilyId { get; set; }
     }
 }

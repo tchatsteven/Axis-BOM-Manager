@@ -12,23 +12,18 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class AssemblyAtAssembly
+    public partial class FamilyName
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public AssemblyAtAssembly()
+        public FamilyName()
         {
-            this.PartAtAssemblies = new HashSet<PartAtAssembly>();
+            this.Parts = new HashSet<Part>();
         }
     
         public int id { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public int AssemblyID { get; set; }
-        public int FixtureID { get; set; }
+        public string FamilyName1 { get; set; }
     
-        public virtual Assembly Assembly { get; set; }
-        public virtual Assembly Assembly1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
-        public virtual Fixture Fixture { get; set; }
+        public virtual ICollection<Part> Parts { get; set; }
     }
 }

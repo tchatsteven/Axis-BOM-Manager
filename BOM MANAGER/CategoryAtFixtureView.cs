@@ -12,14 +12,14 @@ namespace BOM_MANAGER
     using System;
     using System.Collections.Generic;
     
-    public partial class PartAtAssembly
+    public partial class CategoryAtFixtureView
     {
-        public int id { get; set; }
-        public int PartRefID { get; set; }
-        public int AssRefID { get; set; }
-        public int FixtureID { get; set; }
-    
-        public virtual AssemblyAtAssembly AssemblyAtAssembly { get; set; }
-        public virtual Part Part { get; set; }
+        public Nullable<int> id { get; set; }
+        public Nullable<int> CategoryId { get; set; }
+        public Nullable<int> FixtureId { get; set; }
+        public Nullable<int> DisplayOrder { get; set; }
+        public int Category_ID { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
     }
 }

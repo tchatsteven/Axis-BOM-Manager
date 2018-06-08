@@ -41,9 +41,10 @@ namespace BOM_MANAGER
         {
             try
             {
-                Assy_Type_ComboBox.DataSource = db.AssemblyTypes.ToList();
+                Assy_Type_ComboBox.DataSource = db.AssemblyTypes.OrderBy(o=>o.AssemblyType1).Where( o=> o.AssemblyType1 != "RT").ToList();
                 Assy_Type_ComboBox.DisplayMember = "AssemblyType1";
                 Assy_Type_ComboBox.ValueMember = "id";
+                Assy_Type_ComboBox.Items.Remove("RT");
                 //EditFormMsg.NewMessage().AddText("Assembly Type Successfully Loaded").PrependMessageType().Log();
             }
             catch
@@ -58,14 +59,20 @@ namespace BOM_MANAGER
                 NewAssembly = new Assembly();
                 db.Assemblies.Add(NewAssembly);
             }
+            try
+            {
+                NewAssembly.Name = NewAssemblyNameTextBox.Text;
+                NewAssembly.AssemblyTypeID = (Int32)Assy_Type_ComboBox.SelectedValue;
 
-            NewAssembly.Name = NewAssemblyNameTextBox.Text;
-            NewAssembly.AssemblyTypeID = (Int32)Assy_Type_ComboBox.SelectedValue;
 
-            
-            db.SaveChanges();
-            DialogResult = DialogResult.OK;
-            Close();
+                db.SaveChanges();
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            catch
+            {
+                EditFormMsg.NewMessage().AddText("Assembly not Added to Database").IsError().PrependMessageType().Log();
+            }
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -164,5 +171,6 @@ namespace BOM_MANAGER
             LoadAssemblyType();
         }
 
+        
     }
 }

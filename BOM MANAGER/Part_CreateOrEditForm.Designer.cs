@@ -33,15 +33,19 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.Part_Type_ComboBox = new System.Windows.Forms.ComboBox();
             this.NewPartNameTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.PartNameDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.DeletePartTypeButton = new System.Windows.Forms.Button();
             this.NewPartTypeButton = new System.Windows.Forms.Button();
-            this.Part_Type_ComboBox = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.CancelButton = new System.Windows.Forms.Button();
             this.OKButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.FixFamily_ComboBox = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -117,18 +121,23 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.label2, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.NewPartNameTextBox, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 2, 1);
-            this.tableLayoutPanel3.Controls.Add(this.Part_Type_ComboBox, 1, 1);
-            this.tableLayoutPanel3.Controls.Add(this.label3, 0, 1);
-            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label2, 0, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.Part_Type_ComboBox, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.NewPartNameTextBox, 1, 1);
+            this.tableLayoutPanel3.Controls.Add(this.label4, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.PartNameDescriptionTextBox, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 2, 3);
+            this.tableLayoutPanel3.Controls.Add(this.label5, 0, 3);
+            this.tableLayoutPanel3.Controls.Add(this.FixFamily_ComboBox, 1, 3);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 3;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowCount = 4;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.00062F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.00062F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.00062F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 24.99813F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(497, 110);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
@@ -139,23 +148,72 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(5, 5);
+            this.label2.Location = new System.Drawing.Point(5, 32);
             this.label2.Margin = new System.Windows.Forms.Padding(5);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 26);
+            this.label2.Size = new System.Drawing.Size(89, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "Part Name:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label3.Location = new System.Drawing.Point(5, 5);
+            this.label3.Margin = new System.Windows.Forms.Padding(5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(89, 17);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Part Type:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // Part_Type_ComboBox
+            // 
+            this.Part_Type_ComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.Part_Type_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.Part_Type_ComboBox.FormattingEnabled = true;
+            this.Part_Type_ComboBox.Location = new System.Drawing.Point(102, 3);
+            this.Part_Type_ComboBox.Name = "Part_Type_ComboBox";
+            this.Part_Type_ComboBox.Size = new System.Drawing.Size(143, 21);
+            this.Part_Type_ComboBox.TabIndex = 3;
             // 
             // NewPartNameTextBox
             // 
             this.NewPartNameTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.NewPartNameTextBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.NewPartNameTextBox.Location = new System.Drawing.Point(102, 8);
+            this.NewPartNameTextBox.Location = new System.Drawing.Point(102, 30);
             this.NewPartNameTextBox.Name = "NewPartNameTextBox";
             this.NewPartNameTextBox.Size = new System.Drawing.Size(143, 20);
             this.NewPartNameTextBox.TabIndex = 4;
             this.NewPartNameTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NewPartNameTextBox_KeyUp);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label4.Location = new System.Drawing.Point(5, 59);
+            this.label4.Margin = new System.Windows.Forms.Padding(5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(89, 17);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Part Description: ";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // PartNameDescriptionTextBox
+            // 
+            this.PartNameDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.PartNameDescriptionTextBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.PartNameDescriptionTextBox.Location = new System.Drawing.Point(102, 57);
+            this.PartNameDescriptionTextBox.Name = "PartNameDescriptionTextBox";
+            this.PartNameDescriptionTextBox.Size = new System.Drawing.Size(143, 20);
+            this.PartNameDescriptionTextBox.TabIndex = 7;
             // 
             // tableLayoutPanel6
             // 
@@ -167,12 +225,12 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.Controls.Add(this.DeletePartTypeButton, 1, 0);
             this.tableLayoutPanel6.Controls.Add(this.NewPartTypeButton, 0, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(248, 36);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(248, 0);
             this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(249, 36);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(249, 27);
             this.tableLayoutPanel6.TabIndex = 5;
             // 
             // DeletePartTypeButton
@@ -182,7 +240,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DeletePartTypeButton.Location = new System.Drawing.Point(127, 3);
             this.DeletePartTypeButton.Name = "DeletePartTypeButton";
-            this.DeletePartTypeButton.Size = new System.Drawing.Size(119, 30);
+            this.DeletePartTypeButton.Size = new System.Drawing.Size(119, 21);
             this.DeletePartTypeButton.TabIndex = 1;
             this.DeletePartTypeButton.Text = "Delete Part Type";
             this.DeletePartTypeButton.UseVisualStyleBackColor = true;
@@ -195,36 +253,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.NewPartTypeButton.Location = new System.Drawing.Point(3, 3);
             this.NewPartTypeButton.Name = "NewPartTypeButton";
-            this.NewPartTypeButton.Size = new System.Drawing.Size(118, 30);
+            this.NewPartTypeButton.Size = new System.Drawing.Size(118, 21);
             this.NewPartTypeButton.TabIndex = 0;
             this.NewPartTypeButton.Text = "Add New Part Type";
             this.NewPartTypeButton.UseVisualStyleBackColor = true;
             this.NewPartTypeButton.Click += new System.EventHandler(this.NewPartTypeButton_Click);
-            // 
-            // Part_Type_ComboBox
-            // 
-            this.Part_Type_ComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.Part_Type_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.Part_Type_ComboBox.FormattingEnabled = true;
-            this.Part_Type_ComboBox.Location = new System.Drawing.Point(102, 43);
-            this.Part_Type_ComboBox.Name = "Part_Type_ComboBox";
-            this.Part_Type_ComboBox.Size = new System.Drawing.Size(143, 21);
-            this.Part_Type_ComboBox.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label3.Location = new System.Drawing.Point(5, 41);
-            this.label3.Margin = new System.Windows.Forms.Padding(5);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 26);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Part Type:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tableLayoutPanel5
             // 
@@ -236,12 +269,12 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.CancelButton, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.OKButton, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(99, 72);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(248, 81);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(149, 38);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(249, 29);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // CancelButton
@@ -250,9 +283,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton.Location = new System.Drawing.Point(77, 3);
+            this.CancelButton.Location = new System.Drawing.Point(127, 3);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(69, 32);
+            this.CancelButton.Size = new System.Drawing.Size(119, 23);
             this.CancelButton.TabIndex = 1;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
@@ -265,11 +298,38 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OKButton.Location = new System.Drawing.Point(3, 3);
             this.OKButton.Name = "OKButton";
-            this.OKButton.Size = new System.Drawing.Size(68, 32);
+            this.OKButton.Size = new System.Drawing.Size(118, 23);
             this.OKButton.TabIndex = 0;
             this.OKButton.Text = "OK";
             this.OKButton.UseVisualStyleBackColor = true;
             this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label5.Location = new System.Drawing.Point(5, 86);
+            this.label5.Margin = new System.Windows.Forms.Padding(5);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 19);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Fixture Family: ";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // FixFamily_ComboBox
+            // 
+            this.FixFamily_ComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.FixFamily_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.FixFamily_ComboBox.FormattingEnabled = true;
+            this.FixFamily_ComboBox.Location = new System.Drawing.Point(102, 84);
+            this.FixFamily_ComboBox.Name = "FixFamily_ComboBox";
+            this.FixFamily_ComboBox.Size = new System.Drawing.Size(143, 21);
+            this.FixFamily_ComboBox.TabIndex = 9;
             // 
             // tableLayoutPanel4
             // 
@@ -374,5 +434,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Button DeletePartTypeButton;
         private System.Windows.Forms.Button NewPartTypeButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox PartNameDescriptionTextBox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox FixFamily_ComboBox;
     }
 }

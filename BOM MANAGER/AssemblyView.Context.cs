@@ -28,13 +28,20 @@ namespace BOM_MANAGER
         public virtual DbSet<Assembly> Assemblies { get; set; }
         public virtual DbSet<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
         public virtual DbSet<AssemblyType> AssemblyTypes { get; set; }
+        public virtual DbSet<FamilyName> FamilyNames { get; set; }
         public virtual DbSet<PartAtAssembly> PartAtAssemblies { get; set; }
         public virtual DbSet<PartType> PartTypes { get; set; }
-        public virtual DbSet<Fixture> Fixtures { get; set; }
         public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
         public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
-        public virtual DbSet<PartView> PartViews { get; set; }
+        public virtual DbSet<BOM> BOMs { get; set; }
         public virtual DbSet<PartTypeAtPart> PartTypeAtParts { get; set; }
+        public virtual DbSet<PartView> PartViews { get; set; }
+        public virtual DbSet<Fixture> Fixtures { get; set; }
+        public virtual DbSet<CategoryAtFixture> CategoryAtFixtures { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<CategoryAtFixtureView> CategoryAtFixtureViews { get; set; }
+        public virtual DbSet<FixtureSetupCodeParserTemplate> FixtureSetupCodeParserTemplates { get; set; }
+        public virtual DbSet<ParameterAtCategoryAtFixtureView> ParameterAtCategoryAtFixtureViews { get; set; }
     }
 }
