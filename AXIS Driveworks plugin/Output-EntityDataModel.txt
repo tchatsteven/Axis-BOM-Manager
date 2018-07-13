@@ -1,0 +1,49 @@
+﻿Generated model file: DbData.edmx.
+Loading metadata from the database took 00:00:00.3876759.
+Generating the model took 00:00:00.9237330.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0132451.
+The model was generated with warnings or errors.FixtureSetupCodes.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3488367.
+Generating the model took 00:00:01.7016330.
+The model was generated with warnings or errors.FixtureSetupCodes.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3549276.
+Generating the model took 00:00:01.1241489.
+Added the connection string to the App.Config file.
+The model was generated with warnings or errors.FixtureSetupCodes.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.4147121.
+Generating the model took 00:00:01.1794427.
+The model was generated with warnings or errors.FixtureSetupCodes.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3752783.
+Generating the model took 00:00:01.1201981.
+The model was generated with warnings or errors.DbData.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3567576.
+Generating the model took 00:00:00.7451111.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0110948.
+The model was generated with warnings or errors.DbData.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3778270.
+Generating the model took 00:00:00.9362850.
+Generated model file: SectionSolverDbData.edmx.
+Loading metadata from the database took 00:00:00.3855842.
+Generating the model took 00:00:00.3498594.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0120124.
+Generated model file: SectionLengthsSolver_DbData.edmx.
+Loading metadata from the database took 00:00:00.4121178.
+Generating the model took 00:00:00.2918493.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0119409.
+The model was generated with warnings or errors.FixtureSetupCodeParserDbData.edmxPlease see the Error List for more details. These issues must be fixed before running your application.
+Loading metadata from the database took 00:00:00.3707344.
+Generating the model took 00:00:00.3097021.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0121587.
+The 'configuration' start tag on line 2 position 2 does not match the end tag of 'connectionStrings'. Line 9, position 5.
+Generated model file: FixtureConfiguratorDbData.edmx.
+Loading metadata from the database took 00:00:00.3782149.
+Generating the model took 00:00:00.2402661.
+Added the connection string to the App.Config file.
+Writing the .edmx file took 00:00:00.0107935.
+An item with the same key has already been added.
+An item with the same key has already been added.

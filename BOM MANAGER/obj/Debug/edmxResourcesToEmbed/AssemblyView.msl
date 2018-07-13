@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="AXIS_AutomationEntities">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="AXIS_AutomationEntitiesBOM">
     <EntitySetMapping Name="Assemblies">
       <EntityTypeMapping TypeName="Model.Assembly">
         <MappingFragment StoreEntitySet="Assembly">
@@ -280,6 +280,33 @@
           <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
           <ScalarProperty Name="CatAtFixture_ID" ColumnName="CatAtFixture_ID" />
           <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FilterBehaviors">
+      <EntityTypeMapping TypeName="Model.FilterBehavior">
+        <MappingFragment StoreEntitySet="FilterBehavior">
+          <ScalarProperty Name="Behavior" ColumnName="Behavior" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartRules">
+      <EntityTypeMapping TypeName="Model.PartRule">
+        <MappingFragment StoreEntitySet="PartRules">
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="FirstFilterDependencyName" ColumnName="FirstFilterDependencyName" />
+          <ScalarProperty Name="FirstFilterDependencyID" ColumnName="FirstFilterDependencyID" />
+          <ScalarProperty Name="PACAF_ID" ColumnName="PACAF_ID" />
+          <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+          <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="PartName" ColumnName="PartName" />
+          <ScalarProperty Name="PartID" ColumnName="PartID" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

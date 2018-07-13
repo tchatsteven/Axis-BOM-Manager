@@ -13,10 +13,10 @@ namespace BOM_MANAGER
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class AXIS_AutomationEntities : DbContext
+    public partial class AXIS_AutomationEntitiesBOM : DbContext
     {
-        public AXIS_AutomationEntities()
-            : base("name=AXIS_AutomationEntities")
+        public AXIS_AutomationEntitiesBOM()
+            : base("name=AXIS_AutomationEntitiesBOM")
         {
         }
     
@@ -43,5 +43,7 @@ namespace BOM_MANAGER
         public virtual DbSet<CategoryAtFixtureView> CategoryAtFixtureViews { get; set; }
         public virtual DbSet<FixtureSetupCodeParserTemplate> FixtureSetupCodeParserTemplates { get; set; }
         public virtual DbSet<ParameterAtCategoryAtFixtureView> ParameterAtCategoryAtFixtureViews { get; set; }
+        public virtual DbSet<FilterBehavior> FilterBehaviors { get; set; }
+        public virtual DbSet<PartRule> PartRules { get; set; }
     }
 }

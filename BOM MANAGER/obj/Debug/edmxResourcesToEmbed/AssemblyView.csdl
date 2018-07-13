@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityContainer Name="AXIS_AutomationEntities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="AXIS_AutomationEntitiesBOM" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Assemblies" EntityType="Model.Assembly" />
     <EntitySet Name="AssemblyAtAssemblies" EntityType="Model.AssemblyAtAssembly" />
     <EntitySet Name="AssemblyTypes" EntityType="Model.AssemblyType" />
@@ -59,6 +59,16 @@
     <EntitySet Name="CategoryAtFixtureViews" EntityType="Model.CategoryAtFixtureView" />
     <EntitySet Name="FixtureSetupCodeParserTemplates" EntityType="Model.FixtureSetupCodeParserTemplate" />
     <EntitySet Name="ParameterAtCategoryAtFixtureViews" EntityType="Model.ParameterAtCategoryAtFixtureView" />
+    <EntitySet Name="FilterBehaviors" EntityType="Model.FilterBehavior" />
+    <EntitySet Name="PartRules" EntityType="Model.PartRule" />
+    <AssociationSet Name="FK_PartRules_PartRules" Association="Model.FK_PartRules_PartRules">
+      <End Role="FilterBehavior" EntitySet="FilterBehaviors" />
+      <End Role="PartRule" EntitySet="PartRules" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRules_Parts" Association="Model.FK_PartRules_Parts">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="PartRule" EntitySet="PartRules" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Assembly">
     <Key>
@@ -131,6 +141,7 @@
     <NavigationProperty Name="FamilyName" Relationship="Model.FK_Parts_FamilyName1" FromRole="Part" ToRole="FamilyName" />
     <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
     <NavigationProperty Name="PartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="PartType" />
+    <NavigationProperty Name="PartRules" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRule" />
   </EntityType>
   <EntityType Name="AssemblyTypeAtAssembly">
     <Key>
@@ -494,7 +505,61 @@
     <Property Name="Parameter_ID" Type="Int32" />
     <Property Name="ParameterCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
     <Property Name="Description" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
-    <Property Name="Category_ID" Type="Int32" />
-    <Property Name="Name" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="Category_ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="75" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
+  <EntityType Name="FilterBehavior">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Behavior" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PartRules" Relationship="Model.FK_PartRules_PartRules" FromRole="FilterBehavior" ToRole="PartRule" />
+  </EntityType>
+  <EntityType Name="PartRule">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartID" Type="Int32" Nullable="false" />
+    <Property Name="PartName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ProductID" Type="Int32" />
+    <Property Name="ProductCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryID" Type="Int32" />
+    <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ParameterID" Type="Int32" />
+    <Property Name="ParameterName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PACAF_ID" Type="Int32" />
+    <Property Name="FirstFilterDependencyID" Type="Int32" />
+    <Property Name="FirstFilterDependencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <NavigationProperty Name="FilterBehavior" Relationship="Model.FK_PartRules_PartRules" FromRole="PartRule" ToRole="FilterBehavior" />
+    <NavigationProperty Name="Part" Relationship="Model.FK_PartRules_Parts" FromRole="PartRule" ToRole="Part" />
+  </EntityType>
+  <Association Name="FK_PartRules_PartRules">
+    <End Type="Model.FilterBehavior" Role="FilterBehavior" Multiplicity="0..1" />
+    <End Type="Model.PartRule" Role="PartRule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilterBehavior">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRule">
+        <PropertyRef Name="FirstFilterDependencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartRules_Parts">
+    <End Type="Model.Part" Role="Part" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.PartRule" Role="PartRule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Part">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRule">
+        <PropertyRef Name="PartID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

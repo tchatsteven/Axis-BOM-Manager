@@ -1,0 +1,41 @@
+﻿<Window x:Class="SpecSheet_Generator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpecSheet_Generator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="482.372" Width="664.103" Background="#FF383631">
+    <Grid Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="159*"/>
+            <ColumnDefinition Width="236*"/>
+            <ColumnDefinition Width="261*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="53*"/>
+            <RowDefinition Height="226*"/>
+            <RowDefinition Height="63*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="GenerateSpecSheete__Button" Content="Generate" Margin="0,24" Grid.Column="2" Click="GenerateSpecSheete__Button_Click" HorizontalAlignment="Left" Width="114" Foreground="Black">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFF3F3F3" Offset="0"/>
+                    <GradientStop Color="#FFEBEBEB" Offset="0.5"/>
+                    <GradientStop Color="#FFC8D7E0" Offset="0.5"/>
+                    <GradientStop Color="#FF5B5656" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <TextBox Grid.Column="1" HorizontalAlignment="Center" Height="23" Margin="0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="218"/>
+        <Label Content="Generate Spec. Sheet" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" Foreground="White"/>
+        <RichTextBox HorizontalAlignment="Left" Height="63" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="636" Grid.ColumnSpan="3" Background="#FF2C2C22">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="RichTextBox"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
+    </Grid>
+</Window>

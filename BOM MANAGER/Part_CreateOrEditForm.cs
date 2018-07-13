@@ -7,20 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AXISAutomation.Tools.Logging;
 
 namespace BOM_MANAGER
 {
     public partial class Part_CreateOrEditForm : Form
     {
-        RTFMessenger.RTFMessenger EditFormMsg;
-        AXIS_AutomationEntities db = new AXIS_AutomationEntities();
-        Part NewPart = null;
+        _RTFMessenger EditFormMsg;
+        AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
+        Part newPart = null;
 
         //Constructor for NEW BUTTON
         public Part_CreateOrEditForm()
         {
             InitializeComponent();
-            EditFormMsg = new RTFMessenger.RTFMessenger(PartType_TextBox, true) { DefaulSpaceAfter = 0 };
+            EditFormMsg = new _RTFMessenger(PartType_TextBox, 0,true) { DefaulSpaceAfter = 0 };
             ValidateForm();
             LoadAssemblyType();
         }
@@ -29,10 +30,10 @@ namespace BOM_MANAGER
         public Part_CreateOrEditForm( String partNameToEdit, String description, String partTypeToEdit, String FamilyName)
         {
             InitializeComponent();
-            EditFormMsg = new RTFMessenger.RTFMessenger(PartType_TextBox, true) { DefaulSpaceAfter = 0 };            
+            EditFormMsg = new _RTFMessenger(PartType_TextBox, 0,true) { DefaulSpaceAfter = 0 };            
             NewPartNameTextBox.Text = partNameToEdit;
             PartNameDescriptionTextBox.Text = description;            
-            NewPart = db.Parts.Where(o => o.PartName == partNameToEdit).First();
+            newPart = db.Parts.Where(o => o.PartName == partNameToEdit).First();
             LoadAssemblyType(partTypeToEdit, FamilyName);
         }
 
@@ -77,20 +78,20 @@ namespace BOM_MANAGER
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            if (NewPart == null)
+            if (newPart == null)
             {
-                NewPart = new Part();
-                db.Parts.Add(NewPart);
+                newPart = new Part();
+                db.Parts.Add(newPart);
             }
             try
             {
-                NewPart.PartName = NewPartNameTextBox.Text;
-                NewPart.Description = PartNameDescriptionTextBox.Text;
-                NewPart.TypeID = (Int32)Part_Type_ComboBox.SelectedValue;
+                newPart.PartName = NewPartNameTextBox.Text;
+                newPart.Description = PartNameDescriptionTextBox.Text;
+                newPart.TypeID = (Int32)Part_Type_ComboBox.SelectedValue;
 
                 String currentFixFamily = FixFamily_ComboBox.Text;
-                Int32 fixFamilyIndex = db.FamilyNames.Where(o => o.FamilyName1 == currentFixFamily).First().id;                          
-                NewPart.FixFamilyID = fixFamilyIndex;
+                Int32 fixFamilyIndex = db.FamilyNames.Where(o => o.FamilyName1 == currentFixFamily).First().id;
+                newPart.FixFamilyID = fixFamilyIndex;
 
                 db.SaveChanges();
                 DialogResult = DialogResult.OK;
@@ -137,13 +138,13 @@ namespace BOM_MANAGER
         private Boolean NameExists
         {
             get {
-                Boolean MyTest = db.Parts.Any(o => o.PartName == NewPartNameTextBox.Text);
-                if (MyTest)
-                {
-                    EditFormMsg.NewMessage().AddText("Part already Exists").IsError().PrependMessageType().Log();
+                    Boolean MyTest = db.Parts.Any(o => o.PartName == NewPartNameTextBox.Text);
+                    if (MyTest)
+                    {
+                        EditFormMsg.NewMessage().AddText("Part already Exists").IsError().PrependMessageType().Log();
+                    }
+                    return MyTest;
                 }
-                return MyTest;
-            }
         }
 
         private Boolean AssemblyNameFieldIsEmpty
@@ -153,6 +154,7 @@ namespace BOM_MANAGER
 
         private void NewPartNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {
+            PartType_TextBox.Clear();
             ValidateForm();
         }
 

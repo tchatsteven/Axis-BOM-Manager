@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBData" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CartridgeSolverDbDataConnection" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="GenericCartridges" EntityType="DBData.GenericCartridge" />
+    <EntitySet Name="GenericBoardAtGenericCartridges" EntityType="DBData.GenericBoardAtGenericCartridge" />
+    <EntitySet Name="GenericBoardsDatas" EntityType="DBData.GenericBoardsData" />
+    <EntitySet Name="GenericCartridgesDatas" EntityType="DBData.GenericCartridgesData" />
+    <AssociationSet Name="FK_GenericBoardAtGenericCartridge_GenericBoardsData" Association="DBData.FK_GenericBoardAtGenericCartridge_GenericBoardsData">
+      <End Role="GenericBoardsData" EntitySet="GenericBoardsDatas" />
+      <End Role="GenericBoardAtGenericCartridge" EntitySet="GenericBoardAtGenericCartridges" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GenericBoardAtGenericCartridge_GenericCartridges" Association="DBData.FK_GenericBoardAtGenericCartridge_GenericCartridges">
+      <End Role="GenericCartridgesData" EntitySet="GenericCartridgesDatas" />
+      <End Role="GenericBoardAtGenericCartridge" EntitySet="GenericBoardAtGenericCartridges" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="GenericCartridge">
+    <Key>
+      <PropertyRef Name="CartID" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="Length" />
+      <PropertyRef Name="NeedsCutting" />
+      <PropertyRef Name="Serie" />
+      <PropertyRef Name="InSerieID" />
+    </Key>
+    <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="26" FixedLength="false" Unicode="false" />
+    <Property Name="ContainedBoards" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Length" Type="Decimal" Nullable="false" Precision="7" Scale="4" />
+    <Property Name="NeedsCutting" Type="Boolean" Nullable="false" />
+    <Property Name="Serie" Type="Int32" Nullable="false" />
+    <Property Name="InSerieID" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GenericBoardAtGenericCartridge">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GenericCartridge" Type="Int32" Nullable="false" />
+    <Property Name="GenericBoard" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="GenericBoardsData" Relationship="DBData.FK_GenericBoardAtGenericCartridge_GenericBoardsData" FromRole="GenericBoardAtGenericCartridge" ToRole="GenericBoardsData" />
+    <NavigationProperty Name="GenericCartridgesData" Relationship="DBData.FK_GenericBoardAtGenericCartridge_GenericCartridges" FromRole="GenericBoardAtGenericCartridge" ToRole="GenericCartridgesData" />
+  </EntityType>
+  <EntityType Name="GenericBoardsData">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="Length" Type="Decimal" Precision="10" Scale="5" />
+    <NavigationProperty Name="GenericBoardAtGenericCartridges" Relationship="DBData.FK_GenericBoardAtGenericCartridge_GenericBoardsData" FromRole="GenericBoardsData" ToRole="GenericBoardAtGenericCartridge" />
+  </EntityType>
+  <EntityType Name="GenericCartridgesData">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Serie" Type="Int32" Nullable="false" />
+    <Property Name="InSerieID" Type="Int32" Nullable="false" />
+    <Property Name="Length" Type="Decimal" Nullable="false" Precision="7" Scale="4" />
+    <Property Name="NeedsCutting" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="GenericBoardAtGenericCartridges" Relationship="DBData.FK_GenericBoardAtGenericCartridge_GenericCartridges" FromRole="GenericCartridgesData" ToRole="GenericBoardAtGenericCartridge" />
+  </EntityType>
+  <Association Name="FK_GenericBoardAtGenericCartridge_GenericBoardsData">
+    <End Type="DBData.GenericBoardsData" Role="GenericBoardsData" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="DBData.GenericBoardAtGenericCartridge" Role="GenericBoardAtGenericCartridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GenericBoardsData">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="GenericBoardAtGenericCartridge">
+        <PropertyRef Name="GenericBoard" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GenericBoardAtGenericCartridge_GenericCartridges">
+    <End Type="DBData.GenericCartridgesData" Role="GenericCartridgesData" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="DBData.GenericBoardAtGenericCartridge" Role="GenericBoardAtGenericCartridge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GenericCartridgesData">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="GenericBoardAtGenericCartridge">
+        <PropertyRef Name="GenericCartridge" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

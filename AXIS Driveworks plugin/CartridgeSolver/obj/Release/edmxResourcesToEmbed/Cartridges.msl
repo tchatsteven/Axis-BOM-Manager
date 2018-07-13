@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="CartridgeSolverDbDataConnection">
+    <EntitySetMapping Name="GenericCartridges">
+      <EntityTypeMapping TypeName="DBData.GenericCartridge">
+        <MappingFragment StoreEntitySet="GenericCartridges">
+          <ScalarProperty Name="InSerieID" ColumnName="InSerieID" />
+          <ScalarProperty Name="Serie" ColumnName="Serie" />
+          <ScalarProperty Name="NeedsCutting" ColumnName="NeedsCutting" />
+          <ScalarProperty Name="Length" ColumnName="Length" />
+          <ScalarProperty Name="ContainedBoards" ColumnName="ContainedBoards" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CartID" ColumnName="CartID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GenericBoardAtGenericCartridges">
+      <EntityTypeMapping TypeName="DBData.GenericBoardAtGenericCartridge">
+        <MappingFragment StoreEntitySet="GenericBoardAtGenericCartridge">
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="GenericBoard" ColumnName="GenericBoard" />
+          <ScalarProperty Name="GenericCartridge" ColumnName="GenericCartridge" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GenericBoardsDatas">
+      <EntityTypeMapping TypeName="DBData.GenericBoardsData">
+        <MappingFragment StoreEntitySet="GenericBoardsData">
+          <ScalarProperty Name="Length" ColumnName="Length" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GenericCartridgesDatas">
+      <EntityTypeMapping TypeName="DBData.GenericCartridgesData">
+        <MappingFragment StoreEntitySet="GenericCartridgesData">
+          <ScalarProperty Name="NeedsCutting" ColumnName="NeedsCutting" />
+          <ScalarProperty Name="Length" ColumnName="Length" />
+          <ScalarProperty Name="InSerieID" ColumnName="InSerieID" />
+          <ScalarProperty Name="Serie" ColumnName="Serie" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

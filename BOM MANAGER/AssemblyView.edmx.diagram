@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="1051d55e4ac94aee9d6c989c5cb7d3b6" Name="Diagram1" ZoomLevel="67">
-        <EntityTypeShape EntityType="Model.Assembly" Width="1.5" PointX="2.75" PointY="4.125" />
-        <EntityTypeShape EntityType="Model.AssemblyAtAssembly" Width="1.5" PointX="5.125" PointY="4" />
-        <EntityTypeShape EntityType="Model.AssemblyType" Width="1.5" PointX="0.5" PointY="4.75" />
-        <EntityTypeShape EntityType="Model.FamilyName" Width="1.5" PointX="0.5" PointY="2.375" />
-        <EntityTypeShape EntityType="Model.PartAtAssembly" Width="1.5" PointX="5.125" PointY="0.875" />
-        <EntityTypeShape EntityType="Model.PartType" Width="1.5" PointX="0.625" PointY="0.5" />
-        <EntityTypeShape EntityType="Model.Part" Width="1.5" PointX="2.875" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.AssemblyTypeAtAssembly" Width="3.25" PointX="10.375" PointY="6.375" />
+        <EntityTypeShape EntityType="Model.Assembly" Width="1.5" PointX="2.875" PointY="10.25" />
+        <EntityTypeShape EntityType="Model.AssemblyAtAssembly" Width="1.625" PointX="5.25" PointY="9" />
+        <EntityTypeShape EntityType="Model.AssemblyType" Width="1.5" PointX="0.5" PointY="10.375" />
+        <EntityTypeShape EntityType="Model.FamilyName" Width="1.5" PointX="0.5" PointY="6.625" />
+        <EntityTypeShape EntityType="Model.PartAtAssembly" Width="1.5" PointX="5.5" PointY="6.25" />
+        <EntityTypeShape EntityType="Model.PartType" Width="1.5" PointX="0.5" PointY="3.875" />
+        <EntityTypeShape EntityType="Model.Part" Width="1.5" PointX="2.875" PointY="4.75" />
+        <EntityTypeShape EntityType="Model.AssemblyTypeAtAssembly" Width="3.25" PointX="10.125" PointY="4.125" />
         <EntityTypeShape EntityType="Model.AssemblyView" Width="1.875" PointX="7.75" PointY="6.125" />
         <EntityTypeShape EntityType="Model.BOM" Width="3" PointX="13.875" PointY="0.875" />
         <EntityTypeShape EntityType="Model.PartTypeAtPart" Width="2.125" PointX="10.375" PointY="0.5" />
@@ -24,16 +24,20 @@
         <AssociationConnector Association="Model.FK_Parts_FamilyName1" />
         <AssociationConnector Association="Model.FK_PartAtAssembly_Parts" />
         <AssociationConnector Association="Model.FK_Parts_PartTypes" />
-        <EntityTypeShape EntityType="Model.Fixture" Width="1.5" PointX="5.125" PointY="7.125" />
+        <EntityTypeShape EntityType="Model.Fixture" Width="1.875" PointX="5.375" PointY="13" />
         <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Fixtures" />
-        <EntityTypeShape EntityType="Model.CategoryAtFixture" Width="1.5" PointX="8.375" PointY="10.25" />
+        <EntityTypeShape EntityType="Model.CategoryAtFixture" Width="2.125" PointX="8.75" PointY="13.25" />
         <AssociationConnector Association="Model.FK_OrderingCode_FixtureBelonging" />
-        <EntityTypeShape EntityType="Model.Category" Width="1.5" PointX="11.375" PointY="10.5" />
+        <EntityTypeShape EntityType="Model.Category" Width="1.5" PointX="12" PointY="13" />
         <AssociationConnector Association="Model.FK_OrderingCode_CategoryBelonging" />
-        <EntityTypeShape EntityType="Model.CategoryAtFixtureView" Width="4" PointX="14.125" PointY="12.125" />
+        <EntityTypeShape EntityType="Model.CategoryAtFixtureView" Width="4" PointX="14.25" PointY="11.125" />
         <EntityTypeShape EntityType="Model.FixtureSetupCodeParserTemplate" Width="2.625" PointX="18.875" PointY="4.125" />
-        <EntityTypeShape EntityType="Model.ParameterAtCategoryAtFixtureView" Width="3.125" PointX="14.5" PointY="7.375" />
-      </Diagram>
+        <EntityTypeShape EntityType="Model.ParameterAtCategoryAtFixtureView" Width="3.125" PointX="14.125" PointY="6.375" />
+        <EntityTypeShape EntityType="Model.FilterBehavior" Width="1.5" PointX="2.875" PointY="1.125" />
+        <EntityTypeShape EntityType="Model.PartRule" Width="1.5" PointX="5.125" PointY="1.375" />
+        <AssociationConnector Association="Model.FK_PartRules_PartRules" />
+        <AssociationConnector Association="Model.FK_PartRules_Parts" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

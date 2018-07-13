@@ -22,7 +22,9 @@ Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\EntityF
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.createEditForm.resources
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.MainForm.resources
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.Properties.Resources.resources
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.GenerateResource.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.CopyComplete
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM Data Manager.exe
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM Data Manager.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csprojResolveAssemblyReference.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csprojAssemblyReference.cache

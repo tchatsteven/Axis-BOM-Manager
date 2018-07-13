@@ -1,0 +1,5 @@
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\SystemWideSettings\bin\Debug1\SystemWideSettings.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\SystemWideSettings\bin\Debug1\SystemWideSettings.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\SystemWideSettings\obj\Debug1\SystemWideSettings.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\SystemWideSettings\obj\Debug1\SystemWideSettings.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\SystemWideSettings\obj\Debug1\SystemWideSettings.pdb

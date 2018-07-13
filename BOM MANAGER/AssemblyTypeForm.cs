@@ -12,7 +12,7 @@ namespace BOM_MANAGER
 {
     public partial class AssemblyTypeForm : Form
     {
-        AXIS_AutomationEntities db = new AXIS_AutomationEntities();
+        AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
         public AssemblyTypeForm()
         {
             InitializeComponent();

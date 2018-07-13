@@ -27,7 +27,7 @@ namespace BOM_MANAGER
         public Nullable<int> Parameter_ID { get; set; }
         public string ParameterCode { get; set; }
         public string Description { get; set; }
-        public Nullable<int> Category_ID { get; set; }
+        public int Category_ID { get; set; }
         public string Name { get; set; }
     }
 }

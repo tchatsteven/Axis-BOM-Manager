@@ -1,0 +1,59 @@
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\EntityFramework.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\EntityFramework.SqlServer.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\WindowsFormsApplication1.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\WindowsFormsApplication1.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\WindowsFormsApplication1.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\EntityFramework.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\EntityFramework.SqlServer.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolverTester.csprojResolveAssemblyReference.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\BeamCartridgePicker.CartridgePickerTesterForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolverTester.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolverTester.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolver.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\CartridgeSolver.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\RTFTools.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\bin\Debug\RTFTools.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\BeamCartridgePicker\obj\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.SqlServer.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\RTFTools.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.SqlServer.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\RTFTools.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csprojResolveAssemblyReference.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\BeamCartridgePicker.CartridgePickerTesterForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.SqlServer.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\RTFTools.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\WindowsFormsApplication1.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\EntityFramework.SqlServer.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\RTFTools.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\BeamCartridgePicker.CartridgePickerTesterForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolver.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csprojAssemblyReference.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\obj\Debug\CartridgeSolverTester.csproj.CopyComplete
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\AXIS Driveworks plugin\CartridgeSolver\bin\Debug\RTFMessenger.dll

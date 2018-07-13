@@ -31,6 +31,13 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="FamilyName" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="FilterBehavior">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Behavior" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <EntityType Name="PartAtAssembly">
     <Key>
       <PropertyRef Name="id" />
@@ -39,6 +46,24 @@
     <Property Name="PartRefID" Type="int" Nullable="false" />
     <Property Name="AssRefID" Type="int" Nullable="false" />
     <Property Name="FixtureID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PartRules">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartID" Type="int" Nullable="false" />
+    <Property Name="PartName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ProductID" Type="int" />
+    <Property Name="ProductCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="CategoryID" Type="int" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ParameterID" Type="int" />
+    <Property Name="ParameterName" Type="nvarchar" MaxLength="100" />
+    <Property Name="PACAF_ID" Type="int" />
+    <Property Name="FirstFilterDependencyID" Type="int" />
+    <Property Name="FirstFilterDependencyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Quantity" Type="int" />
   </EntityType>
   <EntityType Name="PartTypes">
     <Key>
@@ -198,8 +223,8 @@ warning 6002: The table/view 'AXIS Automation.bom.ParameterAtCategoryAtFixtureVi
     <Property Name="Parameter_ID" Type="int" />
     <Property Name="ParameterCode" Type="nvarchar" MaxLength="25" />
     <Property Name="Description" Type="nvarchar" MaxLength="75" />
-    <Property Name="Category_ID" Type="int" />
-    <Property Name="Name" Type="nvarchar" MaxLength="75" />
+    <Property Name="Category_ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="75" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'AXIS Automation.bom.PartTypeAtPart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -407,6 +432,32 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_PartRules_PartRules">
+    <End Role="FilterBehavior" Type="Self.FilterBehavior" Multiplicity="0..1" />
+    <End Role="PartRules" Type="Self.PartRules" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilterBehavior">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRules">
+        <PropertyRef Name="FirstFilterDependencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartRules_Parts">
+    <End Role="Parts" Type="Self.Parts" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="PartRules" Type="Self.PartRules" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parts">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRules">
+        <PropertyRef Name="PartID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Parts_FamilyName1">
     <End Role="FamilyName" Type="Self.FamilyName" Multiplicity="0..1" />
     <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
@@ -438,7 +489,9 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     <EntitySet Name="AssemblyAtAssembly" EntityType="Self.AssemblyAtAssembly" Schema="bom" store:Type="Tables" />
     <EntitySet Name="AssemblyType" EntityType="Self.AssemblyType" Schema="bom" store:Type="Tables" />
     <EntitySet Name="FamilyName" EntityType="Self.FamilyName" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="FilterBehavior" EntityType="Self.FilterBehavior" Schema="bom" store:Type="Tables" />
     <EntitySet Name="PartAtAssembly" EntityType="Self.PartAtAssembly" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="PartRules" EntityType="Self.PartRules" Schema="bom" store:Type="Tables" />
     <EntitySet Name="PartTypes" EntityType="Self.PartTypes" Schema="bom" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="FixtureSetupCodes" store:Type="Tables" />
     <EntitySet Name="CategoryAtFixture" EntityType="Self.CategoryAtFixture" Schema="FixtureSetupCodes" store:Type="Tables" />
@@ -636,6 +689,14 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Self.FK_PartAtAssembly_Parts">
       <End Role="Parts" EntitySet="Parts" />
       <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRules_PartRules" Association="Self.FK_PartRules_PartRules">
+      <End Role="FilterBehavior" EntitySet="FilterBehavior" />
+      <End Role="PartRules" EntitySet="PartRules" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRules_Parts" Association="Self.FK_PartRules_Parts">
+      <End Role="Parts" EntitySet="Parts" />
+      <End Role="PartRules" EntitySet="PartRules" />
     </AssociationSet>
     <AssociationSet Name="FK_Parts_FamilyName1" Association="Self.FK_Parts_FamilyName1">
       <End Role="FamilyName" EntitySet="FamilyName" />

@@ -7,20 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AXISAutomation.Tools.Logging;
 
 namespace BOM_MANAGER
 {
     public partial class Assembly_CreatOrEditForm : Form
     {
-        RTFMessenger.RTFMessenger EditFormMsg;
-        AXIS_AutomationEntities db = new AXIS_AutomationEntities();
+        _RTFMessenger EditFormMsg;
+        AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
         Assembly NewAssembly = null;
 
         //Constructor for NEW BUTTON
         public Assembly_CreatOrEditForm( )
         {            
             InitializeComponent();
-            EditFormMsg = new RTFMessenger.RTFMessenger(AssyType_TextBox, true) { DefaulSpaceAfter = 0 }; 
+            EditFormMsg = new _RTFMessenger(AssyType_TextBox,0, true) { DefaulSpaceAfter = 0 }; 
             ValidateForm();
             LoadAssemblyType();
             
@@ -30,7 +31,7 @@ namespace BOM_MANAGER
         public Assembly_CreatOrEditForm( String AssemblyNameToEdit )
         {
             InitializeComponent();
-            EditFormMsg = new RTFMessenger.RTFMessenger(AssyType_TextBox, true) { DefaulSpaceAfter = 0 };
+            EditFormMsg = new _RTFMessenger(AssyType_TextBox, 0,true) { DefaulSpaceAfter = 0 };
             LoadAssemblyType();
             NewAssemblyNameTextBox.Text = AssemblyNameToEdit;
             NewAssembly = db.Assemblies.Where(o => o.Name == AssemblyNameToEdit).First();
