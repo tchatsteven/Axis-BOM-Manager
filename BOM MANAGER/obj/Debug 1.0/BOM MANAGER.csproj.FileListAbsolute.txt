@@ -1,0 +1,27 @@
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\BOM MANAGER.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\BOM MANAGER.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\AXISAutomation.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\EntityFramework.SqlServer.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DBConnection.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DriveWorks.Engine.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\Titan.Rules.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DocumentFormat.OpenXml.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\AXISAutomation.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\AXISAutomation.dll.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DBConnection.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DBConnection.dll.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DriveWorks.Engine.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\Titan.Rules.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug 1.0\DocumentFormat.OpenXml.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.AssemblyTypeForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.BOM_MANAGER.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.Assembly_CreatOrEditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.PartTypeForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.Part_CreateOrEditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM_MANAGER.Rules_EditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM MANAGER.csproj.GenerateResource.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM MANAGER.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM MANAGER.csproj.CopyComplete
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM MANAGER.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug 1.0\BOM MANAGER.csprojAssemblyReference.cache

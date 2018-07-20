@@ -30,5 +30,6 @@ namespace BOM_MANAGER
     
         public virtual FilterBehavior FilterBehavior { get; set; }
         public virtual Part Part { get; set; }
+        public virtual ParameterAtCategoryAtFixture ParameterAtCategoryAtFixture { get; set; }
     }
 }

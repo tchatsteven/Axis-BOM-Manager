@@ -12,29 +12,20 @@ Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM MANAGER\bin\Debug\EntityFramework.SqlServ
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM MANAGER\bin\Debug\EntityFramework.xml
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM MANAGER\bin\Debug\EntityFramework.SqlServer.xml
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM MANAGER\obj\Debug\BOM_MANAGER.EditForm.resources
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\BOM MANAGER.exe.config
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\BOM MANAGER.exe
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\BOM MANAGER.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\FixtureConfiguration.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\FixtureSetupCodeParser.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\RTFMessenger.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\SectionSolvers.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\UnitsParser.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\BOM MANAGER.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\AXISAutomation.dll
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DBConnection.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\CartridgeLayout.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Validation.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\StringProcessing.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Settings.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\FixtureConfiguration.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\FixtureSetupCodeParser.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\FixtureSetupCodeParser.dll.config
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\SectionSolvers.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DriveWorks.Engine.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Titan.Rules.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DocumentFormat.OpenXml.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\AXISAutomation.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\AXISAutomation.dll.config
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DBConnection.pdb
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DBConnection.dll.config
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\CartridgeLayout.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Validation.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\StringProcessing.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Settings.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DriveWorks.Engine.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\Titan.Rules.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\bin\Debug\DocumentFormat.OpenXml.xml
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM_MANAGER.AssemblyTypeForm.resources
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM_MANAGER.BOM_MANAGER.resources
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM_MANAGER.Assembly_CreatOrEditForm.resources
@@ -47,3 +38,30 @@ Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM MA
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM MANAGER.csproj.CopyComplete
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM MANAGER.exe
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\obj\Debug\BOM MANAGER.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\BOM MANAGER.exe.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\BOM MANAGER.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\BOM MANAGER.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\AXISAutomation.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DBConnection.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DriveWorks.Engine.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\Titan.Rules.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DocumentFormat.OpenXml.dll
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\AXISAutomation.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\AXISAutomation.dll.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DBConnection.pdb
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DBConnection.dll.config
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DriveWorks.Engine.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\Titan.Rules.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\bin\Debug\DocumentFormat.OpenXml.xml
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM MANAGER.csprojResolveAssemblyReference.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.AssemblyTypeForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.BOM_MANAGER.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.Assembly_CreatOrEditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.PartTypeForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.Part_CreateOrEditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.Properties.Resources.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM_MANAGER.Rules_EditForm.resources
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM MANAGER.csproj.GenerateResource.Cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM MANAGER.csproj.CoreCompileInputs.cache
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM MANAGER.exe
+Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\obj\Debug\BOM MANAGER.pdb

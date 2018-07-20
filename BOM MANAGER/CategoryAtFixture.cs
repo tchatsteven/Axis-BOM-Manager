@@ -14,6 +14,12 @@ namespace BOM_MANAGER
     
     public partial class CategoryAtFixture
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CategoryAtFixture()
+        {
+            this.ParameterAtCategoryAtFixtures = new HashSet<ParameterAtCategoryAtFixture>();
+        }
+    
         public int id { get; set; }
         public int CategoryId { get; set; }
         public int FixtureId { get; set; }
@@ -26,5 +32,8 @@ namespace BOM_MANAGER
     
         public virtual Fixture Fixture { get; set; }
         public virtual Category Category { get; set; }
+        public virtual ParameterAtCategoryAtFixture ParameterAtCategoryAtFixture { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ParameterAtCategoryAtFixture> ParameterAtCategoryAtFixtures { get; set; }
     }
 }

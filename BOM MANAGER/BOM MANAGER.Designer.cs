@@ -138,11 +138,12 @@
             this.tableLayoutPanel50 = new System.Windows.Forms.TableLayoutPanel();
             this.label19 = new System.Windows.Forms.Label();
             this.FilterBehavior_ComboBox = new System.Windows.Forms.ComboBox();
-            this.tableLayoutPanel49 = new System.Windows.Forms.TableLayoutPanel();
-            this.Qty_NumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.AddQuantity_PR = new System.Windows.Forms.Button();
             this.label18 = new System.Windows.Forms.Label();
-            this.dataGridView_Rules = new System.Windows.Forms.DataGridView();
+            this.tableLayoutPanel49 = new System.Windows.Forms.TableLayoutPanel();
+            this.AdditionalFilter_CheckBox = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel51 = new System.Windows.Forms.TableLayoutPanel();
+            this.Qty_NumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.DataGridView_Rules = new System.Windows.Forms.DataGridView();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -202,8 +203,9 @@
             this.tableLayoutPanel40.SuspendLayout();
             this.tableLayoutPanel50.SuspendLayout();
             this.tableLayoutPanel49.SuspendLayout();
+            this.tableLayoutPanel51.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Qty_NumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Rules)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_Rules)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -456,7 +458,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Fixture_treeView_PartGen.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.Fixture_treeView_PartGen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Fixture_treeView_PartGen.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Bold);
             this.Fixture_treeView_PartGen.Location = new System.Drawing.Point(3, 3);
             this.Fixture_treeView_PartGen.Name = "Fixture_treeView_PartGen";
             this.Fixture_treeView_PartGen.Size = new System.Drawing.Size(825, 682);
@@ -467,7 +469,7 @@
             this.Log_RichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.Log_RichTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Log_RichTextBox.Font = new System.Drawing.Font("Times New Roman", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Log_RichTextBox.Location = new System.Drawing.Point(834, 3);
             this.Log_RichTextBox.Name = "Log_RichTextBox";
             this.Log_RichTextBox.Size = new System.Drawing.Size(604, 682);
@@ -1273,7 +1275,7 @@
             this.tableLayoutPanel36.ColumnCount = 1;
             this.tableLayoutPanel36.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel36.Controls.Add(this.tableLayoutPanel27, 0, 0);
-            this.tableLayoutPanel36.Controls.Add(this.dataGridView_Rules, 0, 1);
+            this.tableLayoutPanel36.Controls.Add(this.DataGridView_Rules, 0, 1);
             this.tableLayoutPanel36.Location = new System.Drawing.Point(611, 3);
             this.tableLayoutPanel36.Name = "tableLayoutPanel36";
             this.tableLayoutPanel36.RowCount = 2;
@@ -1436,8 +1438,9 @@
             this.tableLayoutPanel28.Controls.Add(this.label9, 0, 0);
             this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel41, 1, 1);
             this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel50, 0, 2);
-            this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel49, 0, 5);
             this.tableLayoutPanel28.Controls.Add(this.label18, 0, 4);
+            this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel49, 1, 2);
+            this.tableLayoutPanel28.Controls.Add(this.tableLayoutPanel51, 0, 5);
             this.tableLayoutPanel28.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel28.Name = "tableLayoutPanel28";
             this.tableLayoutPanel28.RowCount = 6;
@@ -1863,47 +1866,6 @@
             this.FilterBehavior_ComboBox.Size = new System.Drawing.Size(94, 23);
             this.FilterBehavior_ComboBox.TabIndex = 14;
             // 
-            // tableLayoutPanel49
-            // 
-            this.tableLayoutPanel49.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel49.ColumnCount = 2;
-            this.tableLayoutPanel49.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel49.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel49.Controls.Add(this.Qty_NumericUpDown, 1, 0);
-            this.tableLayoutPanel49.Controls.Add(this.AddQuantity_PR, 0, 0);
-            this.tableLayoutPanel49.Location = new System.Drawing.Point(0, 205);
-            this.tableLayoutPanel49.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel49.Name = "tableLayoutPanel49";
-            this.tableLayoutPanel49.RowCount = 1;
-            this.tableLayoutPanel49.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel49.Size = new System.Drawing.Size(203, 30);
-            this.tableLayoutPanel49.TabIndex = 11;
-            // 
-            // Qty_NumericUpDown
-            // 
-            this.Qty_NumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.Qty_NumericUpDown.Location = new System.Drawing.Point(104, 3);
-            this.Qty_NumericUpDown.Name = "Qty_NumericUpDown";
-            this.Qty_NumericUpDown.Size = new System.Drawing.Size(96, 23);
-            this.Qty_NumericUpDown.TabIndex = 9;
-            // 
-            // AddQuantity_PR
-            // 
-            this.AddQuantity_PR.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.AddQuantity_PR.Location = new System.Drawing.Point(3, 3);
-            this.AddQuantity_PR.Name = "AddQuantity_PR";
-            this.AddQuantity_PR.Size = new System.Drawing.Size(95, 24);
-            this.AddQuantity_PR.TabIndex = 10;
-            this.AddQuantity_PR.Text = "Add Qty";
-            this.AddQuantity_PR.UseVisualStyleBackColor = true;
-            this.AddQuantity_PR.Click += new System.EventHandler(this.AddQuantity_PR_Click);
-            // 
             // label18
             // 
             this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1919,19 +1881,69 @@
             this.label18.Text = "QUANTITY";
             this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // dataGridView_Rules
+            // tableLayoutPanel49
             // 
-            this.dataGridView_Rules.AllowUserToResizeRows = false;
-            this.dataGridView_Rules.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tableLayoutPanel49.ColumnCount = 2;
+            this.tableLayoutPanel49.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.8731F));
+            this.tableLayoutPanel49.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.12691F));
+            this.tableLayoutPanel49.Controls.Add(this.AdditionalFilter_CheckBox, 1, 0);
+            this.tableLayoutPanel49.Location = new System.Drawing.Point(206, 143);
+            this.tableLayoutPanel49.Name = "tableLayoutPanel49";
+            this.tableLayoutPanel49.RowCount = 1;
+            this.tableLayoutPanel49.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel49.Size = new System.Drawing.Size(197, 22);
+            this.tableLayoutPanel49.TabIndex = 15;
+            // 
+            // AdditionalFilter_CheckBox
+            // 
+            this.AdditionalFilter_CheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.AdditionalFilter_CheckBox.AutoSize = true;
+            this.AdditionalFilter_CheckBox.Location = new System.Drawing.Point(52, 3);
+            this.AdditionalFilter_CheckBox.Name = "AdditionalFilter_CheckBox";
+            this.AdditionalFilter_CheckBox.Size = new System.Drawing.Size(142, 16);
+            this.AdditionalFilter_CheckBox.TabIndex = 14;
+            this.AdditionalFilter_CheckBox.Text = "Additional Filter";
+            this.AdditionalFilter_CheckBox.UseVisualStyleBackColor = true;
+            this.AdditionalFilter_CheckBox.CheckedChanged += new System.EventHandler(this.AdditionalFilter_CheckBox_CheckedChanged);
+            // 
+            // tableLayoutPanel51
+            // 
+            this.tableLayoutPanel51.ColumnCount = 3;
+            this.tableLayoutPanel51.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel51.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel51.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel51.Controls.Add(this.Qty_NumericUpDown, 1, 0);
+            this.tableLayoutPanel51.Location = new System.Drawing.Point(3, 208);
+            this.tableLayoutPanel51.Name = "tableLayoutPanel51";
+            this.tableLayoutPanel51.RowCount = 1;
+            this.tableLayoutPanel51.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel51.Size = new System.Drawing.Size(197, 24);
+            this.tableLayoutPanel51.TabIndex = 16;
+            // 
+            // Qty_NumericUpDown
+            // 
+            this.Qty_NumericUpDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView_Rules.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
-            this.dataGridView_Rules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_Rules.Location = new System.Drawing.Point(3, 323);
-            this.dataGridView_Rules.Name = "dataGridView_Rules";
-            this.dataGridView_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView_Rules.Size = new System.Drawing.Size(827, 315);
-            this.dataGridView_Rules.TabIndex = 4;
+            this.Qty_NumericUpDown.Location = new System.Drawing.Point(42, 3);
+            this.Qty_NumericUpDown.Name = "Qty_NumericUpDown";
+            this.Qty_NumericUpDown.Size = new System.Drawing.Size(112, 23);
+            this.Qty_NumericUpDown.TabIndex = 9;
+            // 
+            // DataGridView_Rules
+            // 
+            this.DataGridView_Rules.AllowUserToResizeRows = false;
+            this.DataGridView_Rules.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataGridView_Rules.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
+            this.DataGridView_Rules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView_Rules.Location = new System.Drawing.Point(3, 323);
+            this.DataGridView_Rules.Name = "DataGridView_Rules";
+            this.DataGridView_Rules.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridView_Rules.Size = new System.Drawing.Size(827, 315);
+            this.DataGridView_Rules.TabIndex = 4;
+            this.DataGridView_Rules.SelectionChanged += new System.EventHandler(this.DataGridView_Rules_SelectionChanged);
             // 
             // tableLayoutPanel1
             // 
@@ -2094,8 +2106,10 @@
             this.tableLayoutPanel50.ResumeLayout(false);
             this.tableLayoutPanel50.PerformLayout();
             this.tableLayoutPanel49.ResumeLayout(false);
+            this.tableLayoutPanel49.PerformLayout();
+            this.tableLayoutPanel51.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Qty_NumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView_Rules)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView_Rules)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -2214,13 +2228,14 @@
         private System.Windows.Forms.Button RefreshTablePR;
         private System.Windows.Forms.NumericUpDown Qty_NumericUpDown;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel49;
-        private System.Windows.Forms.Button AddQuantity_PR;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel50;
         private System.Windows.Forms.ComboBox FilterBehavior_ComboBox;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Button Edit_PR;
-        public System.Windows.Forms.DataGridView dataGridView_Rules;
+        public System.Windows.Forms.DataGridView DataGridView_Rules;
+        private System.Windows.Forms.CheckBox AdditionalFilter_CheckBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel49;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel51;
     }
 }
 

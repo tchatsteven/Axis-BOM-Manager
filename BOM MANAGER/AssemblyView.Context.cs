@@ -45,5 +45,6 @@ namespace BOM_MANAGER
         public virtual DbSet<ParameterAtCategoryAtFixtureView> ParameterAtCategoryAtFixtureViews { get; set; }
         public virtual DbSet<FilterBehavior> FilterBehaviors { get; set; }
         public virtual DbSet<PartRule> PartRules { get; set; }
+        public virtual DbSet<ParameterAtCategoryAtFixture> ParameterAtCategoryAtFixtures { get; set; }
     }
 }

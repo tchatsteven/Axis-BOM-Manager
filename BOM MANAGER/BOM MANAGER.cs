@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AXISAutomation.Lookups.FixtureConfiguration;
 using AXISAutomation.Tools.Logging;
 
 namespace BOM_MANAGER
@@ -25,6 +26,11 @@ namespace BOM_MANAGER
         _RTFMessenger PartGen;
         AXIS_AutomationEntitiesBOM db;
         PartRule newPartRule;
+        //_FixtureConfiguration NewFixture;
+        //List<String> All_PACAFs;
+        _BOM NewBOM;
+        //_Sections NewSections;
+        //_Section NewSection;
 
         public BOM_MANAGER()
         {
@@ -802,6 +808,8 @@ namespace BOM_MANAGER
 
         }
 
+        public String MySelectedFixture => db.PartRules.Find(CurrentPartId).PartName;
+
         private void RefreshTreeView()
         {
             //Int32 MySelectedFixture;
@@ -874,6 +882,8 @@ namespace BOM_MANAGER
                     Fixture_treeView.Nodes.Add(Assy_RootNode);
                     Fixture_treeView.ExpandAll();
 
+                    Fixture_treeView.Nodes[0].EnsureVisible();
+
                 }
                 catch
                 {
@@ -891,6 +901,8 @@ namespace BOM_MANAGER
 
                     Fixture_treeView_PartRule.Nodes.Add(Assy_RootNode_PartRule);
                     Fixture_treeView_PartRule.ExpandAll();
+
+                    Fixture_treeView_PartRule.Nodes[0].EnsureVisible();
 
                     //TreeNode Assy_RootNode_PartGen = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
                     //Fixture_treeView_PartGen.Nodes.Add(Assy_RootNode_PartGen);
@@ -914,6 +926,8 @@ namespace BOM_MANAGER
                     Fixture_treeView_PartGen.Nodes.Add(Assy_RootNode_PartGen);
                     Fixture_treeView_PartGen.ExpandAll();
 
+                    Fixture_treeView_PartGen.Nodes[0].EnsureVisible();
+
                 }
                 catch
                 {
@@ -933,6 +947,8 @@ namespace BOM_MANAGER
                 if (currentAssyId == assyIdAtPartView)
                 {
                     String part_NodeName = String.Format("{0}", partview.PartName);//   ({1})", partview.PartName, partview.PartType );// partview.Description);
+                    //String part_NodeName = String.Format("{0} ({1})", partview.PartName, partview.PartType );// partview.Description);
+
                     TreeNode childTreeNode = new TreeNode();
                     childTreeNode.Text = part_NodeName;
                     childTreeNode.Tag = partview;
@@ -967,6 +983,41 @@ namespace BOM_MANAGER
 
 
 
+
+
+
+        public String PartName => db.PartRules.Find(CurrentPartId).PartName;
+
+        public Int32 CurrentPartId => Int32.Parse(DataGridView_Rules.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+
+        public PartRule PartRuleToEdit => db.PartRules.Find(CurrentPartId);
+
+        public String EditPartName => PartRuleToEdit.PartName;
+
+        public String EditProductCode => PartRuleToEdit.ProductCode;
+
+        public String EditCategoryName => PartRuleToEdit.CategoryName;
+
+        public String EditParameterName => PartRuleToEdit.ParameterName;
+
+        public Int32 EditQty => PartRuleToEdit.Quantity ?? 0;
+
+        public Int32 EditPACAF_Id => PartRuleToEdit.PACAF_ID.Value;
+
+        public String EditFilterRule => PartRuleToEdit.FirstFilterDependencyName;
+
+        public Int32 EditProductCodeIndex => PartRuleToEdit.ProductID ?? 0;
+
+
+
+
+
+
+
+
+
+
+
         private void ProductID_comboBox_PR_SelectionChangeCommitted(object sender, EventArgs e)
         {
             RefreshTreeView();
@@ -980,33 +1031,33 @@ namespace BOM_MANAGER
         {
             try
             {
-                dataGridView_Rules.DataSource = db.PartRules.Where(o => o.ProductCode == productID_comboBox_PR.Text).OrderBy(m => m.PartName).ToList();
+                DataGridView_Rules.DataSource = db.PartRules.Where(o => o.ProductCode == productID_comboBox_PR.Text).OrderBy(m => m.PartName).ToList();
 
-                dataGridView_Rules.Columns[0].Visible = false;
-                dataGridView_Rules.Columns[1].Visible = false;
-                dataGridView_Rules.Columns[3].Visible = false;
-                dataGridView_Rules.Columns[5].Visible = false;
-                dataGridView_Rules.Columns[7].Visible = false;
-                dataGridView_Rules.Columns[13].Visible = false;
-                dataGridView_Rules.Columns[14].Visible = false;
+                DataGridView_Rules.Columns[0].Visible = false;
+                DataGridView_Rules.Columns[1].Visible = false;
+                DataGridView_Rules.Columns[3].Visible = false;
+                DataGridView_Rules.Columns[5].Visible = false;
+                DataGridView_Rules.Columns[7].Visible = false;
+                DataGridView_Rules.Columns[13].Visible = false;
+                DataGridView_Rules.Columns[14].Visible = false;
 
-                dataGridView_Rules.AutoResizeColumns();
-                dataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                DataGridView_Rules.AutoResizeColumns();
+                DataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                 if (PartFilterCheckBox.Checked is true)
                 {
-                    dataGridView_Rules.DataSource = db.PartRules.Where(o => o.PartName == Fixture_treeView_PartRule.SelectedNode.Text).OrderBy(m => m.PartName).ToList();
+                    DataGridView_Rules.DataSource = db.PartRules.Where(o => o.PartName == Fixture_treeView_PartRule.SelectedNode.Text).OrderBy(m => m.PartName).ToList();
 
-                    dataGridView_Rules.Columns[0].Visible = false;
-                    dataGridView_Rules.Columns[1].Visible = false;
-                    dataGridView_Rules.Columns[3].Visible = false;
-                    dataGridView_Rules.Columns[5].Visible = false;
-                    dataGridView_Rules.Columns[7].Visible = false;
-                    dataGridView_Rules.Columns[13].Visible = false;
-                    dataGridView_Rules.Columns[14].Visible = false;
+                    DataGridView_Rules.Columns[0].Visible = false;
+                    DataGridView_Rules.Columns[1].Visible = false;
+                    DataGridView_Rules.Columns[3].Visible = false;
+                    DataGridView_Rules.Columns[5].Visible = false;
+                    DataGridView_Rules.Columns[7].Visible = false;
+                    DataGridView_Rules.Columns[13].Visible = false;
+                    DataGridView_Rules.Columns[14].Visible = false;
 
-                    dataGridView_Rules.AutoResizeColumns();
-                    dataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    DataGridView_Rules.AutoResizeColumns();
+                    DataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
                 else
                 {
@@ -1031,7 +1082,7 @@ namespace BOM_MANAGER
 
         private void DisableButton()
         {
-            if (dataGridView_Rules.Rows.Count == 0)
+            if (DataGridView_Rules.Rows.Count == 0)
             {
                 Edit_PR.Enabled = false;
             }
@@ -1235,43 +1286,9 @@ namespace BOM_MANAGER
             }
         }
 
-
-
-
-
-
-        public String PartName => db.PartRules.Find(currentPartId).PartName;
-
-        public Int32 currentPartId => Int32.Parse(dataGridView_Rules.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-
-        public PartRule partRuleToEdit => db.PartRules.Find(currentPartId);
-
-        public String editPartName => partRuleToEdit.PartName;
-
-        public String editProductCode => partRuleToEdit.ProductCode;
-
-        public String editCategoryName => partRuleToEdit.CategoryName;
-
-        public String editParameterName => partRuleToEdit.ParameterName;
-
-        public Int32 editQty => partRuleToEdit.Quantity ?? 0;
-
-        public Int32 editPACAF_Id => partRuleToEdit.PACAF_ID.Value;
-
-        public String editFilterRule => partRuleToEdit.FirstFilterDependencyName;
-
-        public Int32 editProductCodeIndex => partRuleToEdit.ProductID ?? 0;
-
-
-
-
-
-
-
-
         private void Delete_PR_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow currentDeletionRow in dataGridView_Rules.SelectedRows)
+            foreach (DataGridViewRow currentDeletionRow in DataGridView_Rules.SelectedRows)
             {
                 try
                 {
@@ -1296,7 +1313,7 @@ namespace BOM_MANAGER
 
         private void RefreshTablePR_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow PACAF_ROW in dataGridView_Rules.Rows)
+            foreach (DataGridViewRow PACAF_ROW in DataGridView_Rules.Rows)
             {
                 //if ( PACAF_ROW.Cells["PACAF_ID"] == null)
                 //{
@@ -1336,48 +1353,196 @@ namespace BOM_MANAGER
             }
             RefreshDataGridView_PartRules();
         }
-
-        private void AddQuantity_PR_Click(object sender, EventArgs e)
+       
+        private void AdditionalFilter_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            try
-            {
-                String selectedPartName = dataGridView_Rules.CurrentRow.Cells["PartName"].Value.ToString();
-                Int32 partNameIndex = Int32.Parse(db.Parts.Where(m => m.PartName == selectedPartName).First().id.ToString());
-
-                String selectedCategory = dataGridView_Rules.CurrentRow.Cells["CategoryName"].Value.ToString();
-                Int32 selectedCategoryIndex = Int32.Parse(dataGridView_Rules.CurrentRow.Cells["CategoryID"].Value.ToString());
-
-                String selectedProductId = dataGridView_Rules.CurrentRow.Cells["ProductCode"].Value.ToString();
-                Int32 selectedProductIdIndex = Int32.Parse(dataGridView_Rules.CurrentRow.Cells["ProductID"].Value.ToString());
-
-                String selectedParameter = dataGridView_Rules.CurrentRow.Cells["ParameterName"].Value.ToString();
-                Int32 SelectedParameterIndex = Int32.Parse(dataGridView_Rules.CurrentRow.Cells["ParameterID"].Value.ToString());
-
-                Int32 Quantity = Int32.Parse(Qty_NumericUpDown.Value.ToString());
-
-                Int32 RowID = Int32.Parse(dataGridView_Rules.CurrentRow.Cells["id"].Value.ToString());
-
-                newPartRule = db.PartRules.Where(o => o.id == RowID).First();
-                newPartRule.Quantity = Quantity;
-
-                db.SaveChanges();
-
-                PartRules.NewMessage().AddText("Quantity  for  " + selectedProductId + ",  " + selectedCategory + ",  " + selectedParameter + ",  " + selectedPartName + "  added to Database").PrependMessageType().Log();
-
-            }
-
-            catch
-            {
-                PartRules.NewMessage().AddText("No quantity entered ").IsError().PrependMessageType().Log();
-
-            }
 
 
-
-
-
-            RefreshDataGridView_PartRules();
 
         }
+
+        private void DataGridView_Rules_SelectionChanged(object sender, EventArgs e)
+        {
+
+
+
+        }
+
+
+
+        /****************************************************************************************************************************************************************/
+        /*                                                                                                                                                              */
+        /*                                                              PART Gen Tester TAB                                                                                  */
+        /*                                                                                                                                                              */
+        /****************************************************************************************************************************************************************/
+
+
+
+        //public String _FixtureSetupCode => FixtureSetupCode_TextBox.Text;
+        public String _FixtureSetupCode
+        {
+            get
+            {
+                return FixtureSetupCode_TextBox.Text;
+            }
+        }
+
+         
+
+        //public string getselectedproductid_category => newfixture.selection.productid.selectionbasevalue;
+        //public string getselectedlumen_category => newfixture.selection.lumensdirect.selectionbasevalue;
+        //public string getselectedcri_category => newfixture.selection.cri.selectionbasevalue;
+        //public string getselectedcolortemp_category => newfixture.selection.colortemperature.selectionbasevalue;
+        //public string getselectedlength_category => newfixture.selection.length.selectionbasevalue;
+        //public string getselectedfinish_category => newfixture.selection.finish.selectionbasevalue;
+        //public string getselectedvoltage_category => newfixture.selection.voltage.selectionbasevalue;
+        //public string getselecteddriver_category => newfixture.selection.driver.selectionbasevalue;
+        //public string getselectedcircuits_category => newfixture.selection.circuits.selectionbasevalue;
+        //public string getselectedmounting_category => newfixture.selection.mounting.selectionbasevalue;
+        //public string getselectedbattery_category => newfixture.selection.battery.selectionbasevalue;
+        //public string getselectedother_category => newfixture.selection.other.selectionbasevalue;
+        //public string getselectediccontrol_category => newfixture.selection.ic.selectionbasevalue;
+        //public string getselectedcustom_category => newfixture.selection.custom.selectionbasevalue;
+
+        //public Int32 getSelectedProductID_PACAF => Int32.Parse(NewFixture.Selection.ProductID.SelectionPACAF);
+        //public Int32 getSelectedLumen_PACAF => Int32.Parse(NewFixture.Selection.LumensDirect.SelectionPACAF);
+        //public Int32 getSelectedCRI_PACAF => Int32.Parse(NewFixture.Selection.CRI.SelectionPACAF);
+        //public Int32 getSelectedColorTemp_PACAF => Int32.Parse(NewFixture.Selection.ColorTemperature.SelectionPACAF);
+        //public Int32 getSelectedLength_PACAF => Int32.Parse(NewFixture.Selection.Length.SelectionPACAF);
+        //public Int32 getSelectedFinish_PACAF => Int32.Parse(NewFixture.Selection.Finish.SelectionPACAF);
+        //public Int32 getSelectedVoltage_PACAF => Int32.Parse(NewFixture.Selection.Voltage.SelectionPACAF);
+        //public Int32 getSelectedDriver_PACAF => Int32.Parse(NewFixture.Selection.Driver.SelectionPACAF);
+        //public Int32 getSelectedCircuits_PACAF => Int32.Parse(NewFixture.Selection.Circuits.SelectionPACAF);
+        //public Int32 getSelectedMounting_PACAF => Int32.Parse(NewFixture.Selection.Mounting.SelectionPACAF);
+        //public Int32 getSelectedBattery_PACAF => Int32.Parse(NewFixture.Selection.Battery.SelectionPACAF);
+        //public Int32 getSelectedOther_PACAF => Int32.Parse(NewFixture.Selection.Other.SelectionPACAF);
+        //public Int32 getSelectedICControl_PACAF => Int32.Parse(NewFixture.Selection.IC.SelectionPACAF);
+        //public Int32 getSelectedCustom_PACAF => Int32.Parse(NewFixture.Selection.Custom.SelectionPACAF);
+
+
+
+        
+        private void GetPart_Button_Click(object sender, EventArgs e)
+        {
+           
+            Log_RichTextBox.Clear();
+
+            // _Fixture NewFixture = new _Fixture(_FixtureSetupCode);
+            NewBOM = new _BOM(_FixtureSetupCode);
+                        
+            NewBOM.TestconfigSection(PartGen);
+            NewBOM.GetOrderingCodePACAFs();
+
+            PartGen.NewMessage().SetSpaceAfter(0).AddText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).Log();
+
+
+            int totalSections = NewBOM.FixtureConfiguration.Sections.Count;
+
+            for (int sectionIncreament = 0; sectionIncreament < totalSections; sectionIncreament++)
+            {
+                //Function to go through treeview and add that to thr RichText Box
+
+                NewBOM.SummarizeBOMinIntoRTB(PartGen, sectionIncreament);
+                FirstFilter(PartGen);
+
+            }
+
+
+
+            Log_RichTextBox.SelectionStart = 0;
+            Log_RichTextBox.ScrollToCaret();
+        }
+
+        private void Get_Template_Button_Click(object sender, EventArgs e)
+        {
+            Log_RichTextBox.Clear();
+
+            NewBOM = new _BOM(_FixtureSetupCode);
+            NewBOM.TestconfigSection(PartGen);
+            // _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
+            NewBOM.FixtureConfiguration.ConfigureClientRequest();
+            NewBOM.FixtureConfiguration.ConfigureSections();
+            NewBOM.FixtureConfiguration.ConfigureCoverElements();
+
+            NewBOM.FixtureConfiguration.CustomerRequest.Template.SummarizeIntoRTB(PartGen);
+
+            Log_RichTextBox.SelectionStart = 0;
+            Log_RichTextBox.ScrollToCaret();
+        }
+
+        private void Match_Summary_Button_Click(object sender, EventArgs e)
+        {
+            _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
+            NewFixture.ConfigureClientRequest();
+            NewFixture.ConfigureSections();
+            NewFixture.ConfigureCoverElements();
+
+            Log_RichTextBox.Clear();
+            NewFixture.CustomerRequest.Template.SummarizeMatchesIntoRTB(PartGen);
+
+            Log_RichTextBox.SelectionStart = 0;
+            Log_RichTextBox.ScrollToCaret();
+
+        }
+
+        private void Solve_Mechanical_Button_Click(object sender, EventArgs e)
+        {
+            _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
+            NewFixture.ConfigureClientRequest();
+            NewFixture.ConfigureSections();
+            NewFixture.ConfigureCoverElements();
+
+            Log_RichTextBox.Clear();
+            NewFixture.Sections.SummarizeMechanicalIntoRTB(PartGen);
+
+            Log_RichTextBox.SelectionStart = 0;
+            Log_RichTextBox.ScrollToCaret();
+        }
+
+        public void FirstFilter(_RTFMessenger Messenger)
+        {
+
+            foreach (TreeNode ParentNode in Fixture_treeView_PartGen.Nodes)
+            {
+                List<String> PartNameList = new List<String>();
+
+                foreach (TreeNode childNode in ParentNode.Nodes)
+                {
+
+                    try
+                    {   
+                        /**/
+                        String currentPartName = childNode.Text;
+                        String currentProductId = ParentNode.Text;
+
+                        /**/
+                        //Int32 Current_PACAF = Int32.Parse(db.PartRules.Where(o => o.PartName == currentPartName).First().PACAF_ID.ToString());
+                        List<String> Current_PACAFs = db.PartRules.Where(o=>o.PartName == currentPartName && o.ProductCode == currentProductId).Select(p=>p.PACAF_ID.ToString()).ToList();
+
+                        /*Filter*/
+                        Boolean PACAFisAvailable = NewBOM.All_PACAFs.Any(t => Current_PACAFs.Contains(t));
+                        String GetFiterBehavior = db.PartRules.Where(o => o.PartName == currentPartName).First().FirstFilterDependencyName.ToString();
+                        String GetQuantity = db.PartRules.Where(o => o.PartName == currentPartName).First().Quantity.ToString(); ;
+
+                        if (PACAFisAvailable && GetFiterBehavior == "INCLUSIVE")
+                        {
+                            PartNameList.Add(childNode.Text);
+                            Messenger.NewMessage().AddText(String.Format(@"     {0}          {1}          {2}", childNode.Text, ((PartView)childNode.Tag).PartType, GetQuantity)).Log();
+
+                        }
+
+                    }
+                    catch
+                    {
+
+                    }
+
+                }
+
+            }
+        }
+
     }
 }
+
+ 

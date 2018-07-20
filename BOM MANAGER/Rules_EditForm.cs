@@ -48,14 +48,14 @@ namespace BOM_MANAGER
 
         private void LoadDataFromParentForm()
         {
-            PartName_textBox.Text = ParentForm.editPartName;
-            ProductCode_textBox.Text = ParentForm.editProductCode;
-            PACAF_textBox.Text = ParentForm.editPACAF_Id.ToString();
-            QtyEdit_numericUpDown.Value = ParentForm.editQty;
+            PartName_textBox.Text = ParentForm.EditPartName;
+            ProductCode_textBox.Text = ParentForm.EditProductCode;
+            PACAF_textBox.Text = ParentForm.EditPACAF_Id.ToString();
+            QtyEdit_numericUpDown.Value = ParentForm.EditQty;
 
-            LoadFilterRule(ParentForm.editFilterRule);
-            LoadCategory_ComboBox(ParentForm.editCategoryName, ParentForm.editProductCodeIndex);
-            LoadParameter_ComboBox(ParentForm.editParameterName, ParentForm.editProductCodeIndex);
+            LoadFilterRule(ParentForm.EditFilterRule);
+            LoadCategory_ComboBox(ParentForm.EditCategoryName, ParentForm.EditProductCodeIndex);
+            LoadParameter_ComboBox(ParentForm.EditParameterName, ParentForm.EditProductCodeIndex);
         }
 
         private void LoadFilterRule(String FilterRuleToEdit)
@@ -124,7 +124,7 @@ namespace BOM_MANAGER
         private void Ok_EditRulesButton_Click(object sender, EventArgs e)
         {
                             
-                Int32 RowID = Int32.Parse(ParentForm.dataGridView_Rules.CurrentRow.Cells["id"].Value.ToString());
+                Int32 RowID = Int32.Parse(ParentForm.DataGridView_Rules.CurrentRow.Cells["id"].Value.ToString());
                 newPartRule = db.PartRules.Where(o => o.id == RowID).First();
 
                 newPartRule.CategoryName = CategoryName_comboBox.Text;

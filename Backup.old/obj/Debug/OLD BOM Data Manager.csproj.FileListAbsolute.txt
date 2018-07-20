@@ -12,19 +12,3 @@ Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM_Data_Manager.P
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\OLD BOM Data Manager.csproj.GenerateResource.Cache
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.exe
 Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\BOM Data Manager\obj\Debug\BOM Data Manager.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\BOM Data Manager.exe.config
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\BOM Data Manager.exe
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\BOM Data Manager.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\EntityFramework.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\EntityFramework.SqlServer.dll
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\EntityFramework.xml
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\bin\Debug\EntityFramework.SqlServer.xml
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.createEditForm.resources
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.MainForm.resources
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM_Data_Manager.Properties.Resources.resources
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.GenerateResource.cache
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.CoreCompileInputs.cache
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csproj.CopyComplete
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM Data Manager.exe
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\BOM Data Manager.pdb
-Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\Backup.old\obj\Debug\OLD BOM Data Manager.csprojAssemblyReference.cache

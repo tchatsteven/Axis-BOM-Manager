@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM Manager\BOM MANAGER\AssemblyView.edmx'. 
+﻿// T4 code generation is enabled for model 'Z:\RESEARCH + DEVELOPMENT\6 DW\Dev\Axis BOM\BOM MANAGER\AssemblyView.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
