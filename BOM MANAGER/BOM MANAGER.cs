@@ -1359,6 +1359,7 @@ namespace BOM_MANAGER
 
 
 
+
         }
 
         private void DataGridView_Rules_SelectionChanged(object sender, EventArgs e)
