@@ -14,7 +14,7 @@ namespace BOM_MANAGER
     public partial class Rules_EditForm : Form
     {
         AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
-        PartRule newPartRule = null;
+        PartRulesFilter newPartRule = null;
         BOM_MANAGER ParentForm;
 
         //Default constructor
@@ -51,7 +51,7 @@ namespace BOM_MANAGER
             PartName_textBox.Text = ParentForm.EditPartName;
             ProductCode_textBox.Text = ParentForm.EditProductCode;
             PACAF_textBox.Text = ParentForm.EditPACAF_Id.ToString();
-            QtyEdit_numericUpDown.Value = ParentForm.EditQty;
+            QtyEdit_numericUpDown.Value = (Int32)ParentForm.EditQty;
 
             LoadFilterRule(ParentForm.EditFilterRule);
             LoadCategory_ComboBox(ParentForm.EditCategoryName, ParentForm.EditProductCodeIndex);
@@ -69,16 +69,16 @@ namespace BOM_MANAGER
 
         private void LoadCategory_ComboBox( String CategoryName, Int32 ProductCode_Id)
         {
-            CategoryName_comboBox.DataSource = db.CategoryAtFixtureViews.AsNoTracking().Where(o => o.FixtureId.ToString() == ProductCode_Id.ToString() && o.Name != "PRODUCT ID").OrderBy(o => o.DisplayOrder).ToList();
-            CategoryName_comboBox.ValueMember = "CategoryId";
-            CategoryName_comboBox.DisplayMember = "Name";
+            CategoryName_comboBox.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId.ToString() == ProductCode_Id.ToString() && o.FixtureCode != "PRODUCT ID").OrderBy(o => o.CAF_DisplayOrder).ToList();
+            CategoryName_comboBox.ValueMember = "CAF_Id";
+            CategoryName_comboBox.DisplayMember = "CategoryName";
             CategoryName_comboBox.Text = CategoryName;
         }
 
         private void LoadParameter_ComboBox(String ParameterName, Int32 ProductCode_Id)
         {
-            ParameterName_comboBox.DataSource = db.ParameterAtCategoryAtFixtureViews.Where(o => o.id.ToString() == ProductCode_Id.ToString() && o.CategoryId.ToString() == CategoryName_comboBox.SelectedValue.ToString() && o.ParameterCode != null).Distinct().OrderBy(o => o.DisplayOrder_Id).ToList();
-            ParameterName_comboBox.ValueMember = "ParameterId";
+            ParameterName_comboBox.DataSource = db.ProductTemplates.Where(o => o.FixtureId.ToString() == ProductCode_Id.ToString() && o.CAF_Id.ToString() == CategoryName_comboBox.SelectedValue.ToString() && o.ParameterCode != null).Distinct().OrderBy(o => o.PAC_DisplayOrder).ToList();
+            ParameterName_comboBox.ValueMember = "PAC_Id";
             ParameterName_comboBox.DisplayMember = "ParameterCode";
             ParameterName_comboBox.Text = ParameterName;
         }
@@ -88,8 +88,8 @@ namespace BOM_MANAGER
             String productId = db.Fixtures.Where(O => O.Code == ProductCode_textBox.Text).First().id.ToString();
             String categoryId = CategoryName_comboBox.SelectedValue.ToString();
             
-            ParameterName_comboBox.DataSource = db.ParameterAtCategoryAtFixtureViews.Where(o => o.id.ToString() == productId && o.CategoryId.ToString() == categoryId && o.ParameterCode != null).Distinct().OrderBy(o => o.DisplayOrder_Id).ToList();
-            ParameterName_comboBox.ValueMember = "ParameterId";
+            ParameterName_comboBox.DataSource = db.ProductTemplates.Where(o => o.FixtureId.ToString() == productId && o.CAF_Id.ToString() == categoryId && o.ParameterCode != null).Distinct().OrderBy(o => o.PAC_DisplayOrder).ToList();
+            ParameterName_comboBox.ValueMember = "PAC_Id";
             ParameterName_comboBox.DisplayMember = "ParameterCode";
 
             
@@ -100,7 +100,7 @@ namespace BOM_MANAGER
             try
             {
                 Int32 selectedProductId = Int32.Parse(db.Fixtures.Where(O => O.Code == ProductCode_textBox.Text).First().id.ToString());
-                PACAF_textBox.Text = db.ParameterAtCategoryAtFixtureViews.Where(o => o.id == selectedProductId && o.CategoryId.ToString() == CategoryName_comboBox.SelectedValue.ToString() && o.ParameterId.ToString() == ParameterName_comboBox.SelectedValue.ToString()).First().ParAtCatAtFix_ID.ToString();
+                PACAF_textBox.Text = db.ProductTemplates.Where(o => o.FixtureId == selectedProductId && o.CAF_Id.ToString() == CategoryName_comboBox.SelectedValue.ToString() && o.PAC_Id.ToString() == ParameterName_comboBox.SelectedValue.ToString()).First().PAC_DisplayOrder.ToString();
 
             }
             catch
@@ -125,18 +125,18 @@ namespace BOM_MANAGER
         {
                             
                 Int32 RowID = Int32.Parse(ParentForm.DataGridView_Rules.CurrentRow.Cells["id"].Value.ToString());
-                newPartRule = db.PartRules.Where(o => o.id == RowID).First();
+                newPartRule = db.PartRulesFilters.Where(o => o.id == RowID).First();
 
                 newPartRule.CategoryName = CategoryName_comboBox.Text;
                 newPartRule.CategoryID = Int32.Parse(CategoryName_comboBox.SelectedValue.ToString());
 
                 newPartRule.ParameterName = ParameterName_comboBox.Text;
-                newPartRule.ParameterID = Int32.Parse(ParameterName_comboBox.SelectedValue.ToString());
+                newPartRule.ParameterID = ParameterName_comboBox.SelectedValue.ToString();
 
-                newPartRule.FirstFilterDependencyID = Int32.Parse(FilterRuleEdit_comboBox.SelectedValue.ToString());
-                newPartRule.FirstFilterDependencyName = FilterRuleEdit_comboBox.Text;
+                newPartRule.FilterDependencyID = Int32.Parse(FilterRuleEdit_comboBox.SelectedValue.ToString());
+                newPartRule.FilterDependencyName = FilterRuleEdit_comboBox.Text;
 
-                newPartRule.PACAF_ID = Int32.Parse(PACAF_textBox.Text);
+                newPartRule.PACAF_ID = PACAF_textBox.Text;
 
                 newPartRule.Quantity = Int32.Parse(QtyEdit_numericUpDown.Value.ToString());
 

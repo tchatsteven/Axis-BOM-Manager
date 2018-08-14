@@ -17,7 +17,6 @@ namespace BOM_MANAGER
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ParameterAtCategoryAtFixture()
         {
-            this.PartRules = new HashSet<PartRule>();
             this.CategoryAtFixtures = new HashSet<CategoryAtFixture>();
         }
     
@@ -27,11 +26,11 @@ namespace BOM_MANAGER
         public int DisplayOrder { get; set; }
         public string FootnoteOverride { get; set; }
         public bool IsObsolete { get; set; }
+        public string DescriptionOverride { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartRule> PartRules { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CategoryAtFixture> CategoryAtFixtures { get; set; }
         public virtual CategoryAtFixture CategoryAtFixture { get; set; }
+        public virtual Parameter Parameter { get; set; }
     }
 }

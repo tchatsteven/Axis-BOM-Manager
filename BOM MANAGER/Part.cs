@@ -18,7 +18,7 @@ namespace BOM_MANAGER
         public Part()
         {
             this.PartAtAssemblies = new HashSet<PartAtAssembly>();
-            this.PartRules = new HashSet<PartRule>();
+            this.PartRulesFilters = new HashSet<PartRulesFilter>();
         }
     
         public int id { get; set; }
@@ -32,6 +32,6 @@ namespace BOM_MANAGER
         public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
         public virtual PartType PartType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartRule> PartRules { get; set; }
+        public virtual ICollection<PartRulesFilter> PartRulesFilters { get; set; }
     }
 }

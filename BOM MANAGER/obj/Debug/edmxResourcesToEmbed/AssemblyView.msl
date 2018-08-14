@@ -165,21 +165,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Fixtures">
-      <EntityTypeMapping TypeName="Model.Fixture">
-        <MappingFragment StoreEntitySet="Fixtures">
-          <ScalarProperty Name="DWGouverningProject" ColumnName="DWGouverningProject" />
-          <ScalarProperty Name="HasSingleEmmiter" ColumnName="HasSingleEmmiter" />
-          <ScalarProperty Name="Directionality" ColumnName="Directionality" />
-          <ScalarProperty Name="ApplicationType" ColumnName="ApplicationType" />
-          <ScalarProperty Name="IsDWEnabled" ColumnName="IsDWEnabled" />
-          <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Code" ColumnName="Code" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CategoryAtFixtures">
       <EntityTypeMapping TypeName="Model.CategoryAtFixture">
         <MappingFragment StoreEntitySet="CategoryAtFixture">
@@ -207,22 +192,79 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CategoryAtFixtureViews">
-      <EntityTypeMapping TypeName="Model.CategoryAtFixtureView">
-        <MappingFragment StoreEntitySet="CategoryAtFixtureView">
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Category_ID" ColumnName="Category_ID" />
+    <EntitySetMapping Name="ParameterAtCategoryAtFixtures">
+      <EntityTypeMapping TypeName="Model.ParameterAtCategoryAtFixture">
+        <MappingFragment StoreEntitySet="ParameterAtCategoryAtFixture">
+          <ScalarProperty Name="DescriptionOverride" ColumnName="DescriptionOverride" />
+          <ScalarProperty Name="IsObsolete" ColumnName="IsObsolete" />
+          <ScalarProperty Name="FootnoteOverride" ColumnName="FootnoteOverride" />
           <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
-          <ScalarProperty Name="FixtureId" ColumnName="FixtureId" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="ParameterId" ColumnName="ParameterId" />
+          <ScalarProperty Name="CategoryAtFixtureId" ColumnName="CategoryAtFixtureId" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="FixtureSetupCodeParserTemplates">
-      <EntityTypeMapping TypeName="Model.FixtureSetupCodeParserTemplate">
-        <MappingFragment StoreEntitySet="FixtureSetupCodeParserTemplate">
+    <EntitySetMapping Name="FixtureApplicationTypes">
+      <EntityTypeMapping TypeName="Model.FixtureApplicationType">
+        <MappingFragment StoreEntitySet="FixtureApplicationTypes">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FixtureDirectionalities">
+      <EntityTypeMapping TypeName="Model.FixtureDirectionality">
+        <MappingFragment StoreEntitySet="FixtureDirectionality">
+          <ScalarProperty Name="Direction" ColumnName="Direction" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Fixtures">
+      <EntityTypeMapping TypeName="Model.Fixture">
+        <MappingFragment StoreEntitySet="Fixtures">
+          <ScalarProperty Name="DWGouverningProjectId" ColumnName="DWGouverningProjectId" />
+          <ScalarProperty Name="HasSingleEmmiter" ColumnName="HasSingleEmmiter" />
+          <ScalarProperty Name="DirectionalityId" ColumnName="DirectionalityId" />
+          <ScalarProperty Name="ApplicationTypeId" ColumnName="ApplicationTypeId" />
+          <ScalarProperty Name="IsDWEnabled" ColumnName="IsDWEnabled" />
+          <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FilterBehaviors">
+      <EntityTypeMapping TypeName="Model.FilterBehavior">
+        <MappingFragment StoreEntitySet="FilterBehavior">
+          <ScalarProperty Name="Behavior" ColumnName="Behavior" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FilterTypes">
+      <EntityTypeMapping TypeName="Model.FilterType">
+        <MappingFragment StoreEntitySet="FilterType">
+          <ScalarProperty Name="FilterTypeName" ColumnName="FilterTypeName" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Parameters">
+      <EntityTypeMapping TypeName="Model.Parameter">
+        <MappingFragment StoreEntitySet="Parameters">
+          <ScalarProperty Name="Footnote" ColumnName="Footnote" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Code" ColumnName="Code" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductTemplates">
+      <EntityTypeMapping TypeName="Model.ProductTemplate">
+        <MappingFragment StoreEntitySet="ProductTemplates">
           <ScalarProperty Name="ParameterDescriptionOverride" ColumnName="ParameterDescriptionOverride" />
           <ScalarProperty Name="RVO_ValueReAssemblyString" ColumnName="RVO_ValueReAssemblyString" />
           <ScalarProperty Name="RVO_ValueExtractRegex" ColumnName="RVO_ValueExtractRegex" />
@@ -263,42 +305,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ParameterAtCategoryAtFixtureViews">
-      <EntityTypeMapping TypeName="Model.ParameterAtCategoryAtFixtureView">
-        <MappingFragment StoreEntitySet="ParameterAtCategoryAtFixtureView">
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Category_ID" ColumnName="Category_ID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="ParameterCode" ColumnName="ParameterCode" />
-          <ScalarProperty Name="Parameter_ID" ColumnName="Parameter_ID" />
-          <ScalarProperty Name="DisplayOrder_Id" ColumnName="DisplayOrder_Id" />
-          <ScalarProperty Name="ParameterId" ColumnName="ParameterId" />
-          <ScalarProperty Name="CategoryAtFixtureId" ColumnName="CategoryAtFixtureId" />
-          <ScalarProperty Name="ParAtCatAtFix_ID" ColumnName="ParAtCatAtFix_ID" />
-          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
-          <ScalarProperty Name="FixtureId" ColumnName="FixtureId" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="CatAtFixture_ID" ColumnName="CatAtFixture_ID" />
-          <ScalarProperty Name="Code" ColumnName="Code" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FilterBehaviors">
-      <EntityTypeMapping TypeName="Model.FilterBehavior">
-        <MappingFragment StoreEntitySet="FilterBehavior">
-          <ScalarProperty Name="Behavior" ColumnName="Behavior" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PartRules">
-      <EntityTypeMapping TypeName="Model.PartRule">
-        <MappingFragment StoreEntitySet="PartRules">
+    <EntitySetMapping Name="PartRulesFilters">
+      <EntityTypeMapping TypeName="Model.PartRulesFilter">
+        <MappingFragment StoreEntitySet="PartRulesFilter">
+          <ScalarProperty Name="QuantityRule" ColumnName="QuantityRule" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="FirstFilterDependencyName" ColumnName="FirstFilterDependencyName" />
-          <ScalarProperty Name="FirstFilterDependencyID" ColumnName="FirstFilterDependencyID" />
+          <ScalarProperty Name="FilterDependencyName" ColumnName="FilterDependencyName" />
+          <ScalarProperty Name="FilterDependencyID" ColumnName="FilterDependencyID" />
           <ScalarProperty Name="PACAF_ID" ColumnName="PACAF_ID" />
+          <ScalarProperty Name="OrderOfExecution" ColumnName="OrderOfExecution" />
+          <ScalarProperty Name="FilterTypeID" ColumnName="FilterTypeID" />
           <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
           <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
           <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
@@ -307,18 +323,6 @@
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="PartName" ColumnName="PartName" />
           <ScalarProperty Name="PartID" ColumnName="PartID" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="ParameterAtCategoryAtFixtures">
-      <EntityTypeMapping TypeName="Model.ParameterAtCategoryAtFixture">
-        <MappingFragment StoreEntitySet="ParameterAtCategoryAtFixture">
-          <ScalarProperty Name="IsObsolete" ColumnName="IsObsolete" />
-          <ScalarProperty Name="FootnoteOverride" ColumnName="FootnoteOverride" />
-          <ScalarProperty Name="DisplayOrder" ColumnName="DisplayOrder" />
-          <ScalarProperty Name="ParameterId" ColumnName="ParameterId" />
-          <ScalarProperty Name="CategoryAtFixtureId" ColumnName="CategoryAtFixtureId" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

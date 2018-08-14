@@ -37,14 +37,16 @@ namespace BOM_MANAGER
         public virtual DbSet<BOM> BOMs { get; set; }
         public virtual DbSet<PartTypeAtPart> PartTypeAtParts { get; set; }
         public virtual DbSet<PartView> PartViews { get; set; }
-        public virtual DbSet<Fixture> Fixtures { get; set; }
         public virtual DbSet<CategoryAtFixture> CategoryAtFixtures { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<CategoryAtFixtureView> CategoryAtFixtureViews { get; set; }
-        public virtual DbSet<FixtureSetupCodeParserTemplate> FixtureSetupCodeParserTemplates { get; set; }
-        public virtual DbSet<ParameterAtCategoryAtFixtureView> ParameterAtCategoryAtFixtureViews { get; set; }
-        public virtual DbSet<FilterBehavior> FilterBehaviors { get; set; }
-        public virtual DbSet<PartRule> PartRules { get; set; }
         public virtual DbSet<ParameterAtCategoryAtFixture> ParameterAtCategoryAtFixtures { get; set; }
+        public virtual DbSet<FixtureApplicationType> FixtureApplicationTypes { get; set; }
+        public virtual DbSet<FixtureDirectionality> FixtureDirectionalities { get; set; }
+        public virtual DbSet<Fixture> Fixtures { get; set; }
+        public virtual DbSet<FilterBehavior> FilterBehaviors { get; set; }
+        public virtual DbSet<FilterType> FilterTypes { get; set; }
+        public virtual DbSet<Parameter> Parameters { get; set; }
+        public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
+        public virtual DbSet<PartRulesFilter> PartRulesFilters { get; set; }
     }
 }

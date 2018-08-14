@@ -18,12 +18,12 @@ using AXISAutomation.Solvers.FixtureSetupCodeParser;
 namespace BOM_MANAGER
 {
 
-    class _BOM
+    public class _BOM
     {
         // OTHER CLASS  ASSOCIATION
-
+        public AXIS_AutomationEntitiesBOM DbConn;
         _FixtureConfiguration _fixtureConfiguration;
-        
+        List<_Assembly> Assemblies = new List<_Assembly>();
 
         // CLASS CONSTRUCTORS
 
@@ -31,8 +31,16 @@ namespace BOM_MANAGER
         public _BOM(String _fixtureCode)
         {
             _code = _fixtureCode;
+            
         }
-               
+
+        public _BOM(String _fixtureCode, AXIS_AutomationEntitiesBOM dbConn)
+        {
+            _code = _fixtureCode;
+            DbConn = dbConn;
+            GetAssemblies();
+        }
+
         public _FixtureConfiguration FixtureConfiguration
         {
             get
@@ -71,38 +79,43 @@ namespace BOM_MANAGER
 
         public List<String> All_PACAFs;
 
-        public String getselectedproductID_Category { get; set; }
-        public String getSelectedLumen_Category { get; set; }
-        public String getSelectedCRI_Category { get; set; }
-        public String getSelectedColorTemp_Category { get; set; }
-        public String getSelectedLength_Category { get; set; }
-        public String getSelectedFinish_Category { get; set; }
-        public String getSelectedVoltage_Category { get; set; }
-        public String getSelectedDriver_Category { get; set; }
-        public String getSelectedCircuits_Category { get; set; }
-        public String getSelectedMounting_Category { get; set; }
-        public String getSelectedBattery_Category { get; set; }
-        public String getSelectedOther_Category { get; set; }
-        public String getSelectedICControl_Category { get; set; }
-        public String getSelectedCustom_Category { get; set; }
-
-        public String getSelectedProductID_PACAF { get; set; }
-        public String getSelectedLumen_PACAF { get; set; }
-        public String getSelectedCRI_PACAF { get; set; }
-        public String getSelectedColorTemp_PACAF { get; set; }
-        public String getSelectedLength_PACAF { get; set; }
-        public String getSelectedFinish_PACAF { get; set; }
-        public String getSelectedVoltage_PACAF { get; set; }
-        public String getSelectedDriver_PACAF { get; set; }
-        public String getSelectedCircuits_PACAF { get; set; }
-        public String getSelectedMounting_PACAF { get; set; }
-        public String getSelectedBattery_PACAF { get; set; }
-        public String getSelectedOther_PACAF { get; set; }
-        public String getSelectedICControl_PACAF { get; set; }
-        public String getSelectedCustom_PACAF { get; set; }
+        public String GetselectedproductID_Category { get; set; }
+        public String GetSelectedLumen_Category { get; set; }
+        public String GetSelectedCRI_Category { get; set; }
+        public String GetSelectedColorTemp_Category { get; set; }
+        public String GetSelectedLength_Category { get; set; }
+        public String GetSelectedFinish_Category { get; set; }
+        public String GetSelectedVoltage_Category { get; set; }
+        public String GetSelectedDriver_Category { get; set; }
+        public String GetSelectedCircuits_Category { get; set; }
+        public String GetSelectedMounting_Category { get; set; }
+        public String GetSelectedBattery_Category { get; set; }
+        public String GetSelectedOther_Category { get; set; }
+        public String GetSelectedICControl_Category { get; set; }
+        public String GetSelectedCustom_Category { get; set; }
+                      
+        public String GetSelectedProductID_PACAF { get; set; }
+        public String GetSelectedLumen_PACAF { get; set; }
+        public String GetSelectedCRI_PACAF { get; set; }
+        public String GetSelectedColorTemp_PACAF { get; set; }
+        public String GetSelectedLength_PACAF { get; set; }
+        public String GetSelectedFinish_PACAF { get; set; }
+        public String GetSelectedVoltage_PACAF { get; set; }
+        public String GetSelectedDriver_PACAF { get; set; }
+        public String GetSelectedCircuits_PACAF { get; set; }
+        public String GetSelectedMounting_PACAF { get; set; }
+        public String GetSelectedBattery_PACAF { get; set; }
+        public String GetSelectedOther_PACAF { get; set; }
+        public String GetSelectedICControl_PACAF { get; set; }
+        public String GetSelectedCustom_PACAF { get; set; }
 
 
         // CLASS MEMBER FUNCTION
+
+        public void GetAssemblies()
+        {
+            //DbConn.AssemblyViews.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
+        }
 
 
         public void TestconfigSection(_RTFMessenger Messenger)
@@ -123,23 +136,29 @@ namespace BOM_MANAGER
             
         }
 
-        public void SummarizeBOMinIntoRTB(_RTFMessenger Messenger, Int32 sectionsIncreament)
+        public void SummarizeBOMinIntoRTB(_RTFMessenger Messenger, Int32 sectionsIncreament, ref Decimal currentSectionLength,ref  String sectionDefinition)
         {
             int initCount = sectionsIncreament;
+            
             if (FixtureConfiguration.Sections.Items[initCount].IsAtStart)
             {
                 int Temp = initCount + 1;
+                currentSectionLength = FixtureConfiguration.Sections.Items[0].Length;
+                sectionDefinition = "START";
                 Messenger.NewMessage().SetSpaceAfter(0).AddBoldText("Section " + Temp + " Length: ").AddBoldText(FixtureConfiguration.Sections.Items[0].Length.ToString()).Log();
-
             }
             else if(FixtureConfiguration.Sections.Items[initCount].IsAtEnd)
             {
                 int Temp = initCount + 1;
+                currentSectionLength = FixtureConfiguration.Sections.Items[initCount].Length;
+                sectionDefinition = "END";
                 Messenger.NewMessage().SetSpaceAfter(0).AddBoldText("Section " + Temp + " Length: ").AddBoldText(FixtureConfiguration.Sections.Items[initCount].Length.ToString()).Log();
             }
             else
             {
                 int Temp = initCount + 1;
+                currentSectionLength = FixtureConfiguration.Sections.Items[initCount].Length;
+                sectionDefinition = "MIDDLE";
                 Messenger.NewMessage().SetSpaceAfter(0).AddBoldText("Section " + Temp + " Length: ").AddBoldText(FixtureConfiguration.Sections.Items[initCount].Length.ToString()).Log();
             }
             initCount++;
@@ -151,20 +170,20 @@ namespace BOM_MANAGER
             //try
             //{
 
-            getselectedproductID_Category = _fixtureConfiguration.Selection.ProductID.SelectionBaseValue;
-            getSelectedLumen_Category = _fixtureConfiguration.Selection.LumensDirect.SelectionBaseValue;
-            getSelectedCRI_Category = _fixtureConfiguration.Selection.CRI.SelectionBaseValue;
-            getSelectedColorTemp_Category = _fixtureConfiguration.Selection.ColorTemperature.SelectionBaseValue;
-            getSelectedLength_Category = _fixtureConfiguration.Selection.Length.SelectionBaseValue;
-            getSelectedFinish_Category = _fixtureConfiguration.Selection.Finish.SelectionBaseValue;
-            getSelectedVoltage_Category = _fixtureConfiguration.Selection.Voltage.SelectionBaseValue;
-            getSelectedDriver_Category = _fixtureConfiguration.Selection.Driver.SelectionBaseValue;
-            getSelectedCircuits_Category = _fixtureConfiguration.Selection.Circuits.SelectionBaseValue;
-            getSelectedMounting_Category = _fixtureConfiguration.Selection.Mounting.SelectionBaseValue;
-            getSelectedBattery_Category = _fixtureConfiguration.Selection.Battery.SelectionBaseValue;
-            getSelectedOther_Category = _fixtureConfiguration.Selection.Other.SelectionBaseValue;
-            getSelectedICControl_Category = _fixtureConfiguration.Selection.IC.SelectionBaseValue;
-            getSelectedCustom_Category = _fixtureConfiguration.Selection.Custom.SelectionBaseValue;
+            GetselectedproductID_Category = _fixtureConfiguration.Selection.ProductID.SelectionBaseValue;
+            GetSelectedLumen_Category = _fixtureConfiguration.Selection.LumensDirect.SelectionBaseValue;
+            GetSelectedCRI_Category = _fixtureConfiguration.Selection.CRI.SelectionBaseValue;
+            GetSelectedColorTemp_Category = _fixtureConfiguration.Selection.ColorTemperature.SelectionBaseValue;
+            GetSelectedLength_Category = _fixtureConfiguration.Selection.Length.SelectionBaseValue;
+            GetSelectedFinish_Category = _fixtureConfiguration.Selection.Finish.SelectionBaseValue;
+            GetSelectedVoltage_Category = _fixtureConfiguration.Selection.Voltage.SelectionBaseValue;
+            GetSelectedDriver_Category = _fixtureConfiguration.Selection.Driver.SelectionBaseValue;
+            GetSelectedCircuits_Category = _fixtureConfiguration.Selection.Circuits.SelectionBaseValue;
+            GetSelectedMounting_Category = _fixtureConfiguration.Selection.Mounting.SelectionBaseValue;
+            GetSelectedBattery_Category = _fixtureConfiguration.Selection.Battery.SelectionBaseValue;
+            GetSelectedOther_Category = _fixtureConfiguration.Selection.Other.SelectionBaseValue;
+            GetSelectedICControl_Category = _fixtureConfiguration.Selection.IC.SelectionBaseValue;
+            GetSelectedCustom_Category = _fixtureConfiguration.Selection.Custom.SelectionBaseValue;
 
             //getSelectedLumen_PACAF =  (NewFixture.Selection.LumensDirect.SelectionPACAF);
             //getSelectedCRI_PACAF =  (NewFixture.Selection.CRI.SelectionPACAF);

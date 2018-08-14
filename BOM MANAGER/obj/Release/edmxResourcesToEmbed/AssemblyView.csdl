@@ -41,39 +41,13 @@
       <End Role="PartType" EntitySet="PartTypes" />
       <End Role="Part" EntitySet="Parts" />
     </AssociationSet>
-    <EntitySet Name="Fixtures" EntityType="Model.Fixture" />
-    <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Model.FK_AssemblyAtAssembly_Fixtures">
-      <End Role="Fixture" EntitySet="Fixtures" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-    </AssociationSet>
     <EntitySet Name="CategoryAtFixtures" EntityType="Model.CategoryAtFixture" />
-    <AssociationSet Name="FK_OrderingCode_FixtureBelonging" Association="Model.FK_OrderingCode_FixtureBelonging">
-      <End Role="Fixture" EntitySet="Fixtures" />
-      <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
-    </AssociationSet>
     <EntitySet Name="Categories" EntityType="Model.Category" />
     <AssociationSet Name="FK_OrderingCode_CategoryBelonging" Association="Model.FK_OrderingCode_CategoryBelonging">
       <End Role="Category" EntitySet="Categories" />
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
     </AssociationSet>
-    <EntitySet Name="CategoryAtFixtureViews" EntityType="Model.CategoryAtFixtureView" />
-    <EntitySet Name="FixtureSetupCodeParserTemplates" EntityType="Model.FixtureSetupCodeParserTemplate" />
-    <EntitySet Name="ParameterAtCategoryAtFixtureViews" EntityType="Model.ParameterAtCategoryAtFixtureView" />
-    <EntitySet Name="FilterBehaviors" EntityType="Model.FilterBehavior" />
-    <EntitySet Name="PartRules" EntityType="Model.PartRule" />
-    <AssociationSet Name="FK_PartRules_PartRules" Association="Model.FK_PartRules_PartRules">
-      <End Role="FilterBehavior" EntitySet="FilterBehaviors" />
-      <End Role="PartRule" EntitySet="PartRules" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PartRules_Parts" Association="Model.FK_PartRules_Parts">
-      <End Role="Part" EntitySet="Parts" />
-      <End Role="PartRule" EntitySet="PartRules" />
-    </AssociationSet>
     <EntitySet Name="ParameterAtCategoryAtFixtures" EntityType="Model.ParameterAtCategoryAtFixture" />
-    <AssociationSet Name="FK_PartRules_ParameterAtCategoryAtFixture" Association="Model.FK_PartRules_ParameterAtCategoryAtFixture">
-      <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
-      <End Role="PartRule" EntitySet="PartRules" />
-    </AssociationSet>
     <AssociationSet Name="FK_CategoryAtFixture_ParameterAtCategoryAtFixture" Association="Model.FK_CategoryAtFixture_ParameterAtCategoryAtFixture">
       <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
@@ -81,6 +55,46 @@
     <AssociationSet Name="FK_ParameterAtCategoryAtFixture_CategoryID" Association="Model.FK_ParameterAtCategoryAtFixture_CategoryID">
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
       <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
+    </AssociationSet>
+    <EntitySet Name="FixtureApplicationTypes" EntityType="Model.FixtureApplicationType" />
+    <EntitySet Name="FixtureDirectionalities" EntityType="Model.FixtureDirectionality" />
+    <EntitySet Name="Fixtures" EntityType="Model.Fixture" />
+    <AssociationSet Name="FK_Fixtures_FixtureApplicationTypes" Association="Model.FK_Fixtures_FixtureApplicationTypes">
+      <End Role="FixtureApplicationType" EntitySet="FixtureApplicationTypes" />
+      <End Role="Fixture" EntitySet="Fixtures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Fixtures_FixtureDirectionality" Association="Model.FK_Fixtures_FixtureDirectionality">
+      <End Role="FixtureDirectionality" EntitySet="FixtureDirectionalities" />
+      <End Role="Fixture" EntitySet="Fixtures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Model.FK_AssemblyAtAssembly_Fixtures">
+      <End Role="Fixture" EntitySet="Fixtures" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderingCode_FixtureBelonging" Association="Model.FK_OrderingCode_FixtureBelonging">
+      <End Role="Fixture" EntitySet="Fixtures" />
+      <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
+    </AssociationSet>
+    <EntitySet Name="FilterBehaviors" EntityType="Model.FilterBehavior" />
+    <EntitySet Name="FilterTypes" EntityType="Model.FilterType" />
+    <EntitySet Name="Parameters" EntityType="Model.Parameter" />
+    <AssociationSet Name="FK_ParameterAtCategoryAtFixture_ParameterID" Association="Model.FK_ParameterAtCategoryAtFixture_ParameterID">
+      <End Role="Parameter" EntitySet="Parameters" />
+      <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
+    </AssociationSet>
+    <EntitySet Name="ProductTemplates" EntityType="Model.ProductTemplate" />
+    <EntitySet Name="PartRulesFilters" EntityType="Model.PartRulesFilter" />
+    <AssociationSet Name="FK_FilterBehavior_PartRulesFilter" Association="Model.FK_FilterBehavior_PartRulesFilter">
+      <End Role="FilterBehavior" EntitySet="FilterBehaviors" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRulesFilter_FilterType" Association="Model.FK_PartRulesFilter_FilterType">
+      <End Role="FilterType" EntitySet="FilterTypes" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRules_Parts" Association="Model.FK_PartRules_Parts">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Assembly">
@@ -154,7 +168,7 @@
     <NavigationProperty Name="FamilyName" Relationship="Model.FK_Parts_FamilyName1" FromRole="Part" ToRole="FamilyName" />
     <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
     <NavigationProperty Name="PartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="PartType" />
-    <NavigationProperty Name="PartRules" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRule" />
+    <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRulesFilter" />
   </EntityType>
   <EntityType Name="AssemblyTypeAtAssembly">
     <Key>
@@ -352,36 +366,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="Fixture">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="FamilyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="IsDWEnabled" Type="Boolean" Nullable="false" />
-    <Property Name="ApplicationType" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
-    <Property Name="Directionality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="HasSingleEmmiter" Type="Boolean" Nullable="false" />
-    <Property Name="DWGouverningProject" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
-    <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="Fixture" ToRole="CategoryAtFixture" />
-  </EntityType>
-  <Association Name="FK_AssemblyAtAssembly_Fixtures">
-    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Fixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="FixtureID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="CategoryAtFixture">
     <Key>
       <PropertyRef Name="id" />
@@ -395,25 +379,11 @@
     <Property Name="IsMultiselectOverride" Type="Boolean" Nullable="false" />
     <Property Name="IsObsolete" Type="Boolean" Nullable="false" />
     <Property Name="DefaultFallbackSelection" Type="Int32" />
-    <NavigationProperty Name="Fixture" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="CategoryAtFixture" ToRole="Fixture" />
     <NavigationProperty Name="Category" Relationship="Model.FK_OrderingCode_CategoryBelonging" FromRole="CategoryAtFixture" ToRole="Category" />
     <NavigationProperty Name="ParameterAtCategoryAtFixture" Relationship="Model.FK_CategoryAtFixture_ParameterAtCategoryAtFixture" FromRole="CategoryAtFixture" ToRole="ParameterAtCategoryAtFixture" />
     <NavigationProperty Name="ParameterAtCategoryAtFixtures" Relationship="Model.FK_ParameterAtCategoryAtFixture_CategoryID" FromRole="CategoryAtFixture" ToRole="ParameterAtCategoryAtFixture" />
+    <NavigationProperty Name="Fixture" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="CategoryAtFixture" ToRole="Fixture" />
   </EntityType>
-  <Association Name="FK_OrderingCode_FixtureBelonging">
-    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Fixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="CategoryAtFixture">
-        <PropertyRef Name="FixtureId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="Category">
     <Key>
       <PropertyRef Name="id" />
@@ -440,35 +410,186 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="CategoryAtFixtureView">
+  <EntityType Name="ParameterAtCategoryAtFixture">
     <Key>
-      <PropertyRef Name="Category_ID" />
-      <PropertyRef Name="Name" />
-      <PropertyRef Name="Type" />
+      <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" />
-    <Property Name="CategoryId" Type="Int32" />
-    <Property Name="FixtureId" Type="Int32" />
-    <Property Name="DisplayOrder" Type="Int32" />
-    <Property Name="Category_ID" Type="Int32" Nullable="false" />
-    <Property Name="Name" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="true" />
-    <Property Name="Type" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryAtFixtureId" Type="Int32" Nullable="false" />
+    <Property Name="ParameterId" Type="Int32" Nullable="false" />
+    <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
+    <Property Name="FootnoteOverride" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="IsObsolete" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_CategoryAtFixture_ParameterAtCategoryAtFixture" FromRole="ParameterAtCategoryAtFixture" ToRole="CategoryAtFixture" />
+    <NavigationProperty Name="CategoryAtFixture" Relationship="Model.FK_ParameterAtCategoryAtFixture_CategoryID" FromRole="ParameterAtCategoryAtFixture" ToRole="CategoryAtFixture" />
+    <Property Name="DescriptionOverride" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Parameter" Relationship="Model.FK_ParameterAtCategoryAtFixture_ParameterID" FromRole="ParameterAtCategoryAtFixture" ToRole="Parameter" />
   </EntityType>
-  <EntityType Name="FixtureSetupCodeParserTemplate">
+  <Association Name="FK_CategoryAtFixture_ParameterAtCategoryAtFixture">
+    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="0..1" />
+    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ParameterAtCategoryAtFixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="CategoryAtFixture">
+        <PropertyRef Name="DefaultFallbackSelection" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ParameterAtCategoryAtFixture_CategoryID">
+    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CategoryAtFixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ParameterAtCategoryAtFixture">
+        <PropertyRef Name="CategoryAtFixtureId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FixtureApplicationType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Fixtures" Relationship="Model.FK_Fixtures_FixtureApplicationTypes" FromRole="FixtureApplicationType" ToRole="Fixture" />
+  </EntityType>
+  <EntityType Name="FixtureDirectionality">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Direction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Fixtures" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="FixtureDirectionality" ToRole="Fixture" />
+  </EntityType>
+  <EntityType Name="Fixture">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FamilyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsDWEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="ApplicationTypeId" Type="Int32" Nullable="false" />
+    <Property Name="DirectionalityId" Type="Int32" Nullable="false" />
+    <Property Name="HasSingleEmmiter" Type="Boolean" Nullable="false" />
+    <Property Name="DWGouverningProjectId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="FixtureApplicationType" Relationship="Model.FK_Fixtures_FixtureApplicationTypes" FromRole="Fixture" ToRole="FixtureApplicationType" />
+    <NavigationProperty Name="FixtureDirectionality" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="Fixture" ToRole="FixtureDirectionality" />
+    <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
+    <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="Fixture" ToRole="CategoryAtFixture" />
+  </EntityType>
+  <Association Name="FK_Fixtures_FixtureApplicationTypes">
+    <End Type="Model.FixtureApplicationType" Role="FixtureApplicationType" Multiplicity="1" />
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FixtureApplicationType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Fixture">
+        <PropertyRef Name="ApplicationTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Fixtures_FixtureDirectionality">
+    <End Type="Model.FixtureDirectionality" Role="FixtureDirectionality" Multiplicity="1" />
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FixtureDirectionality">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Fixture">
+        <PropertyRef Name="DirectionalityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_Fixtures">
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="FixtureID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderingCode_FixtureBelonging">
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="CategoryAtFixture">
+        <PropertyRef Name="FixtureId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="FilterBehavior">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Behavior" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_FilterBehavior_PartRulesFilter" FromRole="FilterBehavior" ToRole="PartRulesFilter" />
+  </EntityType>
+  <EntityType Name="FilterType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FilterTypeName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRulesFilter_FilterType" FromRole="FilterType" ToRole="PartRulesFilter" />
+  </EntityType>
+  <EntityType Name="Parameter">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+    <Property Name="Footnote" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ParameterAtCategoryAtFixtures" Relationship="Model.FK_ParameterAtCategoryAtFixture_ParameterID" FromRole="Parameter" ToRole="ParameterAtCategoryAtFixture" />
+  </EntityType>
+  <Association Name="FK_ParameterAtCategoryAtFixture_ParameterID">
+    <End Type="Model.Parameter" Role="Parameter" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parameter">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ParameterAtCategoryAtFixture">
+        <PropertyRef Name="ParameterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ProductTemplate">
     <Key>
       <PropertyRef Name="FixtureId" />
       <PropertyRef Name="FixtureCode" />
       <PropertyRef Name="FixtureIsDWEnabled" />
-      <PropertyRef Name="FixtureApplicationType" />
-      <PropertyRef Name="FixtureDirectionality" />
     </Key>
     <Property Name="FixtureId" Type="Int32" Nullable="false" />
     <Property Name="FixtureCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="FixtureIsDWEnabled" Type="Boolean" Nullable="false" />
     <Property Name="FixtureDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="FixtureFamilyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="FixtureApplicationType" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
-    <Property Name="FixtureDirectionality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FixtureApplicationType" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="FixtureDirectionality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CAF_Id" Type="Int32" />
     <Property Name="CAF_CategoryId" Type="Int32" />
     <Property Name="CAF_FixtureId" Type="Int32" />
@@ -498,69 +619,53 @@
     <Property Name="RVO_PAC_Id" Type="Int32" />
     <Property Name="RVO_ValueExtractRegex" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="RVO_ValueReAssemblyString" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="ParameterDescriptionOverride" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ParameterDescriptionOverride" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
   </EntityType>
-  <EntityType Name="ParameterAtCategoryAtFixtureView">
-    <Key>
-      <PropertyRef Name="ParAtCatAtFix_ID" />
-      <PropertyRef Name="CategoryAtFixtureId" />
-      <PropertyRef Name="ParameterId" />
-      <PropertyRef Name="DisplayOrder_Id" />
-    </Key>
-    <Property Name="id" Type="Int32" />
-    <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="CatAtFixture_ID" Type="Int32" />
-    <Property Name="CategoryId" Type="Int32" />
-    <Property Name="FixtureId" Type="Int32" />
-    <Property Name="DisplayOrder" Type="Int32" />
-    <Property Name="ParAtCatAtFix_ID" Type="Int32" Nullable="false" />
-    <Property Name="CategoryAtFixtureId" Type="Int32" Nullable="false" />
-    <Property Name="ParameterId" Type="Int32" Nullable="false" />
-    <Property Name="DisplayOrder_Id" Type="Int32" Nullable="false" />
-    <Property Name="Parameter_ID" Type="Int32" />
-    <Property Name="ParameterCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
-    <Property Name="Description" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
-    <Property Name="Category_ID" Type="Int32" Nullable="false" />
-    <Property Name="Name" Type="String" MaxLength="75" FixedLength="false" Unicode="true" Nullable="false" />
-  </EntityType>
-  <EntityType Name="FilterBehavior">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Behavior" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="PartRules" Relationship="Model.FK_PartRules_PartRules" FromRole="FilterBehavior" ToRole="PartRule" />
-  </EntityType>
-  <EntityType Name="PartRule">
+  <EntityType Name="PartRulesFilter">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PartID" Type="Int32" Nullable="false" />
     <Property Name="PartName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ProductID" Type="Int32" />
-    <Property Name="ProductCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="CategoryID" Type="Int32" />
     <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="ParameterID" Type="Int32" />
-    <Property Name="ParameterName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="PACAF_ID" Type="Int32" />
-    <Property Name="FirstFilterDependencyID" Type="Int32" />
-    <Property Name="FirstFilterDependencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ParameterID" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="ParameterName" Type="String" MaxLength="700" FixedLength="false" Unicode="true" />
+    <Property Name="FilterTypeID" Type="Int32" Nullable="false" />
+    <Property Name="OrderOfExecution" Type="Int32" Nullable="false" />
+    <Property Name="PACAF_ID" Type="String" MaxLength="700" FixedLength="false" Unicode="true" />
+    <Property Name="FilterDependencyID" Type="Int32" />
+    <Property Name="FilterDependencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Quantity" Type="Int32" />
-    <NavigationProperty Name="FilterBehavior" Relationship="Model.FK_PartRules_PartRules" FromRole="PartRule" ToRole="FilterBehavior" />
-    <NavigationProperty Name="Part" Relationship="Model.FK_PartRules_Parts" FromRole="PartRule" ToRole="Part" />
-    <NavigationProperty Name="ParameterAtCategoryAtFixture" Relationship="Model.FK_PartRules_ParameterAtCategoryAtFixture" FromRole="PartRule" ToRole="ParameterAtCategoryAtFixture" />
+    <Property Name="QuantityRule" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="FilterBehavior" Relationship="Model.FK_FilterBehavior_PartRulesFilter" FromRole="PartRulesFilter" ToRole="FilterBehavior" />
+    <NavigationProperty Name="FilterType" Relationship="Model.FK_PartRulesFilter_FilterType" FromRole="PartRulesFilter" ToRole="FilterType" />
+    <NavigationProperty Name="Part" Relationship="Model.FK_PartRules_Parts" FromRole="PartRulesFilter" ToRole="Part" />
   </EntityType>
-  <Association Name="FK_PartRules_PartRules">
+  <Association Name="FK_FilterBehavior_PartRulesFilter">
     <End Type="Model.FilterBehavior" Role="FilterBehavior" Multiplicity="0..1" />
-    <End Type="Model.PartRule" Role="PartRule" Multiplicity="*" />
+    <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="FilterBehavior">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="PartRule">
-        <PropertyRef Name="FirstFilterDependencyID" />
+      <Dependent Role="PartRulesFilter">
+        <PropertyRef Name="FilterDependencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartRulesFilter_FilterType">
+    <End Type="Model.FilterType" Role="FilterType" Multiplicity="1" />
+    <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilterType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRulesFilter">
+        <PropertyRef Name="FilterTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -568,67 +673,13 @@
     <End Type="Model.Part" Role="Part" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Type="Model.PartRule" Role="PartRule" Multiplicity="*" />
+    <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Part">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="PartRule">
+      <Dependent Role="PartRulesFilter">
         <PropertyRef Name="PartID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="ParameterAtCategoryAtFixture">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CategoryAtFixtureId" Type="Int32" Nullable="false" />
-    <Property Name="ParameterId" Type="Int32" Nullable="false" />
-    <Property Name="DisplayOrder" Type="Int32" Nullable="false" />
-    <Property Name="FootnoteOverride" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="IsObsolete" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="PartRules" Relationship="Model.FK_PartRules_ParameterAtCategoryAtFixture" FromRole="ParameterAtCategoryAtFixture" ToRole="PartRule" />
-    <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_CategoryAtFixture_ParameterAtCategoryAtFixture" FromRole="ParameterAtCategoryAtFixture" ToRole="CategoryAtFixture" />
-    <NavigationProperty Name="CategoryAtFixture" Relationship="Model.FK_ParameterAtCategoryAtFixture_CategoryID" FromRole="ParameterAtCategoryAtFixture" ToRole="CategoryAtFixture" />
-  </EntityType>
-  <Association Name="FK_PartRules_ParameterAtCategoryAtFixture">
-    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.PartRule" Role="PartRule" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ParameterAtCategoryAtFixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="PartRule">
-        <PropertyRef Name="PACAF_ID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CategoryAtFixture_ParameterAtCategoryAtFixture">
-    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="0..1" />
-    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ParameterAtCategoryAtFixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="CategoryAtFixture">
-        <PropertyRef Name="DefaultFallbackSelection" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_ParameterAtCategoryAtFixture_CategoryID">
-    <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.ParameterAtCategoryAtFixture" Role="ParameterAtCategoryAtFixture" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="CategoryAtFixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="ParameterAtCategoryAtFixture">
-        <PropertyRef Name="CategoryAtFixtureId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

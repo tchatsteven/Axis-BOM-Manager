@@ -17,13 +17,13 @@ namespace BOM_MANAGER
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public FilterBehavior()
         {
-            this.PartRules = new HashSet<PartRule>();
+            this.PartRulesFilters = new HashSet<PartRulesFilter>();
         }
     
         public int id { get; set; }
         public string Behavior { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PartRule> PartRules { get; set; }
+        public virtual ICollection<PartRulesFilter> PartRulesFilters { get; set; }
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="Assembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="_Assembly.cs" />
     <Compile Include="AssemblyAtAssembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
@@ -119,25 +120,28 @@
     <Compile Include="CategoryAtFixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="CategoryAtFixtureView.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="FamilyName.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="FilterBehavior.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="FilterType.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
     <Compile Include="Fixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="FixtureSetupCodeParserTemplate.cs">
+    <Compile Include="FixtureApplicationType.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FixtureDirectionality.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Parameter.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="ParameterAtCategoryAtFixture.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ParameterAtCategoryAtFixtureView.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="Part.cs">
@@ -146,7 +150,7 @@
     <Compile Include="PartAtAssembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="PartRule.cs">
+    <Compile Include="PartRulesFilter.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="PartType.cs">
@@ -170,6 +174,9 @@
     <Compile Include="Part_CreateOrEditForm.Designer.cs">
       <DependentUpon>Part_CreateOrEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProductTemplate.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rules_EditForm.cs">
@@ -179,6 +186,7 @@
       <DependentUpon>Rules_EditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="_BOM.cs" />
+    <Compile Include="_Part.cs" />
     <EmbeddedResource Include="AssemblyTypeForm.resx">
       <DependentUpon>AssemblyTypeForm.cs</DependentUpon>
     </EmbeddedResource>

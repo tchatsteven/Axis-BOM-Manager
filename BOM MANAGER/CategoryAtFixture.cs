@@ -30,10 +30,10 @@ namespace BOM_MANAGER
         public bool IsObsolete { get; set; }
         public Nullable<int> DefaultFallbackSelection { get; set; }
     
-        public virtual Fixture Fixture { get; set; }
         public virtual Category Category { get; set; }
         public virtual ParameterAtCategoryAtFixture ParameterAtCategoryAtFixture { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ParameterAtCategoryAtFixture> ParameterAtCategoryAtFixtures { get; set; }
+        public virtual Fixture Fixture { get; set; }
     }
 }

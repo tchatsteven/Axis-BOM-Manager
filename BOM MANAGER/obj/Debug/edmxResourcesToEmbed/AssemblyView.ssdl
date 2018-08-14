@@ -1,5 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="FixtureApplicationTypes">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FixtureDirectionality">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Direction" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <EntityType Name="Assembly">
     <Key>
       <PropertyRef Name="id" />
@@ -38,6 +52,13 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Behavior" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
+  <EntityType Name="FilterType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FilterTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <EntityType Name="PartAtAssembly">
     <Key>
       <PropertyRef Name="id" />
@@ -47,23 +68,26 @@
     <Property Name="AssRefID" Type="int" Nullable="false" />
     <Property Name="FixtureID" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="PartRules">
+  <EntityType Name="PartRulesFilter">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PartID" Type="int" Nullable="false" />
     <Property Name="PartName" Type="nvarchar" MaxLength="100" Nullable="false" />
-    <Property Name="ProductID" Type="int" />
-    <Property Name="ProductCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="ProductCode" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="CategoryID" Type="int" />
     <Property Name="CategoryName" Type="nvarchar" MaxLength="100" />
-    <Property Name="ParameterID" Type="int" />
-    <Property Name="ParameterName" Type="nvarchar" MaxLength="100" />
-    <Property Name="PACAF_ID" Type="int" />
-    <Property Name="FirstFilterDependencyID" Type="int" />
-    <Property Name="FirstFilterDependencyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ParameterID" Type="nvarchar" MaxLength="500" />
+    <Property Name="ParameterName" Type="nvarchar" MaxLength="700" />
+    <Property Name="FilterTypeID" Type="int" Nullable="false" />
+    <Property Name="OrderOfExecution" Type="int" Nullable="false" />
+    <Property Name="PACAF_ID" Type="nvarchar" MaxLength="700" />
+    <Property Name="FilterDependencyID" Type="int" />
+    <Property Name="FilterDependencyName" Type="nvarchar" MaxLength="50" />
     <Property Name="Quantity" Type="int" />
+    <Property Name="QuantityRule" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="PartTypes">
     <Key>
@@ -106,10 +130,10 @@
     <Property Name="Description" Type="nvarchar" MaxLength="100" />
     <Property Name="FamilyName" Type="nvarchar" MaxLength="100" />
     <Property Name="IsDWEnabled" Type="bit" Nullable="false" />
-    <Property Name="ApplicationType" Type="nvarchar" MaxLength="15" Nullable="false" />
-    <Property Name="Directionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ApplicationTypeId" Type="int" Nullable="false" />
+    <Property Name="DirectionalityId" Type="int" Nullable="false" />
     <Property Name="HasSingleEmmiter" Type="bit" Nullable="false" />
-    <Property Name="DWGouverningProject" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DWGouverningProjectId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="ParameterAtCategoryAtFixture">
     <Key>
@@ -121,6 +145,16 @@
     <Property Name="DisplayOrder" Type="int" Nullable="false" />
     <Property Name="FootnoteOverride" Type="nvarchar" MaxLength="250" Nullable="false" />
     <Property Name="IsObsolete" Type="bit" Nullable="false" />
+    <Property Name="DescriptionOverride" Type="nvarchar" MaxLength="75" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Parameters">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="nvarchar" MaxLength="25" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="75" />
+    <Property Name="Footnote" Type="nvarchar" MaxLength="250" Nullable="false" />
   </EntityType>
   <EntityType Name="Parts">
     <Key>
@@ -197,47 +231,6 @@ warning 6002: The table/view 'AXIS Automation.bom.BOM' does not have a primary k
     <Property Name="FixFamilyID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.CategoryAtFixtureView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="CategoryAtFixtureView">
-    <Key>
-      <PropertyRef Name="Category_ID" />
-      <PropertyRef Name="Name" />
-      <PropertyRef Name="Type" />
-    </Key>
-    <Property Name="id" Type="int" />
-    <Property Name="CategoryId" Type="int" />
-    <Property Name="FixtureId" Type="int" />
-    <Property Name="DisplayOrder" Type="int" />
-    <Property Name="Category_ID" Type="int" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="75" Nullable="false" />
-    <Property Name="Type" Type="nvarchar" MaxLength="25" Nullable="false" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.ParameterAtCategoryAtFixtureView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="ParameterAtCategoryAtFixtureView">
-    <Key>
-      <PropertyRef Name="ParAtCatAtFix_ID" />
-      <PropertyRef Name="CategoryAtFixtureId" />
-      <PropertyRef Name="ParameterId" />
-      <PropertyRef Name="DisplayOrder_Id" />
-    </Key>
-    <Property Name="id" Type="int" />
-    <Property Name="Code" Type="nvarchar" MaxLength="50" />
-    <Property Name="CatAtFixture_ID" Type="int" />
-    <Property Name="CategoryId" Type="int" />
-    <Property Name="FixtureId" Type="int" />
-    <Property Name="DisplayOrder" Type="int" />
-    <Property Name="ParAtCatAtFix_ID" Type="int" Nullable="false" />
-    <Property Name="CategoryAtFixtureId" Type="int" Nullable="false" />
-    <Property Name="ParameterId" Type="int" Nullable="false" />
-    <Property Name="DisplayOrder_Id" Type="int" Nullable="false" />
-    <Property Name="Parameter_ID" Type="int" />
-    <Property Name="ParameterCode" Type="nvarchar" MaxLength="25" />
-    <Property Name="Description" Type="nvarchar" MaxLength="75" />
-    <Property Name="Category_ID" Type="int" Nullable="false" />
-    <Property Name="Name" Type="nvarchar" MaxLength="75" Nullable="false" />
-  </EntityType>
-  <!--Errors Found During Generation:
 warning 6002: The table/view 'AXIS Automation.bom.PartTypeAtPart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="PartTypeAtPart">
     <Key>
@@ -288,22 +281,20 @@ warning 6002: The table/view 'AXIS Automation.bom.PartView' does not have a prim
     <Property Name="FixFamilyID" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCodeParserTemplate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="FixtureSetupCodeParserTemplate">
+warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="ProductTemplates">
     <Key>
       <PropertyRef Name="FixtureId" />
       <PropertyRef Name="FixtureCode" />
       <PropertyRef Name="FixtureIsDWEnabled" />
-      <PropertyRef Name="FixtureApplicationType" />
-      <PropertyRef Name="FixtureDirectionality" />
     </Key>
     <Property Name="FixtureId" Type="int" Nullable="false" />
     <Property Name="FixtureCode" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="FixtureIsDWEnabled" Type="bit" Nullable="false" />
     <Property Name="FixtureDescription" Type="nvarchar" MaxLength="100" />
     <Property Name="FixtureFamilyName" Type="nvarchar" MaxLength="100" />
-    <Property Name="FixtureApplicationType" Type="nvarchar" MaxLength="15" Nullable="false" />
-    <Property Name="FixtureDirectionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FixtureApplicationType" Type="nvarchar" MaxLength="15" />
+    <Property Name="FixtureDirectionality" Type="nvarchar" MaxLength="50" />
     <Property Name="CAF_Id" Type="int" />
     <Property Name="CAF_CategoryId" Type="int" />
     <Property Name="CAF_FixtureId" Type="int" />
@@ -333,7 +324,7 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     <Property Name="RVO_PAC_Id" Type="int" />
     <Property Name="RVO_ValueExtractRegex" Type="nvarchar" MaxLength="50" />
     <Property Name="RVO_ValueReAssemblyString" Type="nvarchar" MaxLength="50" />
-    <Property Name="ParameterDescriptionOverride" Type="nvarchar" MaxLength="250" />
+    <Property Name="ParameterDescriptionOverride" Type="nvarchar" MaxLength="75" />
   </EntityType>
   <Association Name="FK_Assembly_AssemblyType">
     <End Role="AssemblyType" Type="Self.AssemblyType" Multiplicity="0..1" />
@@ -399,6 +390,42 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_FilterBehavior_PartRulesFilter">
+    <End Role="FilterBehavior" Type="Self.FilterBehavior" Multiplicity="0..1" />
+    <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilterBehavior">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRulesFilter">
+        <PropertyRef Name="FilterDependencyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Fixtures_FixtureApplicationTypes">
+    <End Role="FixtureApplicationTypes" Type="Self.FixtureApplicationTypes" Multiplicity="1" />
+    <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FixtureApplicationTypes">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Fixtures">
+        <PropertyRef Name="ApplicationTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Fixtures_FixtureDirectionality">
+    <End Role="FixtureDirectionality" Type="Self.FixtureDirectionality" Multiplicity="1" />
+    <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FixtureDirectionality">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Fixtures">
+        <PropertyRef Name="DirectionalityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OrderingCode_CategoryBelonging">
     <End Role="Categories" Type="Self.Categories" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -441,6 +468,20 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_ParameterAtCategoryAtFixture_ParameterID">
+    <End Role="Parameters" Type="Self.Parameters" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ParameterAtCategoryAtFixture" Type="Self.ParameterAtCategoryAtFixture" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Parameters">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ParameterAtCategoryAtFixture">
+        <PropertyRef Name="ParameterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PartAtAssembly_Assembly">
     <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -469,43 +510,29 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PartRules_ParameterAtCategoryAtFixture">
-    <End Role="ParameterAtCategoryAtFixture" Type="Self.ParameterAtCategoryAtFixture" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="PartRules" Type="Self.PartRules" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ParameterAtCategoryAtFixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="PartRules">
-        <PropertyRef Name="PACAF_ID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PartRules_PartRules">
-    <End Role="FilterBehavior" Type="Self.FilterBehavior" Multiplicity="0..1" />
-    <End Role="PartRules" Type="Self.PartRules" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FilterBehavior">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="PartRules">
-        <PropertyRef Name="FirstFilterDependencyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_PartRules_Parts">
     <End Role="Parts" Type="Self.Parts" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="PartRules" Type="Self.PartRules" Multiplicity="*" />
+    <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Parts">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="PartRules">
+      <Dependent Role="PartRulesFilter">
         <PropertyRef Name="PartID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartRulesFilter_FilterType">
+    <End Role="FilterType" Type="Self.FilterType" Multiplicity="1" />
+    <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FilterType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartRulesFilter">
+        <PropertyRef Name="FilterTypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -536,18 +563,22 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="FixtureApplicationTypes" EntityType="Self.FixtureApplicationTypes" Schema="AvailableOptions" store:Type="Tables" />
+    <EntitySet Name="FixtureDirectionality" EntityType="Self.FixtureDirectionality" Schema="AvailableOptions" store:Type="Tables" />
     <EntitySet Name="Assembly" EntityType="Self.Assembly" Schema="bom" store:Type="Tables" />
     <EntitySet Name="AssemblyAtAssembly" EntityType="Self.AssemblyAtAssembly" Schema="bom" store:Type="Tables" />
     <EntitySet Name="AssemblyType" EntityType="Self.AssemblyType" Schema="bom" store:Type="Tables" />
     <EntitySet Name="FamilyName" EntityType="Self.FamilyName" Schema="bom" store:Type="Tables" />
     <EntitySet Name="FilterBehavior" EntityType="Self.FilterBehavior" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="FilterType" EntityType="Self.FilterType" Schema="bom" store:Type="Tables" />
     <EntitySet Name="PartAtAssembly" EntityType="Self.PartAtAssembly" Schema="bom" store:Type="Tables" />
-    <EntitySet Name="PartRules" EntityType="Self.PartRules" Schema="bom" store:Type="Tables" />
+    <EntitySet Name="PartRulesFilter" EntityType="Self.PartRulesFilter" Schema="bom" store:Type="Tables" />
     <EntitySet Name="PartTypes" EntityType="Self.PartTypes" Schema="bom" store:Type="Tables" />
     <EntitySet Name="Categories" EntityType="Self.Categories" Schema="FixtureSetupCodes" store:Type="Tables" />
     <EntitySet Name="CategoryAtFixture" EntityType="Self.CategoryAtFixture" Schema="FixtureSetupCodes" store:Type="Tables" />
     <EntitySet Name="Fixtures" EntityType="Self.Fixtures" Schema="FixtureSetupCodes" store:Type="Tables" />
     <EntitySet Name="ParameterAtCategoryAtFixture" EntityType="Self.ParameterAtCategoryAtFixture" Schema="FixtureSetupCodes" store:Type="Tables" />
+    <EntitySet Name="Parameters" EntityType="Self.Parameters" Schema="FixtureSetupCodes" store:Type="Tables" />
     <EntitySet Name="Parts" EntityType="Self.Parts" Schema="Parts" store:Type="Tables" />
     <EntitySet Name="AssemblyTypeAtAssembly" EntityType="Self.AssemblyTypeAtAssembly" store:Type="Views" store:Schema="bom">
       <DefiningQuery>SELECT 
@@ -599,36 +630,6 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     [BOM].[FixFamilyID] AS [FixFamilyID]
     FROM [bom].[BOM] AS [BOM]</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="CategoryAtFixtureView" EntityType="Self.CategoryAtFixtureView" store:Type="Views" store:Schema="bom">
-      <DefiningQuery>SELECT 
-    [CategoryAtFixtureView].[id] AS [id], 
-    [CategoryAtFixtureView].[CategoryId] AS [CategoryId], 
-    [CategoryAtFixtureView].[FixtureId] AS [FixtureId], 
-    [CategoryAtFixtureView].[DisplayOrder] AS [DisplayOrder], 
-    [CategoryAtFixtureView].[Category_ID] AS [Category_ID], 
-    [CategoryAtFixtureView].[Name] AS [Name], 
-    [CategoryAtFixtureView].[Type] AS [Type]
-    FROM [bom].[CategoryAtFixtureView] AS [CategoryAtFixtureView]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="ParameterAtCategoryAtFixtureView" EntityType="Self.ParameterAtCategoryAtFixtureView" store:Type="Views" store:Schema="bom">
-      <DefiningQuery>SELECT 
-    [ParameterAtCategoryAtFixtureView].[id] AS [id], 
-    [ParameterAtCategoryAtFixtureView].[Code] AS [Code], 
-    [ParameterAtCategoryAtFixtureView].[CatAtFixture_ID] AS [CatAtFixture_ID], 
-    [ParameterAtCategoryAtFixtureView].[CategoryId] AS [CategoryId], 
-    [ParameterAtCategoryAtFixtureView].[FixtureId] AS [FixtureId], 
-    [ParameterAtCategoryAtFixtureView].[DisplayOrder] AS [DisplayOrder], 
-    [ParameterAtCategoryAtFixtureView].[ParAtCatAtFix_ID] AS [ParAtCatAtFix_ID], 
-    [ParameterAtCategoryAtFixtureView].[CategoryAtFixtureId] AS [CategoryAtFixtureId], 
-    [ParameterAtCategoryAtFixtureView].[ParameterId] AS [ParameterId], 
-    [ParameterAtCategoryAtFixtureView].[DisplayOrder_Id] AS [DisplayOrder_Id], 
-    [ParameterAtCategoryAtFixtureView].[Parameter_ID] AS [Parameter_ID], 
-    [ParameterAtCategoryAtFixtureView].[ParameterCode] AS [ParameterCode], 
-    [ParameterAtCategoryAtFixtureView].[Description] AS [Description], 
-    [ParameterAtCategoryAtFixtureView].[Category_ID] AS [Category_ID], 
-    [ParameterAtCategoryAtFixtureView].[Name] AS [Name]
-    FROM [bom].[ParameterAtCategoryAtFixtureView] AS [ParameterAtCategoryAtFixtureView]</DefiningQuery>
-    </EntitySet>
     <EntitySet Name="PartTypeAtPart" EntityType="Self.PartTypeAtPart" store:Type="Views" store:Schema="bom">
       <DefiningQuery>SELECT 
     [PartTypeAtPart].[Part_ID] AS [Part_ID], 
@@ -669,46 +670,46 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
     [PartView].[FixFamilyID] AS [FixFamilyID]
     FROM [bom].[PartView] AS [PartView]</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="FixtureSetupCodeParserTemplate" EntityType="Self.FixtureSetupCodeParserTemplate" store:Type="Views" store:Schema="FixtureSetupCodes">
+    <EntitySet Name="ProductTemplates" EntityType="Self.ProductTemplates" store:Type="Views" store:Schema="FixtureSetupCodes">
       <DefiningQuery>SELECT 
-    [FixtureSetupCodeParserTemplate].[FixtureId] AS [FixtureId], 
-    [FixtureSetupCodeParserTemplate].[FixtureCode] AS [FixtureCode], 
-    [FixtureSetupCodeParserTemplate].[FixtureIsDWEnabled] AS [FixtureIsDWEnabled], 
-    [FixtureSetupCodeParserTemplate].[FixtureDescription] AS [FixtureDescription], 
-    [FixtureSetupCodeParserTemplate].[FixtureFamilyName] AS [FixtureFamilyName], 
-    [FixtureSetupCodeParserTemplate].[FixtureApplicationType] AS [FixtureApplicationType], 
-    [FixtureSetupCodeParserTemplate].[FixtureDirectionality] AS [FixtureDirectionality], 
-    [FixtureSetupCodeParserTemplate].[CAF_Id] AS [CAF_Id], 
-    [FixtureSetupCodeParserTemplate].[CAF_CategoryId] AS [CAF_CategoryId], 
-    [FixtureSetupCodeParserTemplate].[CAF_FixtureId] AS [CAF_FixtureId], 
-    [FixtureSetupCodeParserTemplate].[CAF_DisplayOrder] AS [CAF_DisplayOrder], 
-    [FixtureSetupCodeParserTemplate].[CAF_IsOptionalOverride] AS [CAF_IsOptionalOverride], 
-    [FixtureSetupCodeParserTemplate].[CAF_IsMultiselectOverride] AS [CAF_IsMultiselectOverride], 
-    [FixtureSetupCodeParserTemplate].[CAF_FootnoteOverride] AS [CAF_FootnoteOverride], 
-    [FixtureSetupCodeParserTemplate].[ParserFallbackParameterID] AS [ParserFallbackParameterID], 
-    [FixtureSetupCodeParserTemplate].[CategoryId] AS [CategoryId], 
-    [FixtureSetupCodeParserTemplate].[CategoryName] AS [CategoryName], 
-    [FixtureSetupCodeParserTemplate].[CategoryType] AS [CategoryType], 
-    [FixtureSetupCodeParserTemplate].[CategoryIsMultiselect] AS [CategoryIsMultiselect], 
-    [FixtureSetupCodeParserTemplate].[CategoryIsOptional] AS [CategoryIsOptional], 
-    [FixtureSetupCodeParserTemplate].[CategoryFootnote] AS [CategoryFootnote], 
-    [FixtureSetupCodeParserTemplate].[CategoryIsObsolete] AS [CategoryIsObsolete], 
-    [FixtureSetupCodeParserTemplate].[PAC_Id] AS [PAC_Id], 
-    [FixtureSetupCodeParserTemplate].[PAC_CategoryAtFixtureId] AS [PAC_CategoryAtFixtureId], 
-    [FixtureSetupCodeParserTemplate].[PAC_ParameterId] AS [PAC_ParameterId], 
-    [FixtureSetupCodeParserTemplate].[PAC_DisplayOrder] AS [PAC_DisplayOrder], 
-    [FixtureSetupCodeParserTemplate].[PAC_FootnoteOverride] AS [PAC_FootnoteOverride], 
-    [FixtureSetupCodeParserTemplate].[ParameterId] AS [ParameterId], 
-    [FixtureSetupCodeParserTemplate].[ParameterCode] AS [ParameterCode], 
-    [FixtureSetupCodeParserTemplate].[ParameterDescription] AS [ParameterDescription], 
-    [FixtureSetupCodeParserTemplate].[ParameterFootnote] AS [ParameterFootnote], 
-    [FixtureSetupCodeParserTemplate].[ParameterIsObsolete] AS [ParameterIsObsolete], 
-    [FixtureSetupCodeParserTemplate].[RVO_Id] AS [RVO_Id], 
-    [FixtureSetupCodeParserTemplate].[RVO_PAC_Id] AS [RVO_PAC_Id], 
-    [FixtureSetupCodeParserTemplate].[RVO_ValueExtractRegex] AS [RVO_ValueExtractRegex], 
-    [FixtureSetupCodeParserTemplate].[RVO_ValueReAssemblyString] AS [RVO_ValueReAssemblyString], 
-    [FixtureSetupCodeParserTemplate].[ParameterDescriptionOverride] AS [ParameterDescriptionOverride]
-    FROM [FixtureSetupCodes].[FixtureSetupCodeParserTemplate] AS [FixtureSetupCodeParserTemplate]</DefiningQuery>
+    [ProductTemplates].[FixtureId] AS [FixtureId], 
+    [ProductTemplates].[FixtureCode] AS [FixtureCode], 
+    [ProductTemplates].[FixtureIsDWEnabled] AS [FixtureIsDWEnabled], 
+    [ProductTemplates].[FixtureDescription] AS [FixtureDescription], 
+    [ProductTemplates].[FixtureFamilyName] AS [FixtureFamilyName], 
+    [ProductTemplates].[FixtureApplicationType] AS [FixtureApplicationType], 
+    [ProductTemplates].[FixtureDirectionality] AS [FixtureDirectionality], 
+    [ProductTemplates].[CAF_Id] AS [CAF_Id], 
+    [ProductTemplates].[CAF_CategoryId] AS [CAF_CategoryId], 
+    [ProductTemplates].[CAF_FixtureId] AS [CAF_FixtureId], 
+    [ProductTemplates].[CAF_DisplayOrder] AS [CAF_DisplayOrder], 
+    [ProductTemplates].[CAF_IsOptionalOverride] AS [CAF_IsOptionalOverride], 
+    [ProductTemplates].[CAF_IsMultiselectOverride] AS [CAF_IsMultiselectOverride], 
+    [ProductTemplates].[CAF_FootnoteOverride] AS [CAF_FootnoteOverride], 
+    [ProductTemplates].[ParserFallbackParameterID] AS [ParserFallbackParameterID], 
+    [ProductTemplates].[CategoryId] AS [CategoryId], 
+    [ProductTemplates].[CategoryName] AS [CategoryName], 
+    [ProductTemplates].[CategoryType] AS [CategoryType], 
+    [ProductTemplates].[CategoryIsMultiselect] AS [CategoryIsMultiselect], 
+    [ProductTemplates].[CategoryIsOptional] AS [CategoryIsOptional], 
+    [ProductTemplates].[CategoryFootnote] AS [CategoryFootnote], 
+    [ProductTemplates].[CategoryIsObsolete] AS [CategoryIsObsolete], 
+    [ProductTemplates].[PAC_Id] AS [PAC_Id], 
+    [ProductTemplates].[PAC_CategoryAtFixtureId] AS [PAC_CategoryAtFixtureId], 
+    [ProductTemplates].[PAC_ParameterId] AS [PAC_ParameterId], 
+    [ProductTemplates].[PAC_DisplayOrder] AS [PAC_DisplayOrder], 
+    [ProductTemplates].[PAC_FootnoteOverride] AS [PAC_FootnoteOverride], 
+    [ProductTemplates].[ParameterId] AS [ParameterId], 
+    [ProductTemplates].[ParameterCode] AS [ParameterCode], 
+    [ProductTemplates].[ParameterDescription] AS [ParameterDescription], 
+    [ProductTemplates].[ParameterFootnote] AS [ParameterFootnote], 
+    [ProductTemplates].[ParameterIsObsolete] AS [ParameterIsObsolete], 
+    [ProductTemplates].[RVO_Id] AS [RVO_Id], 
+    [ProductTemplates].[RVO_PAC_Id] AS [RVO_PAC_Id], 
+    [ProductTemplates].[RVO_ValueExtractRegex] AS [RVO_ValueExtractRegex], 
+    [ProductTemplates].[RVO_ValueReAssemblyString] AS [RVO_ValueReAssemblyString], 
+    [ProductTemplates].[ParameterDescriptionOverride] AS [ParameterDescriptionOverride]
+    FROM [FixtureSetupCodes].[ProductTemplates] AS [ProductTemplates]</DefiningQuery>
     </EntitySet>
     <AssociationSet Name="FK_Assembly_AssemblyType" Association="Self.FK_Assembly_AssemblyType">
       <End Role="AssemblyType" EntitySet="AssemblyType" />
@@ -730,6 +731,18 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixture" />
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixture" />
     </AssociationSet>
+    <AssociationSet Name="FK_FilterBehavior_PartRulesFilter" Association="Self.FK_FilterBehavior_PartRulesFilter">
+      <End Role="FilterBehavior" EntitySet="FilterBehavior" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Fixtures_FixtureApplicationTypes" Association="Self.FK_Fixtures_FixtureApplicationTypes">
+      <End Role="FixtureApplicationTypes" EntitySet="FixtureApplicationTypes" />
+      <End Role="Fixtures" EntitySet="Fixtures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Fixtures_FixtureDirectionality" Association="Self.FK_Fixtures_FixtureDirectionality">
+      <End Role="FixtureDirectionality" EntitySet="FixtureDirectionality" />
+      <End Role="Fixtures" EntitySet="Fixtures" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrderingCode_CategoryBelonging" Association="Self.FK_OrderingCode_CategoryBelonging">
       <End Role="Categories" EntitySet="Categories" />
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixture" />
@@ -742,6 +755,10 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixture" />
       <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixture" />
     </AssociationSet>
+    <AssociationSet Name="FK_ParameterAtCategoryAtFixture_ParameterID" Association="Self.FK_ParameterAtCategoryAtFixture_ParameterID">
+      <End Role="Parameters" EntitySet="Parameters" />
+      <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixture" />
+    </AssociationSet>
     <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Self.FK_PartAtAssembly_Assembly">
       <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
       <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
@@ -750,17 +767,13 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.FixtureSetupCode
       <End Role="Parts" EntitySet="Parts" />
       <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
     </AssociationSet>
-    <AssociationSet Name="FK_PartRules_ParameterAtCategoryAtFixture" Association="Self.FK_PartRules_ParameterAtCategoryAtFixture">
-      <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixture" />
-      <End Role="PartRules" EntitySet="PartRules" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PartRules_PartRules" Association="Self.FK_PartRules_PartRules">
-      <End Role="FilterBehavior" EntitySet="FilterBehavior" />
-      <End Role="PartRules" EntitySet="PartRules" />
-    </AssociationSet>
     <AssociationSet Name="FK_PartRules_Parts" Association="Self.FK_PartRules_Parts">
       <End Role="Parts" EntitySet="Parts" />
-      <End Role="PartRules" EntitySet="PartRules" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartRulesFilter_FilterType" Association="Self.FK_PartRulesFilter_FilterType">
+      <End Role="FilterType" EntitySet="FilterType" />
+      <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
     </AssociationSet>
     <AssociationSet Name="FK_Parts_FamilyName1" Association="Self.FK_Parts_FamilyName1">
       <End Role="FamilyName" EntitySet="FamilyName" />
