@@ -1,70 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="AXIS_AutomationEntitiesBOM">
-    <EntitySetMapping Name="Assemblies">
-      <EntityTypeMapping TypeName="Model.Assembly">
-        <MappingFragment StoreEntitySet="Assembly">
-          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AssemblyAtAssemblies">
-      <EntityTypeMapping TypeName="Model.AssemblyAtAssembly">
-        <MappingFragment StoreEntitySet="AssemblyAtAssembly">
-          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AssemblyTypes">
-      <EntityTypeMapping TypeName="Model.AssemblyType">
-        <MappingFragment StoreEntitySet="AssemblyType">
-          <ScalarProperty Name="AssemblyType1" ColumnName="AssemblyType" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FamilyNames">
-      <EntityTypeMapping TypeName="Model.FamilyName">
-        <MappingFragment StoreEntitySet="FamilyName">
-          <ScalarProperty Name="FamilyName1" ColumnName="FamilyName" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PartAtAssemblies">
-      <EntityTypeMapping TypeName="Model.PartAtAssembly">
-        <MappingFragment StoreEntitySet="PartAtAssembly">
-          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-          <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
-          <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PartTypes">
-      <EntityTypeMapping TypeName="Model.PartType">
-        <MappingFragment StoreEntitySet="PartTypes">
-          <ScalarProperty Name="PartType1" ColumnName="PartType" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Parts">
-      <EntityTypeMapping TypeName="Model.Part">
-        <MappingFragment StoreEntitySet="Parts">
-          <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-          <ScalarProperty Name="PartName" ColumnName="PartName" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AssemblyTypeAtAssemblies">
       <EntityTypeMapping TypeName="Model.AssemblyTypeAtAssembly">
         <MappingFragment StoreEntitySet="AssemblyTypeAtAssembly">
@@ -323,6 +259,70 @@
           <ScalarProperty Name="ProductID" ColumnName="ProductID" />
           <ScalarProperty Name="PartName" ColumnName="PartName" />
           <ScalarProperty Name="PartID" ColumnName="PartID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Assemblies">
+      <EntityTypeMapping TypeName="Model.Assembly">
+        <MappingFragment StoreEntitySet="Assembly">
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyAtAssemblies">
+      <EntityTypeMapping TypeName="Model.AssemblyAtAssembly">
+        <MappingFragment StoreEntitySet="AssemblyAtAssembly">
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyTypes">
+      <EntityTypeMapping TypeName="Model.AssemblyType">
+        <MappingFragment StoreEntitySet="AssemblyType">
+          <ScalarProperty Name="AssemblyType1" ColumnName="AssemblyType" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FamilyNames">
+      <EntityTypeMapping TypeName="Model.FamilyName">
+        <MappingFragment StoreEntitySet="FamilyName">
+          <ScalarProperty Name="FamilyName1" ColumnName="FamilyName" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartAtAssemblies">
+      <EntityTypeMapping TypeName="Model.PartAtAssembly">
+        <MappingFragment StoreEntitySet="PartAtAssembly">
+          <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+          <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
+          <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PartTypes">
+      <EntityTypeMapping TypeName="Model.PartType">
+        <MappingFragment StoreEntitySet="PartTypes">
+          <ScalarProperty Name="PartType1" ColumnName="PartType" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Parts">
+      <EntityTypeMapping TypeName="Model.Part">
+        <MappingFragment StoreEntitySet="Parts">
+          <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+          <ScalarProperty Name="PartName" ColumnName="PartName" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

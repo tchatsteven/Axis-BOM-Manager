@@ -30,8 +30,8 @@ namespace BOM_MANAGER
         public virtual FamilyName FamilyName { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
-        public virtual PartType PartType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PartRulesFilter> PartRulesFilters { get; set; }
+        public virtual PartType PartType { get; set; }
     }
 }

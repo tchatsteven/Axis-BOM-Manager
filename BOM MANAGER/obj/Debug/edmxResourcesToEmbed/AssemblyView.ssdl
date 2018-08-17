@@ -338,19 +338,21 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_AssemblyAtAssembly_Assembly">
-    <End Role="Assembly" Type="Self.Assembly" Multiplicity="0..1" />
+  <Association Name="FK_AssemblyAtAssembly_Fixtures">
+    <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
     <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Assembly">
+      <Principal Role="Fixtures">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="ParentID" />
+        <PropertyRef Name="FixtureID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_AssemblyAtAssembly_Assembly1">
+  <Association Name="FK_AssemblyAtAssembly_ToAssembly">
     <End Role="Assembly" Type="Self.Assembly" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
@@ -364,17 +366,15 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_AssemblyAtAssembly_Fixtures">
-    <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
+  <Association Name="FK_AssemblyAtAssembly_ToParent">
+    <End Role="Assembly" Type="Self.Assembly" Multiplicity="0..1" />
     <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Fixtures">
+      <Principal Role="Assembly">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="FixtureID" />
+        <PropertyRef Name="ParentID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -715,16 +715,16 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
       <End Role="AssemblyType" EntitySet="AssemblyType" />
       <End Role="Assembly" EntitySet="Assembly" />
     </AssociationSet>
-    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly" Association="Self.FK_AssemblyAtAssembly_Assembly">
-      <End Role="Assembly" EntitySet="Assembly" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly1" Association="Self.FK_AssemblyAtAssembly_Assembly1">
-      <End Role="Assembly" EntitySet="Assembly" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
-    </AssociationSet>
     <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Self.FK_AssemblyAtAssembly_Fixtures">
       <End Role="Fixtures" EntitySet="Fixtures" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_ToAssembly" Association="Self.FK_AssemblyAtAssembly_ToAssembly">
+      <End Role="Assembly" EntitySet="Assembly" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_ToParent" Association="Self.FK_AssemblyAtAssembly_ToParent">
+      <End Role="Assembly" EntitySet="Assembly" />
       <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
     </AssociationSet>
     <AssociationSet Name="FK_CategoryAtFixture_ParameterAtCategoryAtFixture" Association="Self.FK_CategoryAtFixture_ParameterAtCategoryAtFixture">

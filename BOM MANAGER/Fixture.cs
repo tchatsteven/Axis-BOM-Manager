@@ -17,8 +17,8 @@ namespace BOM_MANAGER
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Fixture()
         {
-            this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
             this.CategoryAtFixtures = new HashSet<CategoryAtFixture>();
+            this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
         }
     
         public int id { get; set; }
@@ -34,8 +34,8 @@ namespace BOM_MANAGER
         public virtual FixtureApplicationType FixtureApplicationType { get; set; }
         public virtual FixtureDirectionality FixtureDirectionality { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CategoryAtFixture> CategoryAtFixtures { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
     }
 }

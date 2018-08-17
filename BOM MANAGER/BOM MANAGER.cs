@@ -24,8 +24,8 @@ namespace BOM_MANAGER
 
         _RTFMessenger BomManagerFormMsg;
         _RTFMessenger PartRules;
-        _RTFMessenger PartGen;
-        _RTFMessenger PartGen_log2;
+        _RTFMessenger ApplicableParts;
+        _RTFMessenger NonApplicablePartSummary;
         AXIS_AutomationEntitiesBOM db;
         PartRulesFilter newPartRule;
         _BOM NewBOM;
@@ -37,8 +37,8 @@ namespace BOM_MANAGER
             db = new AXIS_AutomationEntitiesBOM();
             BomManagerFormMsg = new _RTFMessenger(eventLog_richTextBox, 0, true) { DefaulSpaceAfter = 0 };
             PartRules = new _RTFMessenger(eventLog_PR_richTextBox, 0, true) { DefaulSpaceAfter = 0 };
-            PartGen = new _RTFMessenger(Log_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
-            PartGen_log2 = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
+            ApplicableParts = new _RTFMessenger(Log_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
+            NonApplicablePartSummary = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
         }
 
         private void BOM_MANAGER_Load(object sender, EventArgs e)
@@ -50,8 +50,8 @@ namespace BOM_MANAGER
 
             BomManagerFormMsg.On = true;
             PartRules.On = true;
-            PartGen.On = true;
-            PartGen_log2.On = true;
+            ApplicableParts.On = true;
+            NonApplicablePartSummary.On = true;
 
             RefreshTreeView();
 
@@ -846,7 +846,6 @@ namespace BOM_MANAGER
                 //MySelectedFixture = productID_comboBox_PR.SelectedValue.ToString();
                 MySelectedFixture = productID_comboBox_PR.Text;
             }
-
             else
             {
                 MySelectedFixture = "SCR";
@@ -3052,14 +3051,14 @@ namespace BOM_MANAGER
         {
             Log2_RichTextBox.Clear();
 
-            NewBOM = new _BOM(_FixtureSetupCode);
-            NewBOM.TestconfigSection(PartGen_log2);
+            NewBOM = new _BOM(_FixtureSetupCode, db);
+            //NewBOM.ProductTemplate(NonApplicablePartSummary);
             // _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
             NewBOM.FixtureConfiguration.ConfigureClientRequest();
             NewBOM.FixtureConfiguration.ConfigureSections();
             NewBOM.FixtureConfiguration.ConfigureCoverElements();
 
-            NewBOM.FixtureConfiguration.CustomerRequest.Template.SummarizeIntoRTB(PartGen_log2);
+            NewBOM.FixtureConfiguration.CustomerRequest.Template.SummarizeIntoRTB(NonApplicablePartSummary);
 
             Log2_RichTextBox.SelectionStart = 0;
             Log2_RichTextBox.ScrollToCaret();
@@ -3073,7 +3072,7 @@ namespace BOM_MANAGER
             NewFixture.ConfigureSections();
             NewFixture.ConfigureCoverElements();
 
-            NewFixture.CustomerRequest.Template.SummarizeMatchesIntoRTB(PartGen_log2);
+            NewFixture.CustomerRequest.Template.SummarizeMatchesIntoRTB(NonApplicablePartSummary);
 
             Log2_RichTextBox.SelectionStart = 0;
             Log2_RichTextBox.ScrollToCaret();
@@ -3088,312 +3087,32 @@ namespace BOM_MANAGER
             NewFixture.ConfigureSections();
             NewFixture.ConfigureCoverElements();
 
-            NewFixture.Sections.SummarizeMechanicalIntoRTB(PartGen_log2);
+            NewFixture.Sections.SummarizeMechanicalIntoRTB(NonApplicablePartSummary);
 
             Log2_RichTextBox.SelectionStart = 0;
             Log2_RichTextBox.ScrollToCaret();
         }
+
 
         private void GetPart_Button_Click(object sender, EventArgs e)
         {
 
             Log_RichTextBox.Clear();
             Log2_RichTextBox.Clear();
+            NewBOM = new _BOM(_FixtureSetupCode, db);
 
-            NewBOM = new _BOM(_FixtureSetupCode);
-            List<String> finalSectionParts = new List<String>();
-            List<String> noneApplicableParts = new List<String>();
+            ApplicableParts.NewMessage().SetSpaceAfter(0).AddBoldText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).Log();
 
-            NewBOM.TestconfigSection(PartGen);
-            NewBOM.GetOrderingCodePACAFs();
-
-            PartGen.NewMessage().SetSpaceAfter(0).AddText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).Log();
-
-
-            int totalSections = NewBOM.FixtureConfiguration.Sections.Count;
-
-            Decimal currentSectionLength = 0;
-            for (int sectionIncreament = 0; sectionIncreament < totalSections; sectionIncreament++)
-            {
-                //Function to go through treeview and add that to thr RichText Box
-                String sectionDefinition = "Start|Middle|End";
-                NewBOM.SummarizeBOMinIntoRTB(PartGen, sectionIncreament, ref currentSectionLength, ref sectionDefinition);
-                Filter( PartGen, PartGen_log2, finalSectionParts, noneApplicableParts, currentSectionLength, sectionIncreament);
-
-            }
+            NewBOM.SummarizeBOMInToRTB(ApplicableParts, NonApplicablePartSummary);
 
             Log_RichTextBox.SelectionStart = 0;
             Log_RichTextBox.ScrollToCaret();
+
+            Log2_RichTextBox.SelectionStart = 0;
+            Log2_RichTextBox.ScrollToCaret();
+;
         }
 
-        public void Filter( _RTFMessenger Log1_Messenger, _RTFMessenger Log2_Messenger, List<String> finalSectionParts, List<String> noneApplicableParts, Decimal currentSectionLength, Int32 sectionIncreament)
-        {
-            foreach (TreeNode ParentNode in Fixture_treeView_PartGen.Nodes)
-            {
-                foreach (TreeNode childNode in ParentNode.Nodes)
-                {
-                    String childNode_PartName = childNode.Text;
-                    String childNode_PartType = ((PartView)childNode.Tag).PartType;
-                    String childNode_ProductCode = NewBOM.FixtureConfiguration.ProductCode;
-                    String unsuitableParts = "";
-                    String[] parameter_List = { };
-                    Int32 numberOfFilters = db.PartRulesFilters.Where(o => o.PartName == childNode_PartName && o.ProductCode == childNode_ProductCode).Count();
-                    
-                    String partNameToSave = "";
-                    String partTypeToSave = "";
-                    String QuantityToSave = "";
-                    Boolean PACAFisAvailable = false;
-
-                    if (numberOfFilters == 0)
-                    {
-                        bool exists = LineExists(childNode.Text);
-
-                        if (!exists)
-                        {
-                            //PartGen_log2.NewMessage().AddBoldText(currentPartName).AddText(": CONTAINS NO RULES").IsError().Log();
-                            unsuitableParts = childNode_PartName + ": CONTAINS NO RULES";
-                            noneApplicableParts.Add(unsuitableParts);
-                        }
-                    }
-
-                    else
-                    {
-                        try
-                        {
-                            for (int x = 1; x <= numberOfFilters; x++)
-                            {
-                                Int32 orderOfExecution = x;
-                                Int32 filterType = db.PartRulesFilters.Where(o => o.PartName == childNode_PartName && o.ProductCode == childNode_ProductCode && o.OrderOfExecution == orderOfExecution).First().FilterTypeID;
-                                if (filterType == 2)
-                                {   
-                                    //Add PACAF to list
-                                    PACAF_Filter(ref partNameToSave, ref partTypeToSave, currentSectionLength, sectionIncreament, childNode, Log1_Messenger, orderOfExecution, ref finalSectionParts, noneApplicableParts,  PACAFisAvailable);
-
-                                }
-                                else if (filterType == 3)
-                                {   //Add Quantity to Every part in List
-                                    Quantity(childNode_ProductCode, partNameToSave, partTypeToSave, ref finalSectionParts);
-                                }
-                                else if (filterType == 4)
-                                {
-                                    //Code here
-                                }
-                                else if (filterType == 5)
-                                {
-                                    //Code here
-                                }
-                                else if (filterType == 6)
-                                {
-                                    Joiner_Qty(childNode_ProductCode, childNode_PartName, ref partNameToSave, ref partTypeToSave, ref finalSectionParts, childNode, sectionIncreament);
-                                }
-
-                                
-                            }
-                           
-                        }
-                        catch (InvalidOperationException )
-                        {
-                            //MessageBox.Show(" Error Check First Filter");
-                        }
-
-                    }
-
-                }
-
-            }
-
-            //Print Final List of parts at section here
-            foreach (String items in finalSectionParts)
-            {
-                Log1_Messenger.NewMessage().AddText(items).Log();
-
-            }
-            foreach (String items in noneApplicableParts)
-            {
-                Log2_Messenger.NewMessage().AddText(items).Log();
-            }
-            finalSectionParts.Clear();
-            noneApplicableParts.Clear();
-
-
-        }
-
-        public void PACAF_Filter(ref String partNameToSave, ref String partTypeToSave, Decimal currentSectionLength,Int32 sectionIncreament,  TreeNode childNode, _RTFMessenger log1_Messenger, Int32 orderOfExecution, ref List<String> finalSectionParts, List<String> noneApplicableParts, Boolean PACAFisAvailable)
-        {
-            String parameterList = db.PartRulesFilters.Where(o => o.PartName == childNode.Text && o.ProductCode == NewBOM.FixtureConfiguration.ProductCode && o.OrderOfExecution == orderOfExecution).First().PACAF_ID;
-            String GetFiterBehavior = db.PartRulesFilters.Where(o => o.PartName == childNode.Text && o.OrderOfExecution == orderOfExecution).First().FilterDependencyName.ToString();
-            String[] parameterList_split = parameterList.Split('|');
-            String unsuitableParts = "";
-
-            foreach (String x in parameterList_split)
-            {
-                if (NewBOM.All_PACAFs.Any(t => t.Contains(x)))
-                {
-                    PACAFisAvailable = true;
-                }
-            }
-
-            if (PACAFisAvailable && GetFiterBehavior == "INCLUSIVE")
-            {
-                // List of Parts
-                // Select Extrusion and Lens
-                String currentPart = childNode.Text;
-                String currentPartType = ((PartView)childNode.Tag).PartType;
-                String currentPartDescription = ((PartView)childNode.Tag).Description;
-                bool IsBlank = currentPartDescription.Contains("BLANK");
-                bool IsLens = currentPartDescription.Contains("LONG");
-
-                if (currentPartType == "EXTRUSION"  && !IsBlank)
-                {// Only Extrusions and Lens are considered. BLANKS will be treated as nnon extrusion
-                    EXorLN_Selection(ref partNameToSave, ref partTypeToSave, currentSectionLength, currentPart, currentPartType, finalSectionParts);
-
-                }
-                else if (currentPartType == "LENS" && IsLens)
-                {
-                    EXorLN_Selection(ref partNameToSave, ref partTypeToSave, currentSectionLength, currentPart, currentPartType, finalSectionParts);
-                }
-                else if (currentPartType == "ENDCAP" || currentPartType == "ENDCAP LENS")
-                {
-                    EndCapDropLens_Selection(ref partNameToSave, ref partTypeToSave, currentPart, currentPartType, sectionIncreament, finalSectionParts);
-                }
-                else
-                {
-                    partNameToSave = currentPart;
-                    partTypeToSave = currentPartType;
-                    finalSectionParts.Add(String.Format(@"     {0}     {1}     ", partNameToSave, partTypeToSave));
-                }
-                // new function
-                //ring.Format("{0}  {1}, old name, qty);
-
-            }
-            else if (PACAFisAvailable && GetFiterBehavior == "EXCLUSIVE")
-            {
-                // Remove selected part from list
-                RemoveLine(finalSectionParts, childNode);
-            }
-            else
-            {
-                bool exists = LineExists(childNode.Text);
-
-                if (!exists)
-                {
-                    unsuitableParts = String.Format(@"{0}: {1}", childNode.Text, "NOT APPLICABLE");
-                    noneApplicableParts.Add(unsuitableParts);
-                }
-            }
-
-        }
-
-        public void Joiner_Qty(String productCode, String partName, ref String partNameToSave, ref String partTypeToSave, ref List<String> finalSectionParts, TreeNode childNode, Int32 sectionIncreament)
-        {
-            bool IsStart = NewBOM.FixtureConfiguration.Sections.Items[sectionIncreament].IsAtStart;
-            bool IsEnd = NewBOM.FixtureConfiguration.Sections.Items[sectionIncreament].IsAtEnd;
-
-            //String GetQuantity = Quantity(productCode, partName);
-
-            String currentPart = String.Format(@"     {0}     {1}     ", childNode.Text, ((PartView)childNode.Tag).PartType);
-
-            if (!IsEnd)
-            {
-                partNameToSave = childNode.Text;
-                partTypeToSave = ((PartView)childNode.Tag).PartType;
-                finalSectionParts.Add(currentPart);
-            }
-        }
-
-        public bool LineExists(String PartName)
-        {
-            bool exists = false;
-
-            for (int i = 0; i < Log2_RichTextBox.Lines.Count(); i++)
-            {
-                if (Log2_RichTextBox.Lines[i].Contains(PartName + ": CONTAINS NO RULES"))
-                {
-                    exists = true;
-                    break;
-                }
-                if (Log2_RichTextBox.Lines[i].Contains(PartName + ": NOT APPLICABLE"))
-                {
-                    exists = true;
-                    break;
-                }
-            }
-
-            return exists;
-        }
-
-        public void EXorLN_Selection(ref String partNameToSave, ref String partTypeToSave, Decimal sectionLength, String currentPart, String currentPartType, List<String> finalSectionParts)
-        {
-            bool EX_8_FT = currentPart.Contains("-8-");
-            bool LN_8_FT = currentPart.Contains("-102-");
-            if ((sectionLength > 0 && sectionLength <= 20 || sectionLength > 37 && sectionLength <= 50 || sectionLength > 74 && sectionLength <= 100) && (EX_8_FT || LN_8_FT))
-            {
-                partNameToSave = currentPart;
-                partTypeToSave = currentPartType;
-                finalSectionParts.Add(String.Format(@"     {0}     {1}     ", partNameToSave, partTypeToSave));
-            }
-            else if((sectionLength > 20 && sectionLength <= 37 || sectionLength > 50 && sectionLength <= 74 || sectionLength > 100) && !(EX_8_FT || LN_8_FT))
-            {
-                partNameToSave = currentPart;
-                partTypeToSave = currentPartType;
-                finalSectionParts.Add(String.Format(@"     {0}     {1}     ", partNameToSave, partTypeToSave));
-            }
-            else
-            {
-                //Do nothing
-            }
-
-        }
-
-        public void EndCapDropLens_Selection(ref String partNameToSave, ref String partTypeToSave, String currentPart, String currentPartType, Int32 sectionIncreament, List<String> finalSectionParts)
-        {
-            if(NewBOM.FixtureConfiguration.Sections.Items[sectionIncreament].IsAtStart || NewBOM.FixtureConfiguration.Sections.Items[sectionIncreament].IsAtEnd)
-            {
-                partNameToSave = currentPart;
-                partTypeToSave = currentPartType;
-                finalSectionParts.Add(String.Format(@"     {0}     {1}     ", partNameToSave, partTypeToSave));
-
-            }
-            else
-            {
-                // Do Nothing
-            }
-
-        }
-
-        public void RemoveLine(List<String> finalSectionParts, TreeNode childNode)
-        {
-            foreach (String items in finalSectionParts)
-            {
-                if (items.Contains(String.Format(@"     {0}     {1}     ", childNode.Text, ((PartView)childNode.Tag).PartType)))
-                {
-                    //Remove here
-                    finalSectionParts.Remove(items);
-                }
-
-            }
-        }
-
-        public void Quantity(String childNode_ProductCode, String childNode_PartName, String childNode_PartType, ref List<String> finalSectionParts)
-        {
-            String Part_Quantity = "";
-
-            Part_Quantity = db.PartRulesFilters.Where(o => o.PartName == childNode_PartName && o.FilterTypeID == 3).First().Quantity.ToString();
-
-            List<String> TempList = new List<string>();
-
-            foreach (String item in finalSectionParts)
-            {
-                if (item.Equals(String.Format(@"     {0}     {1}     ", childNode_PartName, childNode_PartType)))
-                {
-                    TempList.Add(String.Format(@"       {0}       {1}", item, Part_Quantity));
-                    finalSectionParts.Remove(item);
-                    finalSectionParts.AddRange(TempList);
-                }
-            }
-
-            
-        }
     }
 }
 

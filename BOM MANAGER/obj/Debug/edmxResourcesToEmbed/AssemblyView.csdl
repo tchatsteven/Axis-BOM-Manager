@@ -1,46 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="AXIS_AutomationEntitiesBOM" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="Assemblies" EntityType="Model.Assembly" />
-    <EntitySet Name="AssemblyAtAssemblies" EntityType="Model.AssemblyAtAssembly" />
-    <EntitySet Name="AssemblyTypes" EntityType="Model.AssemblyType" />
-    <EntitySet Name="FamilyNames" EntityType="Model.FamilyName" />
-    <EntitySet Name="PartAtAssemblies" EntityType="Model.PartAtAssembly" />
-    <EntitySet Name="PartTypes" EntityType="Model.PartType" />
-    <EntitySet Name="Parts" EntityType="Model.Part" />
     <EntitySet Name="AssemblyTypeAtAssemblies" EntityType="Model.AssemblyTypeAtAssembly" />
     <EntitySet Name="AssemblyViews" EntityType="Model.AssemblyView" />
     <EntitySet Name="BOMs" EntityType="Model.BOM" />
     <EntitySet Name="PartTypeAtParts" EntityType="Model.PartTypeAtPart" />
     <EntitySet Name="PartViews" EntityType="Model.PartView" />
-    <AssociationSet Name="FK_Assembly_AssemblyType" Association="Model.FK_Assembly_AssemblyType">
-      <End Role="AssemblyType" EntitySet="AssemblyTypes" />
-      <End Role="Assembly" EntitySet="Assemblies" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly" Association="Model.FK_AssemblyAtAssembly_Assembly">
-      <End Role="Assembly" EntitySet="Assemblies" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AssemblyAtAssembly_Assembly1" Association="Model.FK_AssemblyAtAssembly_Assembly1">
-      <End Role="Assembly" EntitySet="Assemblies" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Model.FK_PartAtAssembly_Assembly">
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-      <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Parts_FamilyName1" Association="Model.FK_Parts_FamilyName1">
-      <End Role="FamilyName" EntitySet="FamilyNames" />
-      <End Role="Part" EntitySet="Parts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Model.FK_PartAtAssembly_Parts">
-      <End Role="Part" EntitySet="Parts" />
-      <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Parts_PartTypes" Association="Model.FK_Parts_PartTypes">
-      <End Role="PartType" EntitySet="PartTypes" />
-      <End Role="Part" EntitySet="Parts" />
-    </AssociationSet>
     <EntitySet Name="CategoryAtFixtures" EntityType="Model.CategoryAtFixture" />
     <EntitySet Name="Categories" EntityType="Model.Category" />
     <AssociationSet Name="FK_OrderingCode_CategoryBelonging" Association="Model.FK_OrderingCode_CategoryBelonging">
@@ -67,10 +32,6 @@
       <End Role="FixtureDirectionality" EntitySet="FixtureDirectionalities" />
       <End Role="Fixture" EntitySet="Fixtures" />
     </AssociationSet>
-    <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Model.FK_AssemblyAtAssembly_Fixtures">
-      <End Role="Fixture" EntitySet="Fixtures" />
-      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-    </AssociationSet>
     <AssociationSet Name="FK_OrderingCode_FixtureBelonging" Association="Model.FK_OrderingCode_FixtureBelonging">
       <End Role="Fixture" EntitySet="Fixtures" />
       <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
@@ -92,84 +53,50 @@
       <End Role="FilterType" EntitySet="FilterTypes" />
       <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
     </AssociationSet>
+    <EntitySet Name="Assemblies" EntityType="Model.Assembly" />
+    <EntitySet Name="AssemblyAtAssemblies" EntityType="Model.AssemblyAtAssembly" />
+    <EntitySet Name="AssemblyTypes" EntityType="Model.AssemblyType" />
+    <EntitySet Name="FamilyNames" EntityType="Model.FamilyName" />
+    <EntitySet Name="PartAtAssemblies" EntityType="Model.PartAtAssembly" />
+    <EntitySet Name="PartTypes" EntityType="Model.PartType" />
+    <AssociationSet Name="FK_Assembly_AssemblyType" Association="Model.FK_Assembly_AssemblyType">
+      <End Role="AssemblyType" EntitySet="AssemblyTypes" />
+      <End Role="Assembly" EntitySet="Assemblies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_ToAssembly" Association="Model.FK_AssemblyAtAssembly_ToAssembly">
+      <End Role="Assembly" EntitySet="Assemblies" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_ToParent" Association="Model.FK_AssemblyAtAssembly_ToParent">
+      <End Role="Assembly" EntitySet="Assemblies" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Model.FK_AssemblyAtAssembly_Fixtures">
+      <End Role="Fixture" EntitySet="Fixtures" />
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Model.FK_PartAtAssembly_Assembly">
+      <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+      <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
+    </AssociationSet>
+    <EntitySet Name="Parts" EntityType="Model.Part" />
+    <AssociationSet Name="FK_Parts_FamilyName1" Association="Model.FK_Parts_FamilyName1">
+      <End Role="FamilyName" EntitySet="FamilyNames" />
+      <End Role="Part" EntitySet="Parts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Model.FK_PartAtAssembly_Parts">
+      <End Role="Part" EntitySet="Parts" />
+      <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
+    </AssociationSet>
     <AssociationSet Name="FK_PartRules_Parts" Association="Model.FK_PartRules_Parts">
       <End Role="Part" EntitySet="Parts" />
       <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
     </AssociationSet>
+    <AssociationSet Name="FK_Parts_PartTypes" Association="Model.FK_Parts_PartTypes">
+      <End Role="PartType" EntitySet="PartTypes" />
+      <End Role="Part" EntitySet="Parts" />
+    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="Assembly">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="AssemblyTypeID" Type="Int32" />
-    <NavigationProperty Name="AssemblyType" Relationship="Model.FK_Assembly_AssemblyType" FromRole="Assembly" ToRole="AssemblyType" />
-    <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Assembly" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
-    <NavigationProperty Name="AssemblyAtAssemblies1" Relationship="Model.FK_AssemblyAtAssembly_Assembly1" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
-  </EntityType>
-  <EntityType Name="AssemblyAtAssembly">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ParentID" Type="Int32" />
-    <Property Name="AssemblyID" Type="Int32" Nullable="false" />
-    <Property Name="FixtureID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="Assembly" Relationship="Model.FK_AssemblyAtAssembly_Assembly" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
-    <NavigationProperty Name="Assembly1" Relationship="Model.FK_AssemblyAtAssembly_Assembly1" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
-    <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="AssemblyAtAssembly" ToRole="PartAtAssembly" />
-    <NavigationProperty Name="Fixture" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="AssemblyAtAssembly" ToRole="Fixture" />
-  </EntityType>
-  <EntityType Name="AssemblyType">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="AssemblyType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Assemblies" Relationship="Model.FK_Assembly_AssemblyType" FromRole="AssemblyType" ToRole="Assembly" />
-  </EntityType>
-  <EntityType Name="FamilyName">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FamilyName1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_FamilyName1" FromRole="FamilyName" ToRole="Part" />
-  </EntityType>
-  <EntityType Name="PartAtAssembly">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PartRefID" Type="Int32" Nullable="false" />
-    <Property Name="AssRefID" Type="Int32" Nullable="false" />
-    <Property Name="FixtureID" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="AssemblyAtAssembly" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="PartAtAssembly" ToRole="AssemblyAtAssembly" />
-    <NavigationProperty Name="Part" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="PartAtAssembly" ToRole="Part" />
-  </EntityType>
-  <EntityType Name="PartType">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PartType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_PartTypes" FromRole="PartType" ToRole="Part" />
-  </EntityType>
-  <EntityType Name="Part">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PartName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="TypeID" Type="Int32" />
-    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="FixFamilyID" Type="Int32" />
-    <NavigationProperty Name="FamilyName" Relationship="Model.FK_Parts_FamilyName1" FromRole="Part" ToRole="FamilyName" />
-    <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
-    <NavigationProperty Name="PartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="PartType" />
-    <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRulesFilter" />
-  </EntityType>
   <EntityType Name="AssemblyTypeAtAssembly">
     <Key>
       <PropertyRef Name="Assembly_ID" />
@@ -274,98 +201,6 @@
     <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="FixFamilyID" Type="Int32" />
   </EntityType>
-  <Association Name="FK_Assembly_AssemblyType">
-    <End Type="Model.AssemblyType" Role="AssemblyType" Multiplicity="0..1" />
-    <End Type="Model.Assembly" Role="Assembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AssemblyType">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Assembly">
-        <PropertyRef Name="AssemblyTypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AssemblyAtAssembly_Assembly">
-    <End Type="Model.Assembly" Role="Assembly" Multiplicity="0..1" />
-    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Assembly">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="ParentID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AssemblyAtAssembly_Assembly1">
-    <End Type="Model.Assembly" Role="Assembly" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Assembly">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="AssemblyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PartAtAssembly_Assembly">
-    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AssemblyAtAssembly">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="PartAtAssembly">
-        <PropertyRef Name="AssRefID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Parts_FamilyName1">
-    <End Type="Model.FamilyName" Role="FamilyName" Multiplicity="0..1" />
-    <End Type="Model.Part" Role="Part" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FamilyName">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Part">
-        <PropertyRef Name="FixFamilyID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PartAtAssembly_Parts">
-    <End Type="Model.Part" Role="Part" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Part">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="PartAtAssembly">
-        <PropertyRef Name="PartRefID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Parts_PartTypes">
-    <End Type="Model.PartType" Role="PartType" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.Part" Role="Part" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PartType">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="Part">
-        <PropertyRef Name="TypeID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="CategoryAtFixture">
     <Key>
       <PropertyRef Name="id" />
@@ -482,8 +317,8 @@
     <Property Name="DWGouverningProjectId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="FixtureApplicationType" Relationship="Model.FK_Fixtures_FixtureApplicationTypes" FromRole="Fixture" ToRole="FixtureApplicationType" />
     <NavigationProperty Name="FixtureDirectionality" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="Fixture" ToRole="FixtureDirectionality" />
-    <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
     <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="Fixture" ToRole="CategoryAtFixture" />
+    <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
   </EntityType>
   <Association Name="FK_Fixtures_FixtureApplicationTypes">
     <End Type="Model.FixtureApplicationType" Role="FixtureApplicationType" Multiplicity="1" />
@@ -506,20 +341,6 @@
       </Principal>
       <Dependent Role="Fixture">
         <PropertyRef Name="DirectionalityId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AssemblyAtAssembly_Fixtures">
-    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Fixture">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="AssemblyAtAssembly">
-        <PropertyRef Name="FixtureID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -669,6 +490,171 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Assembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="AssemblyTypeID" Type="Int32" />
+    <NavigationProperty Name="AssemblyType" Relationship="Model.FK_Assembly_AssemblyType" FromRole="Assembly" ToRole="AssemblyType" />
+    <NavigationProperty Name="AssemblyAtAssembliesToAssembly" Relationship="Model.FK_AssemblyAtAssembly_ToAssembly" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
+    <NavigationProperty Name="AssemblyAtAssembliesToParent" Relationship="Model.FK_AssemblyAtAssembly_ToParent" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
+  </EntityType>
+  <EntityType Name="AssemblyAtAssembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ParentID" Type="Int32" />
+    <Property Name="AssemblyID" Type="Int32" Nullable="false" />
+    <Property Name="FixtureID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ToAssembly" Relationship="Model.FK_AssemblyAtAssembly_ToAssembly" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
+    <NavigationProperty Name="ToParent" Relationship="Model.FK_AssemblyAtAssembly_ToParent" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
+    <NavigationProperty Name="Fixture" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="AssemblyAtAssembly" ToRole="Fixture" />
+    <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="AssemblyAtAssembly" ToRole="PartAtAssembly" />
+  </EntityType>
+  <EntityType Name="AssemblyType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AssemblyType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Assemblies" Relationship="Model.FK_Assembly_AssemblyType" FromRole="AssemblyType" ToRole="Assembly" />
+  </EntityType>
+  <EntityType Name="FamilyName">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FamilyName1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_FamilyName1" FromRole="FamilyName" ToRole="Part" />
+  </EntityType>
+  <EntityType Name="PartAtAssembly">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartRefID" Type="Int32" Nullable="false" />
+    <Property Name="AssRefID" Type="Int32" Nullable="false" />
+    <Property Name="FixtureID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AssemblyAtAssembly" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="PartAtAssembly" ToRole="AssemblyAtAssembly" />
+    <NavigationProperty Name="Part" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="PartAtAssembly" ToRole="Part" />
+  </EntityType>
+  <EntityType Name="PartType">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_PartTypes" FromRole="PartType" ToRole="Part" />
+  </EntityType>
+  <Association Name="FK_Assembly_AssemblyType">
+    <End Type="Model.AssemblyType" Role="AssemblyType" Multiplicity="0..1" />
+    <End Type="Model.Assembly" Role="Assembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssemblyType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Assembly">
+        <PropertyRef Name="AssemblyTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_ToAssembly">
+    <End Type="Model.Assembly" Role="Assembly" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="AssemblyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_ToParent">
+    <End Type="Model.Assembly" Role="Assembly" Multiplicity="0..1" />
+    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Assembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AssemblyAtAssembly_Fixtures">
+    <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Fixture">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="AssemblyAtAssembly">
+        <PropertyRef Name="FixtureID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartAtAssembly_Assembly">
+    <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AssemblyAtAssembly">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartAtAssembly">
+        <PropertyRef Name="AssRefID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Part">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PartName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="TypeID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="FixFamilyID" Type="Int32" />
+    <NavigationProperty Name="FamilyName" Relationship="Model.FK_Parts_FamilyName1" FromRole="Part" ToRole="FamilyName" />
+    <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
+    <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRulesFilter" />
+    <NavigationProperty Name="PartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="PartType" />
+  </EntityType>
+  <Association Name="FK_Parts_FamilyName1">
+    <End Type="Model.FamilyName" Role="FamilyName" Multiplicity="0..1" />
+    <End Type="Model.Part" Role="Part" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FamilyName">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Part">
+        <PropertyRef Name="FixFamilyID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PartAtAssembly_Parts">
+    <End Type="Model.Part" Role="Part" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Part">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="PartAtAssembly">
+        <PropertyRef Name="PartRefID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PartRules_Parts">
     <End Type="Model.Part" Role="Part" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -680,6 +666,20 @@
       </Principal>
       <Dependent Role="PartRulesFilter">
         <PropertyRef Name="PartID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Parts_PartTypes">
+    <End Type="Model.PartType" Role="PartType" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="Model.Part" Role="Part" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PartType">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Part">
+        <PropertyRef Name="TypeID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

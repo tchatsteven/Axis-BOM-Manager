@@ -25,13 +25,6 @@ namespace BOM_MANAGER
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Assembly> Assemblies { get; set; }
-        public virtual DbSet<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
-        public virtual DbSet<AssemblyType> AssemblyTypes { get; set; }
-        public virtual DbSet<FamilyName> FamilyNames { get; set; }
-        public virtual DbSet<PartAtAssembly> PartAtAssemblies { get; set; }
-        public virtual DbSet<PartType> PartTypes { get; set; }
-        public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
         public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
         public virtual DbSet<BOM> BOMs { get; set; }
@@ -48,5 +41,12 @@ namespace BOM_MANAGER
         public virtual DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
         public virtual DbSet<PartRulesFilter> PartRulesFilters { get; set; }
+        public virtual DbSet<Assembly> Assemblies { get; set; }
+        public virtual DbSet<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
+        public virtual DbSet<AssemblyType> AssemblyTypes { get; set; }
+        public virtual DbSet<FamilyName> FamilyNames { get; set; }
+        public virtual DbSet<PartAtAssembly> PartAtAssemblies { get; set; }
+        public virtual DbSet<PartType> PartTypes { get; set; }
+        public virtual DbSet<Part> Parts { get; set; }
     }
 }

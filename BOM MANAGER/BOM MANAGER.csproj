@@ -65,6 +65,11 @@
     <Compile Include="Assembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="AssemblyView1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
     <Compile Include="_Assembly.cs" />
     <Compile Include="AssemblyAtAssembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
@@ -93,11 +98,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AssemblyView.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyView1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="BOM MANAGER.cs">
       <SubType>Form</SubType>
@@ -186,6 +186,8 @@
       <DependentUpon>Rules_EditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="_BOM.cs" />
+    <Compile Include="_BOMSection.cs" />
+    <Compile Include="_Filter.cs" />
     <Compile Include="_Part.cs" />
     <EmbeddedResource Include="AssemblyTypeForm.resx">
       <DependentUpon>AssemblyTypeForm.cs</DependentUpon>

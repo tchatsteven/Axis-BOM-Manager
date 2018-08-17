@@ -17,8 +17,8 @@ namespace BOM_MANAGER
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Assembly()
         {
-            this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
-            this.AssemblyAtAssemblies1 = new HashSet<AssemblyAtAssembly>();
+            this.AssemblyAtAssembliesToAssembly = new HashSet<AssemblyAtAssembly>();
+            this.AssemblyAtAssembliesToParent = new HashSet<AssemblyAtAssembly>();
         }
     
         public int id { get; set; }
@@ -27,8 +27,8 @@ namespace BOM_MANAGER
     
         public virtual AssemblyType AssemblyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
+        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssembliesToAssembly { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies1 { get; set; }
+        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssembliesToParent { get; set; }
     }
 }
