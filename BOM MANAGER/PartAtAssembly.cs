@@ -15,11 +15,11 @@ namespace BOM_MANAGER
     public partial class PartAtAssembly
     {
         public int id { get; set; }
-        public int PartRefID { get; set; }
-        public int AssRefID { get; set; }
-        public int FixtureID { get; set; }
+        public int PartID { get; set; }
+        public int AssemblyID { get; set; }
+        public int Quantity { get; set; }
     
-        public virtual AssemblyAtAssembly AssemblyAtAssembly { get; set; }
+        public virtual Assembly Assembly { get; set; }
         public virtual Part Part { get; set; }
     }
 }

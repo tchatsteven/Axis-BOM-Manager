@@ -21,13 +21,13 @@ namespace BOM_MANAGER
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            PartType NewPartType = new PartType()
+            AvailablePartType NewPartType = new AvailablePartType()
             {
-                PartType1 = NewPartTypeTextBox.Text                
+                Name = NewPartTypeTextBox.Text                
 
             };
 
-            db.PartTypes.Add(NewPartType);
+            db.AvailablePartTypes.Add(NewPartType);
             db.SaveChanges();
             DialogResult = DialogResult.OK;
             Close();

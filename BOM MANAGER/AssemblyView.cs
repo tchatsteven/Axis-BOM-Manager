@@ -15,15 +15,12 @@ namespace BOM_MANAGER
     public partial class AssemblyView
     {
         public int id { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public int AssemblyID { get; set; }
-        public int FixtureID { get; set; }
-        public Nullable<int> Fixture_ID { get; set; }
-        public string Code { get; set; }
-        public Nullable<int> Assembly_ID { get; set; }
-        public string Name { get; set; }
+        public string AssemblyName { get; set; }
         public Nullable<int> AssemblyTypeID { get; set; }
-        public Nullable<int> AssemblyType_ID { get; set; }
-        public string AssemblyType { get; set; }
+        public string AssemblyTypeName { get; set; }
+        public Nullable<int> AssyAtAssyID { get; set; }
+        public Nullable<int> ParentIDAtAssyAtAssy { get; set; }
+        public Nullable<int> AssemblyIDAtAssyAtAssy { get; set; }
+        public Nullable<int> Quantity { get; set; }
     }
 }

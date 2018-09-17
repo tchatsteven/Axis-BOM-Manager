@@ -42,10 +42,10 @@ namespace BOM_MANAGER
         {
             try
             {
-                Assy_Type_ComboBox.DataSource = db.AssemblyTypes.OrderBy(o=>o.AssemblyType1).Where( o=> o.AssemblyType1 != "RT").ToList();
-                Assy_Type_ComboBox.DisplayMember = "AssemblyType1";
+                Assy_Type_ComboBox.DataSource = db.AvailableAssemblyTypes.OrderBy(o=>o.Name).Where( o=> o.Name != "ROOT").ToList();
+                Assy_Type_ComboBox.DisplayMember = "Name";
                 Assy_Type_ComboBox.ValueMember = "id";
-                Assy_Type_ComboBox.Items.Remove("RT");
+                Assy_Type_ComboBox.Items.Remove("ROOT");
                 //EditFormMsg.NewMessage().AddText("Assembly Type Successfully Loaded").PrependMessageType().Log();
             }
             catch
@@ -164,8 +164,8 @@ namespace BOM_MANAGER
 
         private void DeleteAssemblyTypeFromDB(Int32 assemblyTypeId)
         {
-            db.AssemblyTypes.Remove(db.AssemblyTypes.Find(assemblyTypeId));
-            String assemblyTypeName = db.AssemblyTypes.Find(assemblyTypeId).AssemblyType1;
+            db.AvailableAssemblyTypes.Remove(db.AvailableAssemblyTypes.Find(assemblyTypeId));
+            String assemblyTypeName = db.AvailableAssemblyTypes.Find(assemblyTypeId).Name;
             db.SaveChanges();
             EditFormMsg.NewMessage().AddText("Assembly Type: " + assemblyTypeName +" has been deleted from Database").PrependMessageType().Log();
            // reload Assembly Types after deletion from DB

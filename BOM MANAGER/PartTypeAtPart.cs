@@ -14,15 +14,11 @@ namespace BOM_MANAGER
     
     public partial class PartTypeAtPart
     {
-        public int Part_ID { get; set; }
+        public int PartID { get; set; }
         public string PartName { get; set; }
+        public string PartTypeName { get; set; }
         public Nullable<int> TypeID { get; set; }
-        public Nullable<int> PartType_ID { get; set; }
-        public string PartType { get; set; }
-        public Nullable<int> FixFamilyID { get; set; }
         public string Description { get; set; }
-        public Nullable<int> FamilyName_ID { get; set; }
-        public string FamilyName { get; set; }
-        public Nullable<int> FixtureFamilyId { get; set; }
+        public Nullable<int> PartType_ID { get; set; }
     }
 }

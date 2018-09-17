@@ -8,8 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using AXISAutomation.Lookups.FixtureConfiguration;
+using AXISAutomation.Solvers.FixtureConfiguration;
 using AXISAutomation.Tools.Logging;
+using AXISAutomation.Tools.DBConnection;
 
 namespace BOM_MANAGER
 {
@@ -22,29 +23,38 @@ namespace BOM_MANAGER
         /****************************************************************************************************************************************************************/
 
 
+        PartRulesFilter newPartRule;
+
         _RTFMessenger BomManagerFormMsg;
         _RTFMessenger PartRules;
         _RTFMessenger ApplicableParts;
         _RTFMessenger NonApplicablePartSummary;
+        _RTFMessenger Template;
+        _RTFMessenger MatchSummary;
+        _RTFMessenger SolveMechanical;
+
         AXIS_AutomationEntitiesBOM db;
-        PartRulesFilter newPartRule;
         _BOM NewBOM;
+        AXIS_AutomationEntities FixtureConfigurtorDBConn = new AXIS_AutomationEntities();
 
 
         public BOM_MANAGER()
         {
             InitializeComponent();
-            db = new AXIS_AutomationEntitiesBOM();
-            BomManagerFormMsg = new _RTFMessenger(eventLog_richTextBox, 0, true) { DefaulSpaceAfter = 0 };
-            PartRules = new _RTFMessenger(eventLog_PR_richTextBox, 0, true) { DefaulSpaceAfter = 0 };
-            ApplicableParts = new _RTFMessenger(Log_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
-            NonApplicablePartSummary = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };
+            db = new AXIS_AutomationEntitiesBOM();            
+            BomManagerFormMsg = new _RTFMessenger(eventLog_richTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };//
+            PartRules = new _RTFMessenger(eventLog_PR_richTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };
+            ApplicableParts = new _RTFMessenger(Log_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };
+            NonApplicablePartSummary = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };
+            Template = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0, On = true };
+            MatchSummary = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0, On = true };
+            SolveMechanical = new _RTFMessenger(Log2_RichTextBox, 0, true) { DefaulSpaceAfter = 0, On = true };
         }
 
         private void BOM_MANAGER_Load(object sender, EventArgs e)
         {
             GetFixtureId();
-            SyncRootAssemblies();
+            //SyncRootAssemblies();
             RefreshDataGridView_Assemblies();
             RefreshDataGridView_Part();
 
@@ -74,7 +84,7 @@ namespace BOM_MANAGER
 
             //////////////////////////////////////PART Rules Tab////////////////////////////////////////////////
             else if (BOM_tabControl.SelectedTab == tabPage3)
-            {
+            {                
                 Disable_Filter1();
                 Disable_Filter2();
                 Disable_Filter3();
@@ -83,7 +93,7 @@ namespace BOM_MANAGER
                 PartFilterCheckBox.Checked = true;
                 RefreshDataGridView_PartRules();
 
-                Load_Filter_Rules();
+                Filter_Rules();
 
                 Save_PR.Enabled = false;
                 Edit_PR.Enabled = false;
@@ -93,12 +103,7 @@ namespace BOM_MANAGER
                 DataGridView_Rules.DataSource = null;
                 DataGridView_Rules.Refresh();
 
-
-
             }
-
-
-
         }
 
         private void ProductID_comboBox_SelectionChangeCommitted(object sender, EventArgs e)
@@ -113,8 +118,8 @@ namespace BOM_MANAGER
             productID_comboBox.ValueMember = "id";
             productID_comboBox.DisplayMember = "Code";
 
-            ComboBoxFixtureFamily.DataSource = db.FamilyNames.Select(o => o.FamilyName1).ToList();
-            ComboBoxFixtureFamily.DisplayMember = "FamilyName1";
+            ComboBoxPartType.DataSource = db.AvailablePartTypes.OrderBy(o=> o.Name).Select(o => o.Name).ToList();
+            ComboBoxPartType.DisplayMember = "PartTypeName";
 
             //PART RULE TAB
             productID_comboBox_PR.DataSource = db.Fixtures.OrderBy(o => o.Code).ToList();
@@ -125,25 +130,25 @@ namespace BOM_MANAGER
 
         private void SyncRootAssemblies()
         {
-            List<Fixture> allFixtures = db.Fixtures.ToList();
-            Int32 rootAssyID = db.Assemblies.Where(o => o.Name == "ROOT").First().id;
+            //List<Fixture> allFixtures = db.Fixtures.ToList();
+            //Int32 rootAssyID = db.Assemblies.Where(o => o.Name == "ROOT").First().id;
 
-            foreach (Fixture currentFixture in allFixtures)
-            {
-                Boolean rootExists = db.AssemblyAtAssemblies.Any(o => o.FixtureID == currentFixture.id && o.ParentID == null);
-                if (!rootExists)
-                {
+            //foreach (Fixture currentFixture in allFixtures)
+            //{
+            //    Boolean rootExists = db.AssemblyAtAssemblies.Any(o => o.FixtureID == currentFixture.id && o.ParentID == null);
+            //    if (!rootExists)
+            //    {
 
-                    AssemblyAtAssembly newRoot = new AssemblyAtAssembly()
-                    {
-                        FixtureID = currentFixture.id,
-                        AssemblyID = rootAssyID,
+            //        AssemblyAtAssembly newRoot = new AssemblyAtAssembly()
+            //        {
+            //            FixtureID = currentFixture.id,
+            //            AssemblyID = rootAssyID,
 
-                    };
-                    db.AssemblyAtAssemblies.Add(newRoot);
-                }
-            }
-            db.SaveChanges();
+            //        };
+            //        db.AssemblyAtAssemblies.Add(newRoot);
+            //    }
+            //}
+            //db.SaveChanges();
         }
 
         private void RefreshDataGridView_Assemblies()
@@ -153,11 +158,9 @@ namespace BOM_MANAGER
                 dataGridView_Ass.DataSource = db.AssemblyTypeAtAssemblies.ToList();
 
                 //hide columns here
-                dataGridView_Ass.Columns[0].Visible = false;
-                dataGridView_Ass.Columns[2].Visible = false;
-                dataGridView_Ass.Columns[3].Visible = false;
-
-                // BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
+                dataGridView_Ass.Columns["AssemblyID"].Visible = false;
+                
+                //BomManagerFormMsg.NewMessage().AddText("Assembly Table has been Populated").PrependMessageType().Log();
                 string searchingFor = "ROOT";
                 int rowIndex = 0;
                 foreach (DataGridViewRow row in dataGridView_Ass.Rows)
@@ -171,8 +174,9 @@ namespace BOM_MANAGER
                         }
                     }
                 }
-
+                AssyAssociationcheck();
                 eventLog_richTextBox.ScrollToCaret();
+
             }
             catch
             {
@@ -185,26 +189,22 @@ namespace BOM_MANAGER
             try
             {
 
-                String Combotext = ComboBoxFixtureFamily.Text;
+                String Combotext = ComboBoxPartType.Text;
 
 
-                dataGridView_Part.DataSource = db.PartTypeAtParts.OrderBy(o => o.PartType).Where(o => o.FamilyName == Combotext).OrderBy(p => p.PartName).ToList();
+                dataGridView_Part.DataSource = db.PartTypeAtParts.Where(o => o.PartTypeName == Combotext).OrderBy(p => p.PartName).ToList();
 
-                ////hide columns here
-                dataGridView_Part.Columns[0].Visible = false;
-                //dataGridView_Part.Columns[1].Visible = false;
-                dataGridView_Part.Columns[2].Visible = false;
-                dataGridView_Part.Columns[3].Visible = false;
-                //dataGridView_Part.Columns[4].Visible = false;
-                dataGridView_Part.Columns[5].Visible = false;
-                //dataGridView_Part.Columns[6].Visible = false;
-                dataGridView_Part.Columns[7].Visible = false;
-                //dataGridView_Part.Columns[8].Visible = false;
-                dataGridView_Part.Columns[9].Visible = false;
+                //hide columns here
+                dataGridView_Part.Columns["PartID"].Visible = false;
+                dataGridView_Part.Columns["TypeID"].Visible = false;
+                dataGridView_Part.Columns["PartType_ID"].Visible = false;
+                
                 dataGridView_Part.AutoResizeColumns();
 
-
+                PartAssociationcheck();
                 eventLog_richTextBox.ScrollToCaret();
+                eventLog_richTextBox.Clear();
+
             }
             catch
             {
@@ -216,7 +216,7 @@ namespace BOM_MANAGER
         {
 
             Assembly_CreatOrEditForm newAssemblyForm = new Assembly_CreatOrEditForm();
-            // AssemblyTypeForm NewAssemblyTypeForm = new AssemblyTypeForm();
+            AssemblyTypeForm NewAssemblyTypeForm = new AssemblyTypeForm();
 
             DialogResult NewForm = newAssemblyForm.ShowDialog();
 
@@ -239,6 +239,137 @@ namespace BOM_MANAGER
                 BomManagerFormMsg.NewMessage().AddText("Adding Assembly Failed").IsError().PrependMessageType().Log();
             }
 
+        }
+
+        private void EditAssembly_Click(object sender, EventArgs e)
+        {
+            String editAssemblyName;
+
+
+            Int32 currentAssemblyId = Int32.Parse(dataGridView_Ass.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+            Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
+            editAssemblyName = assemblyToEdit.Name;
+
+            Assembly_CreatOrEditForm editAssemblyForm = new Assembly_CreatOrEditForm(editAssemblyName);
+
+            DialogResult NewForm = editAssemblyForm.ShowDialog();
+            try
+            {
+                if (NewForm == DialogResult.OK)
+                {
+                    db = new AXIS_AutomationEntitiesBOM();
+                    RefreshDataGridView_Assemblies();
+                    BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Edited").PrependMessageType().Log();
+                    RefreshTreeView();
+
+                }
+                else if (NewForm == DialogResult.Cancel)
+                {
+                    BomManagerFormMsg.NewMessage().AddText("Editing Assembly Cancelled").PrependMessageType().Log();
+                }
+                eventLog_richTextBox.ScrollToCaret();
+            }
+            catch
+            {
+                BomManagerFormMsg.NewMessage().AddText("Editing Assembly Failed").IsError().PrependMessageType().Log();
+            }
+        }
+
+        private void DeleteAssembly_Click(object sender, EventArgs e)
+        {
+            String DeletionAssyNames = String.Join(", ", dataGridView_Ass.SelectedRows.OfType<DataGridViewRow>().Select(o => o.Cells["AssemblyName"].Value.ToString()).ToList());
+
+            String assNoun = dataGridView_Ass.SelectedRows.Count > 1 ? "assemblies" : "assembly";
+
+            DialogResult deletingMsg = MessageBox.Show(String.Format("Do you really want to delete {1} {0}", DeletionAssyNames, assNoun), "Confirm Assembly Deletion", MessageBoxButtons.YesNo);
+
+            if (deletingMsg == DialogResult.Yes)
+            {
+
+                try
+                {
+                    foreach (DataGridViewRow currentDeletionRow in dataGridView_Ass.SelectedRows)
+                    {
+                        //Delete_Function_Ass(currentDeletionRow);
+                        Int32 currentAssemblyId = Int32.Parse(currentDeletionRow.Cells["AssemblyID"].Value.ToString());
+                        Assembly AssemblyToDelete = db.Assemblies.Find(currentAssemblyId);
+                        String assemblyNameToDelete = db.Assemblies.Find(currentAssemblyId).Name;
+
+                        Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == currentAssemblyId);
+                        if (!myAssociation)
+                        {
+                            db.Assemblies.Remove(db.Assemblies.Find(currentAssemblyId));
+                            string assemblyname = db.Assemblies.Find(currentAssemblyId).Name;
+                            db.SaveChanges();
+
+
+                            //do not show message if assembly has not been deleted.
+                            BomManagerFormMsg.NewMessage().AddText("Assembly : " + assemblyNameToDelete + " has been deleted from TreeView and Database").PrependMessageType().Log();
+                        }
+                        else
+                        {
+                            BomManagerFormMsg.NewMessage().AddText("Assembly: " + assemblyNameToDelete + " has not been deleted from TreeView and Database due to Association").IsError().PrependMessageType().Log();
+                        }
+
+                    }
+
+                    RefreshDataGridView_Assemblies();
+                    RefreshTreeView();
+
+
+                }
+                catch
+                {
+                    BomManagerFormMsg.NewMessage().AddText("Assemblies with associations cannot be deleted from  Database").IsError().PrependMessageType().Log();
+                }
+
+            }
+        }
+
+        private void AssyAssociationcheck()
+        {
+            if (CheckAssyIsValid)
+            {
+                DeleteAssembly.Enabled = true;
+
+            }
+            else
+            {
+                DeleteAssembly.Enabled = false;
+
+            }
+
+        }
+
+        private Boolean CheckAssyIsValid
+        {
+            get
+            {
+                return (!AssemblyHasNoAssociations);
+            }
+        }
+
+        private Boolean AssemblyHasNoAssociations
+        {
+            get
+            {
+                try
+                {
+                    Int32 rowIndex = dataGridView_Ass.CurrentCell.RowIndex;
+                    Int32 Teststring = Int32.Parse(dataGridView_Ass.Rows[rowIndex].Cells["AssemblyID"].Value.ToString());
+                    Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == Teststring);
+                    if (myAssociation)
+                    {
+                        //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to assembly association").IsWarning().PrependMessageType().Log();
+                    }
+                    return myAssociation;
+
+                }
+                catch
+                {
+                    return false;
+                }
+            }
         }
 
         private void NewPart_Click(object sender, EventArgs e)
@@ -270,75 +401,35 @@ namespace BOM_MANAGER
             }
         }
 
-        private void EditAssembly_Click(object sender, EventArgs e)
-        {
-            String editAssemblyName;
-
-
-            Int32 currentAssemblyId = Int32.Parse(dataGridView_Ass.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
-            editAssemblyName = assemblyToEdit.Name;
-
-            Assembly_CreatOrEditForm editAssemblyForm = new Assembly_CreatOrEditForm(editAssemblyName);
-
-            DialogResult NewForm = editAssemblyForm.ShowDialog();
-            try
-            {
-                if (NewForm == DialogResult.OK)
-                {
-                    BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Edited").PrependMessageType().Log();
-                    db = new AXIS_AutomationEntitiesBOM();
-                    RefreshDataGridView_Assemblies();
-                    RefreshTreeView();
-
-                }
-                else if (NewForm == DialogResult.Cancel)
-                {
-                    BomManagerFormMsg.NewMessage().AddText("Editing Assembly Cancelled").PrependMessageType().Log();
-                }
-                eventLog_richTextBox.ScrollToCaret();
-            }
-            catch
-            {
-                BomManagerFormMsg.NewMessage().AddText("Editing Assembly Failed").IsError().PrependMessageType().Log();
-            }
-        }
-
         private void EditPart_Click(object sender, EventArgs e)
         {
             String editPartName;
             String editDescription;
             Int32 editPartTypeIndex;
             String editPartType;
-            String editFamilyName;
-            Int32 editFamilyNameIndex;
-
+           
             Int32 currentPartId = Int32.Parse(dataGridView_Part.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            Part partToEdit = db.Parts.Find(currentPartId);//.Find(currentPartId);
+            Part partToEdit = db.Parts.Find(currentPartId);
 
             editDescription = partToEdit.Description;
-            editPartName = partToEdit.PartName;
-            editPartTypeIndex = partToEdit.TypeID ?? 0;
-            editFamilyNameIndex = partToEdit.FixFamilyID ?? 0;
+            editPartName = partToEdit.Name;
+            editPartTypeIndex = partToEdit.TypeID;
 
-            PartType partTypeToEdit = db.PartTypes.Find(editPartTypeIndex);
-            editPartType = partTypeToEdit.PartType1;
-
-            FamilyName familytypeToEdit = db.FamilyNames.Find(editFamilyNameIndex);
-            editFamilyName = familytypeToEdit.FamilyName1;
-
-            Part_CreateOrEditForm editPartForm = new Part_CreateOrEditForm(editPartName, editDescription, editPartType, editFamilyName);
+            AvailablePartType partTypeToEdit = db.AvailablePartTypes.Find(editPartTypeIndex);
+            editPartType = partTypeToEdit.Name;
+                      
+            Part_CreateOrEditForm editPartForm = new Part_CreateOrEditForm(editPartName, editDescription, editPartType);
 
             DialogResult NewForm = editPartForm.ShowDialog();
             try
             {
                 if (NewForm == DialogResult.OK)
                 {
-                    BomManagerFormMsg.NewMessage().AddText("Part Successfully Edited").PrependMessageType().Log();
 
                     db = new AXIS_AutomationEntitiesBOM();
                     RefreshDataGridView_Part();
 
+                    BomManagerFormMsg.NewMessage().AddText("Part Successfully Edited").PrependMessageType().Log();
                     RefreshTreeView();
                 }
                 else if (NewForm == DialogResult.Cancel)
@@ -354,56 +445,6 @@ namespace BOM_MANAGER
 
         }
 
-        private void DeleteAssembly_Click(object sender, EventArgs e)
-        {
-            String DeletionAssyNames = String.Join(", ", dataGridView_Ass.SelectedRows.OfType<DataGridViewRow>().Select(o => o.Cells["Name"].Value.ToString()).ToList());
-
-            String assNoun = dataGridView_Ass.SelectedRows.Count > 1 ? "assemblies" : "assembly";
-
-            DialogResult deletingMsg = MessageBox.Show(String.Format("Do you really want to delete {1} {0}", DeletionAssyNames, assNoun), "Confirm Assembly Deletion", MessageBoxButtons.YesNo);
-
-            if (deletingMsg == DialogResult.Yes)
-            {
-
-                try
-                {
-                    foreach (DataGridViewRow currentDeletionRow in dataGridView_Ass.SelectedRows)
-                    {
-                        //Delete_Function_Ass(currentDeletionRow);
-                        Int32 currentAssemblyId = Int32.Parse(currentDeletionRow.Cells["Assembly_ID"].Value.ToString());
-                        Assembly AssemblyToDelete = db.Assemblies.Find(currentAssemblyId);
-                        String assemblyNameToDelete = db.Assemblies.Find(currentAssemblyId).Name;
-
-                        Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == currentAssemblyId);
-                        if (!myAssociation)
-                        {
-                            db.Assemblies.Remove(db.Assemblies.Find(currentAssemblyId));
-                            string assemblyname = db.Assemblies.Find(currentAssemblyId).Name;
-                            db.SaveChanges();
-
-                            RefreshDataGridView_Assemblies();
-                            RefreshTreeView();
-
-                            //do not show message if assembly has not been deleted.
-                            BomManagerFormMsg.NewMessage().AddText("Assembly : " + assemblyNameToDelete + " has been deleted from TreeView and Database").PrependMessageType().Log();
-                        }
-                        else
-                        {
-                            BomManagerFormMsg.NewMessage().AddText("Assembly: " + assemblyNameToDelete + " has not been deleted from TreeView and Database due to Association").IsError().PrependMessageType().Log();
-                        }
-
-                    }
-
-
-                }
-                catch
-                {
-                    BomManagerFormMsg.NewMessage().AddText("Assemblies with associations cannot be deleted from  Database").IsError().PrependMessageType().Log();
-                }
-
-            }
-        }
-
         private void DeletePart_Click(object sender, EventArgs e)
         {
             String deletionPartName = String.Join(", ", dataGridView_Part.SelectedRows.OfType<DataGridViewRow>().Select(o => o.Cells["PartName"].Value.ToString()).ToList());
@@ -417,20 +458,15 @@ namespace BOM_MANAGER
                 {
                     foreach (DataGridViewRow currentDeletionRow in dataGridView_Part.SelectedRows)
                     {
-                        //Delete_Function_Ass(currentDeletionRow);
-                        Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["Part_ID"].Value.ToString());
+                        Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["PartID"].Value.ToString());
                         Part partToDelete = db.Parts.Find(currentPartId);
-                        String partyNameToDelete = db.Parts.Find(currentPartId).PartName;
+                        String partyNameToDelete = db.Parts.Find(currentPartId).Name;
 
-                        Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartRefID == currentPartId);
+                        Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartID == currentPartId);
                         if (!myAssociation)
                         {
-                            //Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["Part_ID"].Value.ToString());
-                            //Part partToDelete = db.Parts.Find(currentPartId);
-                            //String partNameToDelete = db.Parts.Find(currentPartId).PartName;
-
+                            
                             db.Parts.Remove(db.Parts.Find(currentPartId));
-                            string assemblyname = db.Parts.Find(currentPartId).PartName;
                             db.SaveChanges();
 
                             RefreshDataGridView_Part();
@@ -445,30 +481,12 @@ namespace BOM_MANAGER
                         }
                     }
 
-
-
-
                 }
                 catch
                 {
                     BomManagerFormMsg.NewMessage().AddText("Parts with associations cannot be deleted from  Database").IsError().PrependMessageType().Log();
                 }
             }
-        }
-
-        private void AssyAssociationcheck()
-        {
-            if (CheckAssyIsValid)
-            {
-                DeleteAssembly.Enabled = true;
-
-            }
-            else
-            {
-                DeleteAssembly.Enabled = false;
-
-            }
-
         }
 
         private void PartAssociationcheck()
@@ -486,29 +504,6 @@ namespace BOM_MANAGER
 
         }
 
-        private Boolean CheckAssyIsValid
-        {
-            get
-            {
-                return (!AssemblyHasNoAssociations);
-            }
-        }
-
-        private Boolean AssemblyHasNoAssociations
-        {
-            get
-            {
-                Int32 rowIndex = dataGridView_Ass.CurrentCell.RowIndex;
-                Int32 Teststring = Int32.Parse(dataGridView_Ass.Rows[rowIndex].Cells["Assembly_ID"].Value.ToString());
-                Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == Teststring);
-                if (myAssociation)
-                {
-                    //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to assembly association").IsWarning().PrependMessageType().Log();
-                }
-                return myAssociation;
-            }
-        }
-
         private Boolean CheckPartIsValid
         {
             get
@@ -521,20 +516,30 @@ namespace BOM_MANAGER
         {
             get
             {
-                Int32 rowIndex = dataGridView_Part.CurrentCell.RowIndex;
-                Int32 Teststring = Int32.Parse(dataGridView_Part.Rows[rowIndex].Cells["Part_ID"].Value.ToString());
-                Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartRefID == Teststring);
-                if (myAssociation)
+                try
                 {
-                    //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to Part association").IsWarning().PrependMessageType().Log();
+                    Int32 rowIndex = dataGridView_Part.CurrentCell.RowIndex;
+                    Int32 Teststring = Int32.Parse(dataGridView_Part.Rows[rowIndex].Cells["PartID"].Value.ToString());
+                    Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartID == Teststring);
+                    if (myAssociation)
+                    {
+                        //BomManagerFormMsg.NewMessage().AddText("Delete Button not Available due to Part association").IsWarning().PrependMessageType().Log();
+                    }
+                    return myAssociation;
+
                 }
-                return myAssociation;
+                catch
+                {
+                    return false;
+                }
+                
             }
         }
 
         private void ComboBoxFixtureFamily_SelectedIndexChanged(object sender, EventArgs e)
         {
             RefreshDataGridView_Part();
+            PartAssociationcheck();
         }
 
         private void AddButton_AssyToAssy_TreeView_Click(object sender, EventArgs e)
@@ -542,14 +547,12 @@ namespace BOM_MANAGER
             try
             {
                 AssemblyView SelectedAssemblyNode = (AssemblyView)Fixture_treeView.SelectedNode.Tag;
-                Int32? CurrentParentId = SelectedAssemblyNode.ParentID;
-                Int32? CurrentAssemblyId = SelectedAssemblyNode.AssemblyID;
-                Int32? CurrentFixtureCodeId = SelectedAssemblyNode.FixtureID;
-
+                Int32? CurrentParentId = SelectedAssemblyNode.id;
+                
                 foreach (DataGridViewRow currentSelectedRow in dataGridView_Ass.SelectedRows)
                 {
                     //Function to Save Assy to parent
-                    AddAssyToTreeView(currentSelectedRow, CurrentParentId, CurrentAssemblyId, CurrentFixtureCodeId);
+                    AddAssyToTreeView(currentSelectedRow, CurrentParentId); 
                 }
             }
             catch
@@ -560,23 +563,23 @@ namespace BOM_MANAGER
 
         }
 
-        private void AddAssyToTreeView(DataGridViewRow currentSelectedRow, Int32? ParentID, Int32? AssemblyId, Int32? FixtureCodeID)
+        private void AddAssyToTreeView(DataGridViewRow currentSelectedRow, Int32? ParentID)
         {
-            Int32 currentAssemblyId = Int32.Parse(currentSelectedRow.Cells["Assembly_ID"].Value.ToString());
+            Int32 currentAssemblyId = Int32.Parse(currentSelectedRow.Cells["AssemblyID"].Value.ToString());
+            //Int32 currentAssemblyTypeId = Int32.Parse(currentSelectedRow.Cells["AssemblyTypeID"].Value.ToString());
 
             String assemblyNameToAdd = db.Assemblies.Find(currentAssemblyId).Name;
-            Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == currentAssemblyId && o.FixtureID == FixtureCodeID);
+            Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == currentAssemblyId && o.ParentID == ParentID );
 
             //Check if Sub-Assembly is ROOT Assembly... if yues do not add
-            if (currentAssemblyId != 14 && !myAssociation)
+            if (!myAssociation)
             {
                 AssemblyAtAssembly NewAssemblyAtAssembly = new AssemblyAtAssembly();
 
                 db.AssemblyAtAssemblies.Add(NewAssemblyAtAssembly);
 
-                NewAssemblyAtAssembly.ParentID = (Int32)AssemblyId;
+                NewAssemblyAtAssembly.ParentID = (Int32)ParentID;
                 NewAssemblyAtAssembly.AssemblyID = currentAssemblyId;
-                NewAssemblyAtAssembly.FixtureID = (Int32)FixtureCodeID;
                 db.SaveChanges();
 
                 //do not show message if assembly has not been deleted.
@@ -606,8 +609,7 @@ namespace BOM_MANAGER
                     Assy_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                     db.SaveChanges();
-                    //RefreshTreeView();
-                    Fixture_treeView.SelectedNode.Remove();
+                    RefreshTreeView();
 
                     //Association Check
                     AssyAssociationcheck();
@@ -625,74 +627,84 @@ namespace BOM_MANAGER
 
         private void Assy_Recursive_Delete_Function(TreeNode selectedNode)
         {
-
-            if (selectedNode.Nodes.Count != 0)
-            {
-                foreach (TreeNode childNode in selectedNode.Nodes)
-                {
-                    Assy_Recursive_Delete_Function(childNode);
-                }
-            }
-
             try
             {
-                Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).id;
-                String CurrentAssemblyViewName = ((AssemblyView)selectedNode.Tag).Name;
+                Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).AssyAtAssyID;
+                String CurrentAssemblyViewName = ((AssemblyView)selectedNode.Tag).AssemblyName;
                 AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
-                if (deletionTarget.ParentID is null)
-                {
-                    BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
-                }
-                else
-                {
+                //if (deletionTarget.ParentID is null)
+                //{
+                //    BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
+                //}
+                //else
+                //{
                     db.AssemblyAtAssemblies.Remove(deletionTarget);
                     BomManagerFormMsg.NewMessage().AddText("Assembly " + CurrentAssemblyViewName + " has been deleted from Tree view").PrependMessageType().Log();
 
-                }
+                //}
             }
             catch
             {
-                //BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
+                BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
             }
+
+        }
+
+        private void Fixture_treeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            eventLog_richTextBox.Clear();
+            TreeNode selectedNode = Fixture_treeView.SelectedNode;
             try
             {
-                Int32 currentPartId = ((PartView)selectedNode.Tag).id;
-                String currentPartNameId = ((PartView)selectedNode.Tag).PartName;
-                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentPartId);
+                Int32 targetAssemblyId = ((AssemblyView)selectedNode.Tag).id;
+                String targetAssemblyName = ((AssemblyView)selectedNode.Tag).AssemblyName;
 
-                //Delete part in Rules List
-
-                Int32 currentPartRefID = ((PartView)selectedNode.Tag).PartRefID;
-                String currentFixtureID = ((PartView)selectedNode.Tag).Code;
-
-                List<PartRulesFilter> deletionTargetRulesList = db.PartRulesFilters.Where(o => o.ProductCode == currentFixtureID && o.PartID == currentPartRefID).ToList();
-
-                foreach (var test in deletionTargetRulesList)
+                List<PartRulesFilter> AssyFilterToDelete = db.PartRulesFilters.Where(o => o.AssemblyID == targetAssemblyId && o.ProductCode == productID_comboBox.Text).ToList();
+                if (AssyFilterToDelete.Count != 0)
                 {
-                    Int32 deletionIndex = Int32.Parse(test.id.ToString());
-                    db.PartRulesFilters.Remove(db.PartRulesFilters.Find(deletionIndex));
+                    RemoveButton_AssyToAssy_TreeView.Enabled = false;
+                    Remove_PartToAssy_TreeView.Enabled = false;
+                    BomManagerFormMsg.NewMessage().AddText("Assembly cannot be removed from tree view due to Filter Association in Part Rules Tab").IsWarning().PrependMessageType().Log();
                 }
-
-                db.PartAtAssemblies.Remove(deletionTarget);
-
-                BomManagerFormMsg.NewMessage().AddText("Parts " + currentPartNameId + " has been deleted from Tree view").PrependMessageType().Log();
+                else
+                {
+                    RemoveButton_AssyToAssy_TreeView.Enabled = true;
+                    Remove_PartToAssy_TreeView.Enabled = true;
+                }
             }
             catch
             {
 
             }
 
-        }
+            try
+            {
+                Int32 targetPartId = ((PartView)selectedNode.Tag).PartID;
+                String targetPartName = ((PartView)selectedNode.Tag).PartName;
 
-        private void DataGridView_Ass_MouseClick(object sender, MouseEventArgs e)
-        {
-            AssyAssociationcheck();
+                List <PartRulesFilter> PartFilterToDelete = db.PartRulesFilters.Where(o => o.PartID == targetPartId && o.ProductCode == productID_comboBox.Text).ToList();
+                if (PartFilterToDelete.Count != 0)
+                {
+                    RemoveButton_AssyToAssy_TreeView.Enabled = false;
+                    Remove_PartToAssy_TreeView.Enabled = false;
+                    BomManagerFormMsg.NewMessage().AddText("Part cannot be removed from tree view due to Filter Association in Part Rules Tab").IsWarning().PrependMessageType().Log();
+                }
+                else
+                {
+                    RemoveButton_AssyToAssy_TreeView.Enabled = true;
+                    Remove_PartToAssy_TreeView.Enabled = true;
+                }
 
-        }
+            }
+            catch
+            {
 
-        private void DataGridView_Part_MouseClick(object sender, MouseEventArgs e)
-        {
-            PartAssociationcheck();
+            }
+
+            
+            
+
+           
         }
 
         private void AddButton_PartToAssy_TreeView_Click(object sender, EventArgs e)
@@ -700,14 +712,15 @@ namespace BOM_MANAGER
             try
             {
                 AssemblyView SelectedAssemblyNode = (AssemblyView)Fixture_treeView.SelectedNode.Tag;
-                Int32? CurrentParentId = SelectedAssemblyNode.ParentID;
+
                 Int32? CurrentAssemblyId = SelectedAssemblyNode.id;
-                Int32? CurrentFixtureCodeId = SelectedAssemblyNode.FixtureID;
+                //Int32? CurrentAssemblyId = SelectedAssemblyNode.id;
+                //Int32? CurrentFixtureCodeId = SelectedAssemblyNode.FixtureID;
 
                 foreach (DataGridViewRow currentSelectedRow in dataGridView_Part.SelectedRows)
                 {
                     //Function to Save Assy to parent
-                    AddPartsToTreeView(currentSelectedRow, CurrentParentId, CurrentAssemblyId, CurrentFixtureCodeId);
+                    AddPartsToTreeView(currentSelectedRow, CurrentAssemblyId);//, CurrentAssemblyId, CurrentFixtureCodeId);
                 }
             }
             catch
@@ -718,11 +731,11 @@ namespace BOM_MANAGER
 
         }
 
-        private void AddPartsToTreeView(DataGridViewRow currentSelectedRow, Int32? parentId, Int32? assemblyId, Int32? FixtureId)
+        private void AddPartsToTreeView(DataGridViewRow currentSelectedRow, Int32? assemblyId)
         {
-            Int32 currentPartId = Int32.Parse(currentSelectedRow.Cells["Part_ID"].Value.ToString());
+            Int32 currentPartId = Int32.Parse(currentSelectedRow.Cells["PartID"].Value.ToString());
             //PartTypeAtParts
-            String PartNameToAdd = db.Parts.Find(currentPartId).PartName;
+            String PartNameToAdd = db.Parts.Find(currentPartId).Name;
 
             try
             {
@@ -730,9 +743,9 @@ namespace BOM_MANAGER
 
                 db.PartAtAssemblies.Add(NewPartAtAssembly);
 
-                NewPartAtAssembly.PartRefID = currentPartId;
-                NewPartAtAssembly.AssRefID = (Int32)assemblyId;
-                NewPartAtAssembly.FixtureID = (Int32)FixtureId;
+                NewPartAtAssembly.PartID = currentPartId;
+                NewPartAtAssembly.AssemblyID = (Int32)assemblyId;
+                //NewPartAtAssembly.FixtureID = (Int32)FixtureId;
                 db.SaveChanges();
 
                 //do not show message if assembly has not been deleted.
@@ -757,7 +770,6 @@ namespace BOM_MANAGER
                 db.SaveChanges();
 
                 RefreshTreeView();
-                //Fixture_treeView.SelectedNode.Remove();
 
                 //Association Check
                 AssyAssociationcheck();
@@ -781,15 +793,15 @@ namespace BOM_MANAGER
 
             try
             {
-                Int32 currentPartId = ((PartView)selectedNode.Tag).id;
+                Int32 currentId = ((PartView)selectedNode.Tag).id;
                 String currentPartNameId = ((PartView)selectedNode.Tag).PartName;
-                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentPartId);
+                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentId);
 
                 //Delete part in Rules List
-                Int32 currentPartRefID = ((PartView)selectedNode.Tag).PartRefID;
-                String currentFixtureID = ((PartView)selectedNode.Tag).Code;
+                Int32 currentPartID = ((PartView)selectedNode.Tag).PartID;
+                String currentFixtureID = ((PartView)selectedNode.Tag).ProductCode;
 
-                List<PartRulesFilter> deletionTargetRulesList = db.PartRulesFilters.Where(o => o.ProductCode == currentFixtureID && o.PartID == currentPartRefID).ToList();
+                List<PartRulesFilter> deletionTargetRulesList = db.PartRulesFilters.Where(o => o.ProductCode == currentFixtureID && o.PartID == currentPartID).ToList();
 
                 foreach (var test in deletionTargetRulesList)
                 {
@@ -822,66 +834,86 @@ namespace BOM_MANAGER
 
         }
 
-        public String MySelectedFixture => db.PartRulesFilters.Find(CurrentPartId).PartName;
-
-        private void RefreshTreeView()
+        private void DataGridView_Ass_MouseClick(object sender, MouseEventArgs e)
         {
-            //Int32 MySelectedFixture;
-            String MySelectedFixture;
+            AssyAssociationcheck();
 
-            if (BOM_tabControl.SelectedTab == tabPage2)
+        }
+
+        private void DataGridView_Part_MouseClick(object sender, MouseEventArgs e)
+        {
+            PartAssociationcheck();
+        }
+
+
+
+
+        public String MySelectedFixture
+        {
+            get
             {
-                ////Int32 SCR_selected = 134;
-                productID_comboBox.SelectedValue = 134;
-                //MySelectedFixture = Int32.Parse(productID_comboBox.SelectedValue.ToString());
-                //MySelectedFixture = productID_comboBox.SelectedValue.ToString();
-                MySelectedFixture = productID_comboBox.Text;
+                String MySelectedFixture;                
 
-            }
-            else if (BOM_tabControl.SelectedTab == tabPage3)
-            {
-                productID_comboBox_PR.SelectedValue = 134;
-                ////MySelectedFixture = productID_comboBox_PR.Text;
-                //MySelectedFixture = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-                //MySelectedFixture = productID_comboBox_PR.SelectedValue.ToString();
-                MySelectedFixture = productID_comboBox_PR.Text;
-            }
-            else
-            {
-                MySelectedFixture = "SCR";
-            }
-
-            List<AssemblyView> assy_filteredResult = db.AssemblyViews.Where(o => o.Code == MySelectedFixture).ToList();
-            List<PartView> part_filteredResult = db.PartViews.OrderBy(o => o.PartName).Where(p => p.Code == MySelectedFixture).ToList();
-
-            Dictionary<Int32, TreeNode> AssembliesDict = new Dictionary<Int32, TreeNode>();
-
-            foreach (AssemblyView assemblyView in assy_filteredResult)
-            {
-                Int32 assyIdAtAssemblyView = assemblyView.id;
-                String assy_NodeName = assemblyView.Name == "ROOT" ? assemblyView.Code : String.Format("{0}   ({1})", assemblyView.Name, assemblyView.AssemblyType);
-                TreeNode Parent_treeNode = new TreeNode()
-                {
-                    Text = assy_NodeName,
-                    Tag = assemblyView
-                };
-
-                //Recursive Function for childnodes
-                GetChildTreeNodes(Parent_treeNode, part_filteredResult, assyIdAtAssemblyView);
-                AssembliesDict.Add(assemblyView.AssemblyID, Parent_treeNode);
-            }
-
-            foreach (KeyValuePair<Int32, TreeNode> DictItem in AssembliesDict)
-            {
-                Int32 ParentIndex = ((AssemblyView)DictItem.Value.Tag).ParentID ?? 0;
-
-                if (ParentIndex != 0)
-                {
-                    AssembliesDict[ParentIndex].Nodes.Add(DictItem.Value);
+                if (BOM_tabControl.SelectedTab == tabPage2)
+                {                    
+                    MySelectedFixture = productID_comboBox.Text;
 
                 }
+                else if (BOM_tabControl.SelectedTab == tabPage3)
+                {                   
+                    MySelectedFixture = productID_comboBox_PR.Text;
+                }
+                else
+                {
+                    string FixCode = FixtureSetupCode_TextBox.Text;
+                    string[] Fixcodesplit = FixCode.Split('-');
+                    MySelectedFixture = Fixcodesplit[0];
+                }
+                return MySelectedFixture;
             }
+        }
 
+        public TreeNode GetRootTreeNode(String FixtureCode)
+        {
+            AssemblyView RootAssy = db.AssemblyViews.Where(ass => ass.AssemblyName == FixtureCode).First();
+            return GetAssemblyTreeNode(RootAssy);
+        }
+
+        public TreeNode GetAssemblyTreeNode(AssemblyView targetAssy)
+        {
+            TreeNode treeNode = new TreeNode()
+            {
+                Text = targetAssy.AssemblyName,
+                Tag = targetAssy
+            };
+
+            GetMyChildren(treeNode);
+            return treeNode;
+        }
+
+        public TreeNode GetPartTreeNode(PartView targetPart)
+        {
+            TreeNode treeNode = new TreeNode()
+            {
+                Text = targetPart.PartName,
+                Tag = targetPart
+            };
+            
+            return treeNode;
+        }
+
+        public void GetMyChildren(TreeNode parentTreeNode)
+        {
+            AssemblyView ParentAssy = (AssemblyView)parentTreeNode.Tag;
+            db.AssemblyViews.OrderBy(ass=>ass.AssemblyName).Where(ass => ass.ParentIDAtAssyAtAssy == ParentAssy.id).ToList().ForEach(a => parentTreeNode.Nodes.Add(GetAssemblyTreeNode(a)));
+            db.PartViews.OrderBy(p=>p.PartName).Where(p => p.AssemblyID == ParentAssy.id).ToList().ForEach(p => parentTreeNode.Nodes.Add(GetPartTreeNode(p)));
+        }
+
+
+
+
+        private void RefreshTreeView()
+        {           
             Fixture_treeView.Nodes.Clear();
             Fixture_treeView_PartRule.Nodes.Clear();
             Fixture_treeView_PartGen.Nodes.Clear();
@@ -889,9 +921,8 @@ namespace BOM_MANAGER
             if (BOM_tabControl.SelectedTab == tabPage2)
             {
                 try
-                {
-                    //Add the tree Node to the TAB PARTS/ASSEMBLY
-                    TreeNode Assy_RootNode = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
+                {                    
+                    TreeNode Assy_RootNode = GetRootTreeNode(MySelectedFixture);
                     Fixture_treeView.Nodes.Add(Assy_RootNode);
                     Fixture_treeView.ExpandAll();
 
@@ -908,10 +939,8 @@ namespace BOM_MANAGER
             else if (BOM_tabControl.SelectedTab == tabPage3)
             {
                 try
-                {
-                    //Add the tree Node to the TAB PARTS RULES
-                    TreeNode Assy_RootNode_PartRule = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
-
+                {                    
+                    TreeNode Assy_RootNode_PartRule = GetRootTreeNode(MySelectedFixture);
                     Fixture_treeView_PartRule.Nodes.Add(Assy_RootNode_PartRule);
                     Fixture_treeView_PartRule.ExpandAll();
 
@@ -936,9 +965,7 @@ namespace BOM_MANAGER
             {
                 try
                 {
-                    ////Add the tree Node to the TAB PARTS RULES
-
-                    TreeNode Assy_RootNode_PartGen = AssembliesDict.Where(o => ((AssemblyView)o.Value.Tag).ParentID == null).First().Value;
+                    TreeNode Assy_RootNode_PartGen = GetRootTreeNode(MySelectedFixture);
 
                     Fixture_treeView_PartGen.Nodes.Add(Assy_RootNode_PartGen);
                     Fixture_treeView_PartGen.ExpandAll();
@@ -954,43 +981,8 @@ namespace BOM_MANAGER
 
         }
 
-        private void GetChildTreeNodes(TreeNode Parent_treeNode, List<PartView> part_filteredResult, Int32 currentAssyId)
-        {
 
-            foreach (PartView partview in part_filteredResult)
-            {
-                Int32 assyIdAtPartView = partview.AssRefID;
-
-                if (currentAssyId == assyIdAtPartView)
-                {
-                    String part_NodeName = String.Format("{0}", partview.PartName);//   ({1})", partview.PartName, partview.PartType );// partview.Description);
-                    //String part_NodeName = String.Format("{0} ({1})", partview.PartName, partview.PartType );// partview.Description);
-
-                    TreeNode childTreeNode = new TreeNode();
-                    childTreeNode.Text = part_NodeName;
-                    childTreeNode.Tag = partview;
-
-                    Parent_treeNode.Nodes.Add(childTreeNode);
-
-
-                }
-
-            }
-            Dictionary<Int32, TreeNode> PartsDict = new Dictionary<Int32, TreeNode>();
-
-            foreach (KeyValuePair<Int32, TreeNode> PartItem in PartsDict)
-            {
-                Int32 ParentIndex = ((PartView)PartItem.Value.Tag).id;
-
-                if (ParentIndex != 0)
-                {
-                    PartsDict[ParentIndex].Nodes.Add(PartItem.Value);
-
-                }
-            }
-
-        }
-
+     
 
 
 
@@ -1004,11 +996,11 @@ namespace BOM_MANAGER
 
         public String G_PartName => Fixture_treeView_PartRule.SelectedNode.Text;//db.PartRulesFilters.Find(CurrentPartId).PartName;
 
-        public Int32 CurrentPartId => db.PartRulesFilters.Find(G_PartName).PartID;//Int32.Parse(DataGridView_Rules.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
+        public Int32? CurrentPartId => db.PartRulesFilters.Find(G_PartName).PartID;//Int32.Parse(DataGridView_Rules.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
 
         public PartRulesFilter PartRuleToEdit => db.PartRulesFilters.Find(CurrentPartId);
 
-        public String EditPartName => PartRuleToEdit.PartName;
+        public String EditPartName => PartRuleToEdit.Part.Name;
 
         public String EditProductCode => PartRuleToEdit.ProductCode;
 
@@ -1020,11 +1012,71 @@ namespace BOM_MANAGER
 
         public String EditPACAF_Id => PartRuleToEdit.PACAF_ID;
 
-        public String EditFilterRule => PartRuleToEdit.FilterDependencyName;
+        public String EditFilterRule => PartRuleToEdit.FilterBehavior.Behavior;
 
         public Int32 EditProductCodeIndex => PartRuleToEdit.ProductID;
 
 
+        // Filter Data
+        public String Filter_PartName => Fixture_treeView_PartRule.SelectedNode.Text;
+
+        public String Filter_ProductCode => productID_comboBox_PR.Text;
+
+        public Int32 Filter_ProductIdIndex => Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
+
+        public String selected_PartName;
+
+        public String selected_AssemblyName;
+
+        public Int32? part_Index
+        {
+            get
+            {
+                try
+                {
+                    selected_PartName = Filter_PartName;
+                    return Int32.Parse(db.Parts.Where(m => m.Name == Filter_PartName).First().id.ToString());
+                }
+                catch
+                {
+                    selected_PartName = null;
+                    return null;
+                }
+            }
+
+
+
+        }
+
+        public Int32? assembly_Index
+        {
+            get
+            {
+                try
+                {
+                    selected_AssemblyName = Filter_PartName;
+                    return Int32.Parse(db.Assemblies.Where(m => m.Name == Filter_PartName).First().id.ToString());
+                }
+                catch
+                {
+                    selected_AssemblyName = null;
+                    return null;
+
+                }
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+        //ComboBox Event Changes
         private void ProductID_comboBox_PR_SelectionChangeCommitted(object sender, EventArgs e)
         {
             // change  different 
@@ -1040,482 +1092,53 @@ namespace BOM_MANAGER
 
         }
 
-
-
-        //Combo Box Event Changes
         private void FilterType_comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (FilterType_comboBox1.Text == "NONE")//&& styles.Count == 0)
-            {
-                FILTER1_TableLayoutPanel.Visible = false;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                LN_TableLayOut1.Visible = false;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-            }
-
-            else if (FilterType_comboBox1.Text == "PACAF")//&& styles.Count == 1)
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 256;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = true;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                LN_TableLayOut1.Visible = false;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-            }
-
-            else if (FilterType_comboBox1.Text == "QUANTITY")// && styles.Count == 2)
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 72;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = true;
-                EX_TableLayOut1.Visible = false;
-                LN_TableLayOut1.Visible = false;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-
-            }
-
-            else if (FilterType_comboBox1.Text == "EX(8 OR 12)")//&& styles.Count == 3)
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 41;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = true;
-                LN_TableLayOut1.Visible = false;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-
-            }
-
-            else if (FilterType_comboBox1.Text == "LN(8 OR 12)")//&& styles.Count == 4)
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 41;
-
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                LN_TableLayOut1.Visible = true;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-            }
-            else if (FilterType_comboBox1.Text == "JOINER QTY")
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                LN_TableLayOut1.Visible = false;
-
-                Load_Category_ComboBox1();
-                Load_Parameter_ListView1();
-                Load_Behavior1();
-                //Load_Quantity1();
-            }
+            Rules_ComboBox1();
         }
 
         private void FilterType_comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (FilterType_comboBox2.Text == "NONE")
-            {
-                FILTER2_TableLayoutPanel.Visible = false;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                LN_TableLayOut2.Visible = false;
+            Rules_ComboBox2();
 
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-            }
-            else if (FilterType_comboBox2.Text == "PACAF")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 256;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = true;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                LN_TableLayOut2.Visible = false;
-
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-            }
-            else if (FilterType_comboBox2.Text == "QUANTITY")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 72;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = true;
-                EX_TableLayOut2.Visible = false;
-                LN_TableLayOut2.Visible = false;
-
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-
-            }
-
-            else if (FilterType_comboBox2.Text == "EX(8 OR 12)")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 41;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = true;
-                LN_TableLayOut2.Visible = false;
-
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-
-            }
-
-            else if (FilterType_comboBox2.Text == "LN(8 OR 12)")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 41;
-
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                LN_TableLayOut2.Visible = true;
-
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-            }
-
-            else if (FilterType_comboBox2.Text == "JOINER QTY")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                LN_TableLayOut2.Visible = false;
-
-                Load_Category_ComboBox2();
-                Load_Parameter_ListView2();
-                Load_Behavior2();
-                //Load_Quantity2();
-            }
         }
 
         private void FilterType_comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (FilterType_comboBox3.Text == "NONE")
-            {
-                FILTER3_TableLayoutPanel.Visible = false;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                LN_TableLayOut3.Visible = false;
+            Rules_ComboBox3();
 
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-            }
-            else if (FilterType_comboBox3.Text == "PACAF")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 256;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = true;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                LN_TableLayOut3.Visible = false;
-
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-            }
-            else if (FilterType_comboBox3.Text == "QUANTITY")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 72;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = true;
-                EX_TableLayOut3.Visible = false;
-                LN_TableLayOut3.Visible = false;
-
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-
-            }
-
-            else if (FilterType_comboBox3.Text == "EX(8 OR 12)")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 41;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = true;
-                LN_TableLayOut3.Visible = false;
-
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-
-            }
-
-            else if (FilterType_comboBox3.Text == "LN(8 OR 12)")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 41;
-
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                LN_TableLayOut3.Visible = true;
-
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-            }
-
-            else if (FilterType_comboBox3.Text == "JOINER QTY")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                LN_TableLayOut3.Visible = false;
-
-                Load_Category_ComboBox3();
-                Load_Parameter_ListView3();
-                Load_Behavior3();
-                //Load_Quantity3();
-            }
         }
 
         private void FilterType_comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (FilterType_comboBox4.Text == "NONE")
-            {
-                FILTER4_TableLayoutPanel.Visible = false;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                LN_TableLayOut4.Visible = false;
+            Rules_ComboBox4();
 
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
-
-            else if (FilterType_comboBox4.Text == "PACAF")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 256;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = true;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                LN_TableLayOut4.Visible = false;
-
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
-
-            else if (FilterType_comboBox4.Text == "QUANTITY")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 72;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = true;
-                EX_TableLayOut4.Visible = false;
-                LN_TableLayOut4.Visible = false;
-
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
-
-            else if (FilterType_comboBox4.Text == "EX(8 OR 12)")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 41;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = true;
-                LN_TableLayOut4.Visible = false;
-
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
-
-            else if (FilterType_comboBox4.Text == "LN(8 OR 12)")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 41;
-
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                LN_TableLayOut4.Visible = true;
-
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
-
-            else if (FilterType_comboBox4.Text == "JOINER QTY")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
-
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                LN_TableLayOut4.Visible = false;
-
-                Load_Category_ComboBox4();
-                Load_Parameter_ListView4();
-                Load_Behavior4();
-                //Load_Quantity4();
-            }
         }
 
         private void CategoryPR_comboBoxFilter1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Load_Parameter_ListView1();
+            Parameter_ListView1();
         }
 
         private void CategoryPR_comboBoxFilter2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Load_Parameter_ListView2();
+            Parameter_ListView2();
         }
 
         private void CategoryPR_comboBoxFilter3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Load_Parameter_ListView3();
+            Parameter_ListView3();
         }
 
         private void CategoryPR_comboBoxFilter4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Load_Parameter_ListView4();
+            Parameter_ListView4();
         }
 
 
 
-        //Load PACAF's Filter
-        private void Load_Filter_Rules()
+        //Load DATASOURCES
+        private void Filter_Rules()
         {
             FilterType_comboBox1.DataSource = db.FilterTypes.ToList();
             FilterType_comboBox1.ValueMember = "id";
@@ -1535,76 +1158,235 @@ namespace BOM_MANAGER
 
         }
 
-        private void Load_Category_ComboBox1()
+        private void Rules_ComboBox1()
         {
-            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            Filter1_Visibility();
+
+            //String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
 
             if (FilterType_comboBox1.Text == "PACAF")
-            {
-                CategoryPR_comboBoxFilter1.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId.ToString() == productId_PR && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
+            {              
+                //Category ComboBox
+                CategoryPR_comboBoxFilter1.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId == Filter_ProductIdIndex && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
                 CategoryPR_comboBoxFilter1.ValueMember = "CAF_Id";
                 CategoryPR_comboBoxFilter1.DisplayMember = "CategoryName";
+
+                //Behavior ComboBox
+                FilterBehavior_ComboBox1.DataSource = db.FilterBehaviors.ToList();
+                FilterBehavior_ComboBox1.ValueMember = "id";
+                FilterBehavior_ComboBox1.DisplayMember = "Behavior";
+
             }
 
             else if (FilterType_comboBox1.Text != "PACAF")
             {
                 CategoryPR_comboBoxFilter1.SelectedValue = -1;
+                FilterBehavior_ComboBox1.SelectedValue = -1;
+
             }
+
+            if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            {               
+                //Dependable ComboBox
+                DependableQtyPR_comboBoxFilter1.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter1.ValueMember = "id";
+                DependableQtyPR_comboBoxFilter1.DisplayMember = "DependableQuantityName";
+
+            }
+
+            else if (FilterType_comboBox1.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter1.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                //Dependable ComboBox
+                RE_comboBox1.DataSource = db.RenamingExpressions.OrderBy(o => o.id).ToList();
+                RE_comboBox1.ValueMember = "id";
+                RE_comboBox1.DisplayMember = "ExpressionName";
+
+            }
+
+            else if (FilterType_comboBox1.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox1.SelectedValue = -1;
+
+            }
+
         }
 
-        private void Load_Category_ComboBox2()
+        private void Rules_ComboBox2()
         {
-            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            Filter2_Visibility();
 
             if (FilterType_comboBox2.Text == "PACAF")
             {
-                CategoryPR_comboBoxFilter2.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId.ToString() == productId_PR && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
+                //Category ComboBox
+                CategoryPR_comboBoxFilter2.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId == Filter_ProductIdIndex && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
                 CategoryPR_comboBoxFilter2.ValueMember = "CAF_Id";
                 CategoryPR_comboBoxFilter2.DisplayMember = "CategoryName";
+
+                //Behavior ComboBox
+                FilterBehavior_ComboBox2.DataSource = db.FilterBehaviors.ToList();
+                FilterBehavior_ComboBox2.ValueMember = "id";
+                FilterBehavior_ComboBox2.DisplayMember = "Behavior";
             }
 
             else if (FilterType_comboBox2.Text != "PACAF")
             {
                 CategoryPR_comboBoxFilter2.SelectedValue = -1;
+                FilterBehavior_ComboBox2.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            {
+                //Dependable ComboBox
+                DependableQtyPR_comboBoxFilter2.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter2.ValueMember = "id";
+                DependableQtyPR_comboBoxFilter2.DisplayMember = "DependableQuantityName";
+
+            }
+
+            else if (FilterType_comboBox2.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter2.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox2.Text == "RENAMINGEXPRESSION")
+            {
+                //Dependable ComboBox
+                RE_comboBox2.DataSource = db.RenamingExpressions.OrderBy(o => o.id).ToList();
+                RE_comboBox2.ValueMember = "id";
+                RE_comboBox2.DisplayMember = "ExpressionName";
+
+            }
+
+            else if (FilterType_comboBox2.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox2.SelectedValue = -1;
+
             }
         }
 
-        private void Load_Category_ComboBox3()
+        private void Rules_ComboBox3()
         {
-            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            Filter3_Visibility();
 
             if (FilterType_comboBox3.Text == "PACAF")
             {
-                CategoryPR_comboBoxFilter3.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId.ToString() == productId_PR && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
+                //Category ComboBox
+                CategoryPR_comboBoxFilter3.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId == Filter_ProductIdIndex && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
 
                 CategoryPR_comboBoxFilter3.ValueMember = "CAF_Id";
                 CategoryPR_comboBoxFilter3.DisplayMember = "CategoryName";
+
+                //Behavior ComboBox
+                FilterBehavior_ComboBox3.DataSource = db.FilterBehaviors.ToList();
+                FilterBehavior_ComboBox3.ValueMember = "id";
+                FilterBehavior_ComboBox3.DisplayMember = "Behavior";
             }
+
             else if (FilterType_comboBox3.Text != "PACAF")
             {
                 CategoryPR_comboBoxFilter3.SelectedValue = -1;
+                FilterBehavior_ComboBox3.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            {
+                //Dependable ComboBox
+                DependableQtyPR_comboBoxFilter3.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter3.ValueMember = "id";
+                DependableQtyPR_comboBoxFilter3.DisplayMember = "DependableQuantityName";
+
+            }
+
+            else if (FilterType_comboBox3.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter3.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox3.Text == "RENAMINGEXPRESSION")
+            {
+                //Dependable ComboBox
+                RE_comboBox3.DataSource = db.RenamingExpressions.OrderBy(o => o.id).ToList();
+                RE_comboBox3.ValueMember = "id";
+                RE_comboBox3.DisplayMember = "ExpressionName";
+
+            }
+
+            else if (FilterType_comboBox3.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox3.SelectedValue = -1;
+
             }
         }
 
-        private void Load_Category_ComboBox4()
+        private void Rules_ComboBox4()
         {
-            String productId_PR = productID_comboBox_PR.SelectedValue.ToString();
+            Filter4_Visibility();
 
             if (FilterType_comboBox4.Text == "PACAF")
             {
-
-                CategoryPR_comboBoxFilter4.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId.ToString() == productId_PR && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
+                //Category ComboBox
+                CategoryPR_comboBoxFilter4.DataSource = db.ProductTemplates.AsNoTracking().Where(o => o.FixtureId == Filter_ProductIdIndex && o.CategoryName != "PRODUCT ID").Select(o => new { o.CAF_Id, o.CategoryName, o.CAF_DisplayOrder }).Distinct().OrderBy(o => o.CAF_DisplayOrder).ToList();
 
                 CategoryPR_comboBoxFilter4.ValueMember = "CAF_Id";
                 CategoryPR_comboBoxFilter4.DisplayMember = "CategoryName";
+
+                //Behavior ComboBox
+                FilterBehavior_ComboBox4.DataSource = db.FilterBehaviors.ToList();
+                FilterBehavior_ComboBox4.ValueMember = "id";
+                FilterBehavior_ComboBox4.DisplayMember = "Behavior";
             }
+
             else if (FilterType_comboBox4.Text != "PACAF")
             {
                 CategoryPR_comboBoxFilter4.SelectedValue = -1;
+                FilterBehavior_ComboBox4.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox4.Text == "DEPENDABLE QTY")
+            {
+                //Dependable ComboBox
+                DependableQtyPR_comboBoxFilter4.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter4.ValueMember = "id";
+                DependableQtyPR_comboBoxFilter4.DisplayMember = "DependableQuantityName";
+
+            }
+
+            else if (FilterType_comboBox4.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter4.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox4.Text == "RENAMINGEXPRESSION")
+            {
+                //Dependable ComboBox
+                RE_comboBox4.DataSource = db.RenamingExpressions.OrderBy(o => o.id).ToList();
+                RE_comboBox4.ValueMember = "id";
+                RE_comboBox4.DisplayMember = "ExpressionName";
+
+            }
+
+            else if (FilterType_comboBox4.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox4.SelectedValue = -1;
+
             }
         }
 
-        private void Load_Parameter_ListView1()
+
+
+        private void Parameter_ListView1()
         {
             if (FilterType_comboBox1.Text == "PACAF")
             {
@@ -1627,15 +1409,9 @@ namespace BOM_MANAGER
                 else
                 {
                     try
-                    {
-                        String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                        Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
+                    {                        
 
-                        Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-                        Int32 selected_ExecutionOrder = 1;
-
-                        Int32? CAF = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
+                        Int32? CAF = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().CategoryID;
 
                         db.CategoryAtFixtures.Find(CAF).ParameterAtCategoryAtFixtures.OrderBy(o => o.DisplayOrder).ToList().ForEach(p => ParameterPR_ListView1.Items.Add(p.Parameter.Code, p.id));
 
@@ -1654,7 +1430,7 @@ namespace BOM_MANAGER
             }
         }
 
-        private void Load_Parameter_ListView2()
+        private void Parameter_ListView2()
         {
             if (FilterType_comboBox2.Text == "PACAF")
             {
@@ -1674,15 +1450,9 @@ namespace BOM_MANAGER
                 else
                 {
                     try
-                    {
-                        String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                        Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
+                    {                       
 
-                        Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-                        Int32 selected_ExecutionOrder = 2;
-
-                        Int32? CAF = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
+                        Int32? CAF = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().CategoryID;
 
                         db.CategoryAtFixtures.Find(CAF).ParameterAtCategoryAtFixtures.OrderBy(o => o.DisplayOrder).ToList().ForEach(p => ParameterPR_ListView2.Items.Add(p.Parameter.Code, p.id));
 
@@ -1701,7 +1471,7 @@ namespace BOM_MANAGER
             }
         }
 
-        private void Load_Parameter_ListView3()
+        private void Parameter_ListView3()
         {
             if (FilterType_comboBox3.Text == "PACAF")
             {
@@ -1722,14 +1492,8 @@ namespace BOM_MANAGER
                 {
                     try
                     {
-                        String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                        Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                        Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-                        Int32 selected_ExecutionOrder = 3;
-
-                        Int32? CAF = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
+                       
+                        Int32? CAF = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().CategoryID;
 
                         db.CategoryAtFixtures.Find(CAF).ParameterAtCategoryAtFixtures.OrderBy(o => o.DisplayOrder).ToList().ForEach(p => ParameterPR_ListView3.Items.Add(p.Parameter.Code, p.id));
 
@@ -1748,7 +1512,7 @@ namespace BOM_MANAGER
             }
         }
 
-        private void Load_Parameter_ListView4()
+        private void Parameter_ListView4()
         {
             if (FilterType_comboBox4.Text == "PACAF")
             {
@@ -1771,15 +1535,8 @@ namespace BOM_MANAGER
                 else
                 {
                     try
-                    {
-                        String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                        Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                        Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-                        Int32 selected_ExecutionOrder = 4;
-
-                        Int32? CAF = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
+                    {                        
+                        Int32? CAF = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().CategoryID;
 
                         db.CategoryAtFixtures.Find(CAF).ParameterAtCategoryAtFixtures.OrderBy(o => o.DisplayOrder).ToList().ForEach(p => ParameterPR_ListView4.Items.Add(p.Parameter.Code, p.id));
 
@@ -1798,211 +1555,411 @@ namespace BOM_MANAGER
             }
         }
 
-        private void Load_Behavior1()
-        {
-
-            if (FilterType_comboBox1.Text == "PACAF")
-            {
-                FilterBehavior_ComboBox1.DataSource = db.FilterBehaviors.ToList();
-                FilterBehavior_ComboBox1.ValueMember = "id";
-                FilterBehavior_ComboBox1.DisplayMember = "Behavior";
-            }
-            else if (FilterType_comboBox1.Text != "PACAF")
-            {
-                FilterBehavior_ComboBox1.SelectedValue = -1;
-            }
-
-        }
-
-        private void Load_Behavior2()
-        {
-
-            if (FilterType_comboBox2.Text == "PACAF")
-            {
-                FilterBehavior_ComboBox2.DataSource = db.FilterBehaviors.ToList();
-                FilterBehavior_ComboBox2.ValueMember = "id";
-                FilterBehavior_ComboBox2.DisplayMember = "Behavior";
-            }
-            else if (FilterType_comboBox2.Text != "PACAF")
-            {
-                FilterBehavior_ComboBox2.SelectedValue = -1;
-
-            }
-        }
-
-        private void Load_Behavior3()
-        {
-
-            if (FilterType_comboBox3.Text == "PACAF")
-            {
-                FilterBehavior_ComboBox3.DataSource = db.FilterBehaviors.ToList();
-                FilterBehavior_ComboBox3.ValueMember = "id";
-                FilterBehavior_ComboBox3.DisplayMember = "Behavior";
-            }
-            else if (FilterType_comboBox3.Text != "PACAF")
-            {
-                FilterBehavior_ComboBox3.SelectedValue = -1;
-
-            }
-        }
-
-        private void Load_Behavior4()
-        {
-
-            if (FilterType_comboBox4.Text == "PACAF")
-            {
-                FilterBehavior_ComboBox4.DataSource = db.FilterBehaviors.ToList();
-                FilterBehavior_ComboBox4.ValueMember = "id";
-                FilterBehavior_ComboBox4.DisplayMember = "Behavior";
-            }
-            else if (FilterType_comboBox4.Text != "PACAF")
-            {
-                FilterBehavior_ComboBox4.SelectedValue = -1;
-
-            }
-        }
-
-        private void Load_Quantity1()
-        {
-
-            if (FilterType_comboBox1.Text == "QUANTITY")
-            {
-                try
-                {
-                    String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                    Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-                    Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                    Qty_textBox1.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 1).First().QuantityRule;
-
-                    Qty_NumericUpDown1.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 1).First().Quantity ?? 0;
-
-                }
-                catch
-                {
-
-                }
-
-            }
-            else if (FilterType_comboBox1.Text != "QUANTITY")
-            {
-                Qty_textBox1.Text = "";
-                Qty_NumericUpDown1.Value = 0;
-            }
-        }
-
-        private void Load_Quantity2()
-        {
-
-            if (FilterType_comboBox2.Text == "QUANTITY")
-            {
-                try
-                {
-                    String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                    Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-                    Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                    Qty_textBox2.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 2).First().QuantityRule;
-
-                    Qty_NumericUpDown2.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 2).First().Quantity ?? 0;
-
-                }
-                catch
-                {
-
-                }
-
-            }
-            else if (FilterType_comboBox2.Text != "QUANTITY")
-            {
-                Qty_textBox2.Text = "";
-                Qty_NumericUpDown2.Value = 0;
-            }
-        }
-
-        private void Load_Quantity3()
-        {
-
-            if (FilterType_comboBox3.Text == "QUANTITY")
-            {
-                try
-                {
-                    String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                    Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-                    Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                    Qty_textBox3.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 3).First().QuantityRule;
-
-                    Qty_NumericUpDown3.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 3).First().Quantity ?? 0;
-
-                }
-                catch
-                {
-
-                }
-
-            }
-            else if (FilterType_comboBox3.Text != "QUANTITY")
-            {
-                Qty_textBox3.Text = "";
-                Qty_NumericUpDown3.Value = 0;
-            }
-        }
-
-        private void Load_Quantity4()
-        {
-
-            if (FilterType_comboBox4.Text == "QUANTITY")
-            {
-                try
-                {
-                    String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-                    Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-                    Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                    Qty_textBox4.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 4).First().QuantityRule;
-
-                    Qty_NumericUpDown4.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == 4).First().Quantity ?? 0;
-
-                }
-                catch
-                {
-
-                }
-
-            }
-            else if (FilterType_comboBox4.Text != "QUANTITY")
-            {
-                Qty_textBox4.Text = "";
-                Qty_NumericUpDown4.Value = 0;
-            }
-        }
-
 
 
         //Load Filter Types from DATABASE in to BOM MANAGER
-        private void Load_FilterType1()
+        private void Load_FilterType1FromDB()
         {
             ParameterPR_ListView1.SelectedItems.Clear();
-
-            String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-
-            String selected_ProductCode = productID_comboBox_PR.Text;
-            Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-            Int32 selected_ExecutionOrder = 1;
+            
             try
             {
-                Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
+                FilterType_comboBox1.SelectedValue = db.PartRulesFilters.Where(o => (o.AssemblyID == assembly_Index && o.PartID == part_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().FilterTypeID;
 
-                FilterType_comboBox1.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterTypeID;
+            }
 
-                CategoryPR_comboBoxFilter1.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
+            catch (NullReferenceException)
+            {
+                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 1 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
+                //FilterType_comboBox1.SelectedValue = 1;
+            }
 
-                FilterBehavior_ComboBox1.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterDependencyID;
+            catch (InvalidOperationException ex1)
+            {
+                PartRules.NewMessage().AddText("No Rules for Filter 1 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
+                FilterType_comboBox1.SelectedValue = 1;
+            }
+
+            catch (ArgumentNullException)
+            {
+                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
+                //FilterType_comboBox1.SelectedValue = 1;
+            }
+
+            if (FilterType_comboBox1.Text == "NONE")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+            }
+
+            else if (FilterType_comboBox1.Text == "PACAF")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+            }
+
+            else if (FilterType_comboBox1.Text == "QUANTITY")// && styles.Count == 2)
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+
+            }
+
+            else if (FilterType_comboBox1.Text == "JOINER QTY")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+            }
+
+            else if (FilterType_comboBox1.Text == "JOINER")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+            }
+
+            else if (FilterType_comboBox1.Text == "ENDCAP QTY")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+            }
+
+            else if (FilterType_comboBox1.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+
+            }
+
+            else if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                Filter1_Visibility();
+                Load_ParameterSelect1();
+                Load_DependableQuantityORRenamingExpression1();
+                Load_Quantity1();
+
+            }
+
+        }
+
+        private void Load_FilterType2FromDB()
+        {
+            ParameterPR_ListView2.SelectedItems.Clear();
+       
+            try
+            {              
+                FilterType_comboBox2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().FilterTypeID;
+
+            }
+
+            catch (NullReferenceException)
+            {
+                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 2 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
+                //FilterType_comboBox2.SelectedValue = 1;
+            }
+
+            catch (InvalidOperationException ex1)
+            {
+                PartRules.NewMessage().AddText("No Rules for Filter 2 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
+                FilterType_comboBox2.SelectedValue = 1;
+            }
+
+            catch (ArgumentNullException)
+            {
+                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
+                //FilterType_comboBox2.SelectedValue = 1;
+            }
+
+            if (FilterType_comboBox2.Text == "NONE")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+            }
+
+            else if (FilterType_comboBox2.Text == "PACAF")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+            }
+
+            else if (FilterType_comboBox2.Text == "QUANTITY")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+
+            }
+
+            else if (FilterType_comboBox2.Text == "JOINER QTY")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+            }
+
+            else if (FilterType_comboBox2.Text == "JOINER")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+            }
+
+            else if (FilterType_comboBox2.Text == "ENDCAP QTY")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+            }
+
+            else if (FilterType_comboBox2.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+
+            }
+
+            else if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                Filter2_Visibility();
+                Load_ParameterSelect2();
+                Load_DependableQuantityORRenamingExpression2();
+                Load_Quantity2();
+
+            }
+
+        }
+
+        private void Load_FilterType3FromDB()
+        {
+            ParameterPR_ListView3.SelectedItems.Clear();
+
+            try
+            {                
+
+                FilterType_comboBox3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().FilterTypeID;
+
+            }
+
+            catch (NullReferenceException)
+            {
+                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 3 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
+                //FilterType_comboBox3.SelectedValue = 1;
+            }
+
+            catch (InvalidOperationException ex1)
+            {
+                PartRules.NewMessage().AddText("No Rules for Filter 3 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
+                FilterType_comboBox3.SelectedValue = 1;
+
+            }
+
+            catch (ArgumentNullException)
+            {
+                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
+                //FilterType_comboBox3.SelectedValue = 1;
+            }
+
+            if (FilterType_comboBox3.Text == "NONE")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+            }
+
+            else if (FilterType_comboBox3.Text == "PACAF")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+            }
+
+            else if (FilterType_comboBox3.Text == "QUANTITY")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+
+            }
+
+            else if (FilterType_comboBox3.Text == "JOINER QTY")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+            }
+
+            else if (FilterType_comboBox3.Text == "JOINER")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+            }
+
+            else if (FilterType_comboBox3.Text == "ENDCAP QTY")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+            }
+
+            else if (FilterType_comboBox3.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+
+            }
+
+            else if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                Filter3_Visibility();
+                Load_ParameterSelect3();
+                Load_DependableQuantityORRenamingExpression3();
+                Load_Quantity3();
+
+            }
+
+        }
+
+        private void Load_FilterType4FromDB()
+        {
+            ParameterPR_ListView4.SelectedItems.Clear();
+
+            try
+            {               
+                FilterType_comboBox4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().FilterTypeID;
+
+            }
+
+            catch (NullReferenceException)
+            {
+                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 4 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
+                //FilterType_comboBox4.SelectedValue = 1;
+            }
+
+            catch (InvalidOperationException ex1)
+            {
+                PartRules.NewMessage().AddText("No Rules for Filter 4 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
+                FilterType_comboBox4.SelectedValue = 1;
+            }
+
+            catch (ArgumentNullException)
+            {
+                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
+                //FilterType_comboBox4.SelectedValue = 1;
+            }
+
+            if (FilterType_comboBox4.Text == "NONE")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "PACAF")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "QUANTITY")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "JOINER QTY")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "JOINER")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "ENDCAP QTY")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+            }
+
+            else if (FilterType_comboBox4.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+
+            }
+
+            else if (FilterType_comboBox4.Text == "RENAMINGEXPRESSION")
+            {
+                Filter4_Visibility();
+                Load_ParameterSelect4();
+                Load_DependableQuantityORRenamingExpression4();
+                Load_Quantity4();
+
+            }
+
+        }
+
+
+
+        private void Load_ParameterSelect1()
+        {
+            if (FilterType_comboBox1.Text == "PACAF")
+            {
+
+                CategoryPR_comboBoxFilter1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().CategoryID;
+
+                FilterBehavior_ComboBox1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().FilterBehaviorID;
 
                 //Enter Selected PARAMETER ID OR TEXT
-                String parameterString = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().ParameterName;
+                String parameterString = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().ParameterName;
 
                 String[] parameters = parameterString.Split('|');
 
@@ -2020,63 +1977,25 @@ namespace BOM_MANAGER
                     count++;
 
                 }
-
-
-
-                //Qty_textBox1.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().QuantityRule;
-
-                //Qty_NumericUpDown1.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().Quantity ?? 0;
-
-                //eventLog_PR_richTextBox.Clear();
-
-                Load_Quantity1();
-
             }
 
-            catch (NullReferenceException )
+            else if (FilterType_comboBox1.Text != "PACAF")
             {
-                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 1 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
-                //FilterType_comboBox1.SelectedValue = 1;
+                CategoryPR_comboBoxFilter1.SelectedValue = -1;
             }
-
-            catch (InvalidOperationException ex1)
-            {
-                PartRules.NewMessage().AddText("No Rules for Filter 1 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
-                FilterType_comboBox1.SelectedValue = 1;
-            }
-
-            catch (ArgumentNullException )
-            {
-                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
-                //FilterType_comboBox1.SelectedValue = 1;
-            }
-
         }
 
-        private void Load_FilterType2()
+        private void Load_ParameterSelect2()
         {
-            ParameterPR_ListView2.SelectedItems.Clear();
 
-            String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
+            if (FilterType_comboBox2.Text == "PACAF")
+            {                
+                CategoryPR_comboBoxFilter2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().CategoryID;
 
-            String selected_ProductCode = productID_comboBox_PR.Text;
-            Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-            Int32 selected_ExecutionOrder = 2;
-
-
-            try
-            {
-                Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                FilterType_comboBox2.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterTypeID;
-
-                CategoryPR_comboBoxFilter2.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
-
-                FilterBehavior_ComboBox2.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterDependencyID;
+                FilterBehavior_ComboBox2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().FilterBehaviorID;
 
                 //Enter Selected PARAMETER ID OR TEXT
-                String parameterString = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().ParameterName;
+                String parameterString = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().ParameterName;
 
                 String[] parameters = parameterString.Split('|');
 
@@ -2094,62 +2013,24 @@ namespace BOM_MANAGER
                     count++;
 
                 }
-
-
             }
 
-            catch (NullReferenceException )
+            else if (FilterType_comboBox2.Text != "PACAF")
             {
-                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 2 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
-                //FilterType_comboBox2.SelectedValue = 1;
+                CategoryPR_comboBoxFilter2.SelectedValue = -1;
             }
-
-            catch (InvalidOperationException ex1)
-            {
-                PartRules.NewMessage().AddText("No Rules for Filter 2 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
-                FilterType_comboBox2.SelectedValue = 1;
-            }
-
-            catch (ArgumentNullException )
-            {
-                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
-                //FilterType_comboBox2.SelectedValue = 1;
-            }
-
-
-            //Qty_textBox2.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().QuantityRule;
-
-            //Qty_NumericUpDown2.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().Quantity ?? 0;
-
-            //eventLog_PR_richTextBox.Clear();
-
-            Load_Quantity2();
-
         }
 
-        private void Load_FilterType3()
+        private void Load_ParameterSelect3()
         {
-            ParameterPR_ListView3.SelectedItems.Clear();
+            if (FilterType_comboBox3.Text == "PACAF")
+            {               
+                CategoryPR_comboBoxFilter3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().CategoryID;
 
-            String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-
-            String selected_ProductCode = productID_comboBox_PR.Text;
-            Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-            Int32 selected_ExecutionOrder = 3;
-
-            try
-            {
-                Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
-
-                FilterType_comboBox3.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterTypeID;
-
-                CategoryPR_comboBoxFilter3.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
-
-                FilterBehavior_ComboBox3.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterDependencyID;
+                FilterBehavior_ComboBox3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().FilterBehaviorID;
 
                 //Enter Selected PARAMETER ID OR TEXT
-                String parameterString = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().ParameterName;
+                String parameterString = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().ParameterName;
 
                 String[] parameters = parameterString.Split('|');
 
@@ -2167,63 +2048,24 @@ namespace BOM_MANAGER
                     count++;
 
                 }
-
             }
 
-            catch (NullReferenceException )
+            else if (FilterType_comboBox3.Text != "PACAF")
             {
-                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 3 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
-                //FilterType_comboBox3.SelectedValue = 1;
+                CategoryPR_comboBoxFilter3.SelectedValue = -1;
             }
-
-            catch (InvalidOperationException ex1)
-            {
-                PartRules.NewMessage().AddText("No Rules for Filter 3 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
-                FilterType_comboBox3.SelectedValue = 1;
-
-            }
-
-            catch (ArgumentNullException )
-            {
-                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
-                //FilterType_comboBox3.SelectedValue = 1;
-            }
-
-
-            //Qty_textBox3.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().QuantityRule;
-
-            //Qty_NumericUpDown3.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().Quantity ?? 0;
-
-            //eventLog_PR_richTextBox.Clear();
-
-            Load_Quantity3();
-
         }
 
-        private void Load_FilterType4()
+        private void Load_ParameterSelect4()
         {
-            ParameterPR_ListView4.SelectedItems.Clear();
-
-            String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-
-            String selected_ProductCode = productID_comboBox_PR.Text;
-
-            Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-            Int32 selected_ExecutionOrder = 4;
-
-            try
+            if (FilterType_comboBox4.Text == "PACAF")
             {
-                Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
+                CategoryPR_comboBoxFilter4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().CategoryID;
 
-                FilterType_comboBox4.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterTypeID;
-
-                CategoryPR_comboBoxFilter4.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().CategoryID;
-
-                FilterBehavior_ComboBox4.SelectedValue = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().FilterDependencyID;
+                FilterBehavior_ComboBox4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().FilterBehaviorID;
 
                 //Enter Selected PARAMETER ID OR TEXT
-                String parameterString = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().ParameterName;
+                String parameterString = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().ParameterName;
 
                 String[] parameters = parameterString.Split('|');
 
@@ -2242,37 +2084,267 @@ namespace BOM_MANAGER
 
                 }
 
-
-
             }
 
-            catch (NullReferenceException )
+            else if (FilterType_comboBox4.Text != "PACAF")
             {
-                //PartRules.NewMessage().AddText(PartName + ": No PACAF Fixture Rules for Filter 4 Type exist. ").AddText(ex.Message).IsError().PrependMessageType().Log();
-                //FilterType_comboBox4.SelectedValue = 1;
+                CategoryPR_comboBoxFilter4.SelectedValue = -1;
             }
 
-            catch (InvalidOperationException ex1)
-            {
-                PartRules.NewMessage().AddText("No Rules for Filter 4 Type exist for selected part. ").AddText(ex1.Message).PrependMessageType().Log();
-                FilterType_comboBox4.SelectedValue = 1;
-            }
-
-            catch (ArgumentNullException )
-            {
-                //PartRules.NewMessage().AddText("No Fixture Rules for selected part. ").AddText(ex2.Message).PrependMessageType().Log();
-                //FilterType_comboBox4.SelectedValue = 1;
-            }
-
-            //Qty_textBox4.Text = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().QuantityRule;
-
-            //Qty_NumericUpDown4.Value = db.PartRulesFilters.Where(o => o.PartID == partName_Index && o.ProductID == selected_ProductIdIndex && o.OrderOfExecution == selected_ExecutionOrder).First().Quantity ?? 0;
-
-            //eventLog_PR_richTextBox.Clear();
-
-            Load_Quantity4();
         }
 
+
+
+        private void Load_Quantity1()
+        {
+
+            if (FilterType_comboBox1.Text == "QUANTITY")
+            {
+                try
+                {
+                    Qty_NumericUpDown1.Value = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().Quantity ?? 0;
+
+                }
+                catch
+                {
+
+                }
+
+            }
+            else if (FilterType_comboBox1.Text != "QUANTITY")
+            {
+                Qty_NumericUpDown1.Value = 0;
+            }
+        }
+
+        private void Load_Quantity2()
+        {
+
+            if (FilterType_comboBox2.Text == "QUANTITY")
+            {
+                try
+                {                   
+                    Qty_NumericUpDown2.Value = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index)&& o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().Quantity ?? 0;
+
+                }
+                catch
+                {
+
+                }
+
+            }
+            else if (FilterType_comboBox2.Text != "QUANTITY")
+            {
+                Qty_NumericUpDown2.Value = 0;
+            }
+        }
+
+        private void Load_Quantity3()
+        {
+
+            if (FilterType_comboBox3.Text == "QUANTITY")
+            {
+                try
+                {                   
+                    Qty_NumericUpDown3.Value = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().Quantity ?? 0;
+
+                }
+                catch
+                {
+
+                }
+
+            }
+            else if (FilterType_comboBox3.Text != "QUANTITY")
+            {
+                Qty_NumericUpDown3.Value = 0;
+            }
+        }
+
+        private void Load_Quantity4()
+        {
+
+            if (FilterType_comboBox4.Text == "QUANTITY")
+            {
+                try
+                {
+                    Qty_NumericUpDown4.Value = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().Quantity ?? 0;
+
+                }
+                catch
+                {
+
+                }
+
+            }
+            else if (FilterType_comboBox4.Text != "QUANTITY")
+            {
+                Qty_NumericUpDown4.Value = 0;
+            }
+        }
+
+
+
+        private void Load_DependableQuantityORRenamingExpression1()
+        {
+
+            if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            {
+                try
+                {
+                    DependableQtyPR_comboBoxFilter1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().DependableQuantityID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox1.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter1.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                try
+                {
+                    RE_comboBox1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().RenamingExpressionID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox1.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox1.SelectedValue = -1;
+
+            }
+
+        }
+
+        private void Load_DependableQuantityORRenamingExpression2()
+        {
+            if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            {
+                try
+                {
+                    DependableQtyPR_comboBoxFilter2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().DependableQuantityID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox2.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter2.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox2.Text == "RENAMINGEXPRESSION")
+            {
+                try
+                {
+                    RE_comboBox2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().RenamingExpressionID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox2.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox2.SelectedValue = -1;
+
+            }
+
+        }
+
+        private void Load_DependableQuantityORRenamingExpression3()
+        {
+            if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            {
+                try
+                {
+                    DependableQtyPR_comboBoxFilter3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().DependableQuantityID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox3.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter3.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox3.Text == "RENAMINGEXPRESSION")
+            {
+                try
+                {
+                    RE_comboBox3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().RenamingExpressionID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox3.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox3.SelectedValue = -1;
+
+            }
+
+        }
+
+        private void Load_DependableQuantityORRenamingExpression4()
+        {
+            if (FilterType_comboBox4.Text == "DEPENDABLE QTY")
+            {
+                try
+                {
+                    DependableQtyPR_comboBoxFilter4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().DependableQuantityID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox4.Text != "DEPENDABLE QTY")
+            {
+                DependableQtyPR_comboBoxFilter4.SelectedValue = -1;
+
+            }
+
+            if (FilterType_comboBox4.Text == "RENAMINGEXPRESSION")
+            {
+                try
+                {
+                    RE_comboBox4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().RenamingExpressionID;
+
+                }
+                catch
+                {
+
+                }
+            }
+            else if (FilterType_comboBox4.Text != "RENAMINGEXPRESSION")
+            {
+                RE_comboBox4.SelectedValue = -1;
+
+            }
+
+        }
 
 
         //DATA GRID VIEW
@@ -2285,17 +2357,21 @@ namespace BOM_MANAGER
         {
             try
             {
-                DataGridView_Rules.DataSource = db.PartRulesFilters.Where(o => o.PartName == Fixture_treeView_PartRule.SelectedNode.Text).OrderBy(m => m.PartName).ToList();
+                DataGridView_Rules.DataSource = db.PartRulesFilters.Where(o => (o.Part.Name == Fixture_treeView_PartRule.SelectedNode.Text || o.Assembly.Name == Fixture_treeView_PartRule.SelectedNode.Text) && o.ProductCode == productID_comboBox_PR.Text).OrderBy(m => m.OrderOfExecution).ToList();
 
                 DataGridView_Rules.Columns["id"].Visible = false;
-                DataGridView_Rules.Columns["PartID"].Visible = false;
+                DataGridView_Rules.Columns["PartID"].Visible = true;
+                DataGridView_Rules.Columns["AssemblyID"].Visible = true;
                 DataGridView_Rules.Columns["ProductID"].Visible = false;
-                DataGridView_Rules.Columns["CategoryID"].Visible = true;
-                DataGridView_Rules.Columns["ParameterID"].Visible = true;
-                DataGridView_Rules.Columns["FilterDependencyID"].Visible = false;
-                DataGridView_Rules.Columns["FilterBehavior"].Visible = false;
+                DataGridView_Rules.Columns["CategoryID"].Visible = false;
+                DataGridView_Rules.Columns["ParameterID"].Visible = false;
+                DataGridView_Rules.Columns["FilterBehaviorID"].Visible = true;
                 DataGridView_Rules.Columns["FilterType"].Visible = false;
+                DataGridView_Rules.Columns["FilterBehavior"].Visible = false;
+                DataGridView_Rules.Columns["RenamingExpression"].Visible = false;
                 DataGridView_Rules.Columns["Part"].Visible = false;
+                DataGridView_Rules.Columns["Assembly"].Visible = false;
+                DataGridView_Rules.Columns["DependableQuantity"].Visible = false;
 
                 DataGridView_Rules.AutoResizeColumns();
                 DataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -2305,15 +2381,10 @@ namespace BOM_MANAGER
             }
             catch (System.Reflection.TargetException ex)
             {
-                PartRules.NewMessage().AddText("No Part Selected in TreeView. ").AddText(ex.Message).IsError().PrependMessageType().Log();
+                //PartRules.NewMessage().AddText("No Part Selected in TreeView. ").AddText(ex.Message).IsError().PrependMessageType().Log();
             }
 
-            //catch
-            //{
-            //    //eventLog_PR_richTextBox.Clear();
-            //    PartRules.NewMessage().AddText("Refreshing Assembly Table failed").PrependMessageType().Log();
-            //}
-
+           
             DataGridView_Disable_Button();
         }
 
@@ -2358,10 +2429,10 @@ namespace BOM_MANAGER
 
             }
 
-            Load_FilterType1();
-            Load_FilterType2();
-            Load_FilterType3();
-            Load_FilterType4();
+            Load_FilterType1FromDB();
+            Load_FilterType2FromDB();
+            Load_FilterType3FromDB();
+            Load_FilterType4FromDB();
 
 
         }
@@ -2372,16 +2443,11 @@ namespace BOM_MANAGER
         private void Save_PR_Click(object sender, EventArgs e)
         {
             eventLog_PR_richTextBox.Clear();
-            String selected_PartName = Fixture_treeView_PartRule.SelectedNode.Text;
-            Int32 partName_Index = Int32.Parse(db.Parts.Where(m => m.PartName == selected_PartName).First().id.ToString());
 
-            String selected_ProductCode = productID_comboBox_PR.Text;
-            Int32 selected_ProductIdIndex = Int32.Parse(productID_comboBox_PR.SelectedValue.ToString());
-
-            bool FilterExists1 = db.PartRulesFilters.Any(o => o.PartName == selected_PartName && o.OrderOfExecution == 1);
-            bool FilterExists2 = db.PartRulesFilters.Any(o => o.PartName == selected_PartName && o.OrderOfExecution == 2);
-            bool FilterExists3 = db.PartRulesFilters.Any(o => o.PartName == selected_PartName && o.OrderOfExecution == 3);
-            bool FilterExists4 = db.PartRulesFilters.Any(o => o.PartName == selected_PartName && o.OrderOfExecution == 4);
+            bool FilterExists1 = db.PartRulesFilters.Any(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 1 && o.ProductCode == productID_comboBox_PR.Text);
+            bool FilterExists2 = db.PartRulesFilters.Any(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 2 && o.ProductCode == productID_comboBox_PR.Text);
+            bool FilterExists3 = db.PartRulesFilters.Any(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 3 && o.ProductCode == productID_comboBox_PR.Text);
+            bool FilterExists4 = db.PartRulesFilters.Any(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 4 && o.ProductCode == productID_comboBox_PR.Text);
 
             if (FilterType_comboBox1.Text != "NONE")
             {
@@ -2426,18 +2492,37 @@ namespace BOM_MANAGER
                     selected_FilterDependency = Int32.Parse(FilterBehavior_ComboBox1.SelectedValue.ToString());
                 }
 
+                Int32? selected_RenamingExpression;
+                if (RE_comboBox1.SelectedValue == null)
+                {
+                    selected_RenamingExpression = null;
+                }
+                else
+                {
+                    selected_RenamingExpression = Int32.Parse(RE_comboBox1.SelectedValue.ToString());
+                }
+
                 Int32 orderOfExecution = 1;
 
                 Int32? selected_Quantity;
-                String quantityRule = Qty_textBox1.Text;
                 if (Qty_NumericUpDown1.Value == 0)
                 {
                     selected_Quantity = null;
-                    quantityRule = null;
                 }
                 else
                 {
                     selected_Quantity = Int32.Parse(Qty_NumericUpDown1.Value.ToString());
+                }
+
+                Int32? selected_DependableQuantityID;
+                if (DependableQtyPR_comboBoxFilter1.SelectedValue == null)
+                {
+                    selected_DependableQuantityID = null;
+                }
+                else
+                {
+                    selected_DependableQuantityID = Int32.Parse(DependableQtyPR_comboBoxFilter1.SelectedValue.ToString());
+
                 }
 
                 //Check if Filter Exists 
@@ -2445,7 +2530,7 @@ namespace BOM_MANAGER
 
                 if (FilterExists1)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => p.PartName == selected_PartName && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution).First();
                 }
                 else
                 {
@@ -2462,10 +2547,12 @@ namespace BOM_MANAGER
 
                 else
                 {
-                    newPartRule.PartID = partName_Index;
-                    newPartRule.PartName = selected_PartName;
-                    newPartRule.ProductID = selected_ProductIdIndex;
-                    newPartRule.ProductCode = selected_ProductCode;
+                    newPartRule.PartID = part_Index;
+                    //newPartRule.PartName = selected_PartName;
+                    newPartRule.AssemblyID = assembly_Index;
+                    //newPartRule.AssemblyName = selected_AssemblyName;
+                    newPartRule.ProductID = Filter_ProductIdIndex;
+                    newPartRule.ProductCode = Filter_ProductCode;
                     newPartRule.CategoryID = selected_CategoryIndex;
                     newPartRule.CategoryName = selected_Category;
                     newPartRule.ParameterID = Selected_ParameterIndex;
@@ -2473,10 +2560,10 @@ namespace BOM_MANAGER
                     newPartRule.FilterTypeID = selected_FilterType;
                     newPartRule.OrderOfExecution = orderOfExecution;
                     newPartRule.PACAF_ID = selected_PACAF;
-                    newPartRule.FilterDependencyID = selected_FilterDependency;
-                    newPartRule.FilterDependencyName = selected_FilterDependencyName;
+                    newPartRule.FilterBehaviorID = selected_FilterDependency;
+                    newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.QuantityRule = quantityRule;
+                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
 
                     try
                     {
@@ -2499,9 +2586,7 @@ namespace BOM_MANAGER
 
             else if (FilterType_comboBox1.Text == "NONE" && FilterExists1)
             {
-                eventLog_PR_richTextBox.Clear();
-
-                newPartRule = db.PartRulesFilters.Where(o => o.PartName == selected_PartName && o.OrderOfExecution == 1).First();
+                newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 1 && o.ProductCode == productID_comboBox_PR.Text).First();
                 db.PartRulesFilters.Remove(newPartRule);
 
                 try
@@ -2515,6 +2600,7 @@ namespace BOM_MANAGER
                 {
                     PartRules.NewMessage().AddText(G_PartName + ": Filter Type 1 not Removed From DataBase. ").IsError().PrependMessageType().Log();
                 }
+                RefreshDataGridView_PartRules();
 
             }
 
@@ -2550,36 +2636,53 @@ namespace BOM_MANAGER
                 String selected_PACAF = Selected_ParameterIndex;
 
                 Int32? selected_FilterDependency;
-                String selected_FilterDependencyName = FilterBehavior_ComboBox2.Text;
                 if (FilterBehavior_ComboBox2.SelectedValue == null)
                 {
                     selected_FilterDependency = null;
-                    selected_FilterDependencyName = null;
                 }
                 else
                 {
                     selected_FilterDependency = Int32.Parse(FilterBehavior_ComboBox2.SelectedValue.ToString());
                 }
 
+                Int32? selected_RenamingExpression;
+                if (RE_comboBox2.SelectedValue == null)
+                {
+                    selected_RenamingExpression = null;
+                }
+                else
+                {
+                    selected_RenamingExpression = Int32.Parse(RE_comboBox2.SelectedValue.ToString());
+                }
+
                 Int32 orderOfExecution = 2;
 
                 Int32? selected_Quantity;
-                String quantityRule = Qty_textBox2.Text;
                 if (Qty_NumericUpDown2.Value == 0)
                 {
                     selected_Quantity = null;
-                    quantityRule = null;
                 }
                 else
                 {
                     selected_Quantity = Int32.Parse(Qty_NumericUpDown2.Value.ToString());
                 }
 
+                Int32? selected_DependableQuantityID;
+                if (DependableQtyPR_comboBoxFilter2.SelectedValue == null)
+                {
+                    selected_DependableQuantityID = null;
+                }
+                else
+                {
+                    selected_DependableQuantityID = Int32.Parse(DependableQtyPR_comboBoxFilter2.SelectedValue.ToString());
+
+                }
+
                 //PartRulesFilter newPartRule;
 
                 if (FilterExists2)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => p.PartName == selected_PartName && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution).First();
                 }
                 else
                 {
@@ -2596,10 +2699,12 @@ namespace BOM_MANAGER
 
                 else
                 {
-                    newPartRule.PartID = partName_Index;
-                    newPartRule.PartName = selected_PartName;
-                    newPartRule.ProductID = selected_ProductIdIndex;
-                    newPartRule.ProductCode = selected_ProductCode;
+                    newPartRule.PartID = part_Index;
+                    //newPartRule.PartName = selected_PartName;
+                    newPartRule.AssemblyID = assembly_Index;
+                    //newPartRule.AssemblyName = selected_AssemblyName;
+                    newPartRule.ProductID = Filter_ProductIdIndex;
+                    newPartRule.ProductCode = Filter_ProductCode;
                     newPartRule.CategoryID = selected_CategoryIndex;
                     newPartRule.CategoryName = selected_Category;
                     newPartRule.ParameterID = Selected_ParameterIndex;
@@ -2607,10 +2712,10 @@ namespace BOM_MANAGER
                     newPartRule.FilterTypeID = selected_FilterType;
                     newPartRule.OrderOfExecution = orderOfExecution;
                     newPartRule.PACAF_ID = selected_PACAF;
-                    newPartRule.FilterDependencyID = selected_FilterDependency;
-                    newPartRule.FilterDependencyName = selected_FilterDependencyName;
+                    newPartRule.FilterBehaviorID = selected_FilterDependency;
+                    newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.QuantityRule = quantityRule;
+                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
 
 
                     try
@@ -2632,9 +2737,7 @@ namespace BOM_MANAGER
 
             else if (FilterType_comboBox2.Text == "NONE" && FilterExists2)
             {
-                eventLog_PR_richTextBox.Clear();
-
-                newPartRule = db.PartRulesFilters.Where(o => o.PartName == selected_PartName && o.OrderOfExecution == 2).First();
+                newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 2 && o.ProductCode == productID_comboBox_PR.Text).First();
                 db.PartRulesFilters.Remove(newPartRule);
 
                 try
@@ -2648,6 +2751,7 @@ namespace BOM_MANAGER
                 {
                     PartRules.NewMessage().AddText(G_PartName + ": Filter Type 2 not Removed From DataBase. ").IsError().PrependMessageType().Log();
                 }
+                RefreshDataGridView_PartRules();
 
             }
 
@@ -2683,36 +2787,53 @@ namespace BOM_MANAGER
                 String selected_PACAF = Selected_ParameterIndex;
 
                 Int32? selected_FilterDependency;
-                String selected_FilterDependencyName = FilterBehavior_ComboBox3.Text;
                 if (FilterBehavior_ComboBox3.SelectedValue == null)
                 {
                     selected_FilterDependency = null;
-                    selected_FilterDependencyName = null;
                 }
                 else
                 {
                     selected_FilterDependency = Int32.Parse(FilterBehavior_ComboBox3.SelectedValue.ToString());
                 }
 
+                Int32? selected_RenamingExpression;
+                if (RE_comboBox3.SelectedValue == null)
+                {
+                    selected_RenamingExpression = null;
+                }
+                else
+                {
+                    selected_RenamingExpression = Int32.Parse(RE_comboBox3.SelectedValue.ToString());
+                }
+
                 Int32 orderOfExecution = 3;
 
                 Int32? selected_Quantity;
-                String quantityRule = Qty_textBox3.Text;
                 if (Qty_NumericUpDown3.Value == 0)
                 {
                     selected_Quantity = null;
-                    quantityRule = null;
                 }
                 else
                 {
                     selected_Quantity = Int32.Parse(Qty_NumericUpDown3.Value.ToString());
                 }
 
+                Int32? selected_DependableQuantityID;
+                if (DependableQtyPR_comboBoxFilter3.SelectedValue == null)
+                {
+                    selected_DependableQuantityID = null;
+                }
+                else
+                {
+                    selected_DependableQuantityID = Int32.Parse(DependableQtyPR_comboBoxFilter3.SelectedValue.ToString());
+
+                }
+
                 //PartRulesFilter newPartRule;
 
                 if (FilterExists3)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => p.PartName == selected_PartName && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution).First();
                 }
                 else
                 {
@@ -2729,10 +2850,12 @@ namespace BOM_MANAGER
 
                 else
                 {
-                    newPartRule.PartID = partName_Index;
-                    newPartRule.PartName = selected_PartName;
-                    newPartRule.ProductID = selected_ProductIdIndex;
-                    newPartRule.ProductCode = selected_ProductCode;
+                    newPartRule.PartID = part_Index;
+                    //newPartRule.PartName = selected_PartName;
+                    newPartRule.AssemblyID = assembly_Index;
+                    //newPartRule.AssemblyName = selected_AssemblyName;
+                    newPartRule.ProductID = Filter_ProductIdIndex;
+                    newPartRule.ProductCode = Filter_ProductCode;
                     newPartRule.CategoryID = selected_CategoryIndex;
                     newPartRule.CategoryName = selected_Category;
                     newPartRule.ParameterID = Selected_ParameterIndex;
@@ -2740,10 +2863,11 @@ namespace BOM_MANAGER
                     newPartRule.FilterTypeID = selected_FilterType;
                     newPartRule.OrderOfExecution = orderOfExecution;
                     newPartRule.PACAF_ID = selected_PACAF;
-                    newPartRule.FilterDependencyID = selected_FilterDependency;
-                    newPartRule.FilterDependencyName = selected_FilterDependencyName;
+                    newPartRule.FilterBehaviorID = selected_FilterDependency;
+                    newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.QuantityRule = quantityRule;
+                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
+
 
                     try
                     {
@@ -2763,9 +2887,7 @@ namespace BOM_MANAGER
 
             else if (FilterType_comboBox3.Text == "NONE" && FilterExists3)
             {
-                eventLog_PR_richTextBox.Clear();
-
-                newPartRule = db.PartRulesFilters.Where(o => o.PartName == selected_PartName && o.OrderOfExecution == 3).First();
+                newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 3 && o.ProductCode == productID_comboBox_PR.Text).First();
                 db.PartRulesFilters.Remove(newPartRule);
 
                 try
@@ -2779,6 +2901,7 @@ namespace BOM_MANAGER
                 {
                     PartRules.NewMessage().AddText(G_PartName + ": Filter Type 3 not Removed From DataBase. ").IsError().PrependMessageType().Log();
                 }
+                RefreshDataGridView_PartRules();
 
             }
 
@@ -2814,36 +2937,54 @@ namespace BOM_MANAGER
                 String selected_PACAF = Selected_ParameterIndex;
 
                 Int32? selected_FilterDependency;
-                String selected_FilterDependencyName = FilterBehavior_ComboBox4.Text;
                 if (FilterBehavior_ComboBox4.SelectedValue == null)
                 {
                     selected_FilterDependency = null;
-                    selected_FilterDependencyName = null;
                 }
                 else
                 {
                     selected_FilterDependency = Int32.Parse(FilterBehavior_ComboBox4.SelectedValue.ToString());
                 }
 
+                Int32? selected_RenamingExpression;
+                if (RE_comboBox4.SelectedValue == null)
+                {
+                    selected_RenamingExpression = null;
+                }
+                else
+                {
+                    selected_RenamingExpression = Int32.Parse(RE_comboBox4.SelectedValue.ToString());
+                }
+
                 Int32 orderOfExecution = 4;
 
                 Int32? selected_Quantity;
-                String quantityRule = Qty_textBox4.Text;
                 if (Qty_NumericUpDown4.Value == 0)
                 {
                     selected_Quantity = null;
-                    quantityRule = null;
                 }
                 else
                 {
                     selected_Quantity = Int32.Parse(Qty_NumericUpDown4.Value.ToString());
                 }
 
+
+                Int32? selected_DependableQuantityID;
+                if (DependableQtyPR_comboBoxFilter4.SelectedValue == null)
+                {
+                    selected_DependableQuantityID = null;
+                }
+                else
+                {
+                    selected_DependableQuantityID = Int32.Parse(DependableQtyPR_comboBoxFilter4.SelectedValue.ToString());
+
+                }
+
                 //PartRulesFilter newPartRule;
 
                 if (FilterExists4)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => p.PartName == selected_PartName && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution).First();
                 }
                 else
                 {
@@ -2860,10 +3001,12 @@ namespace BOM_MANAGER
 
                 else
                 {
-                    newPartRule.PartID = partName_Index;
-                    newPartRule.PartName = selected_PartName;
-                    newPartRule.ProductID = selected_ProductIdIndex;
-                    newPartRule.ProductCode = selected_ProductCode;
+                    newPartRule.PartID = part_Index;
+                    //newPartRule.PartName = selected_PartName;
+                    newPartRule.AssemblyID = assembly_Index;
+                    //newPartRule.AssemblyName = selected_AssemblyName;
+                    newPartRule.ProductID = Filter_ProductIdIndex;
+                    newPartRule.ProductCode = Filter_ProductCode;
                     newPartRule.CategoryID = selected_CategoryIndex;
                     newPartRule.CategoryName = selected_Category;
                     newPartRule.ParameterID = Selected_ParameterIndex;
@@ -2871,21 +3014,21 @@ namespace BOM_MANAGER
                     newPartRule.FilterTypeID = selected_FilterType;
                     newPartRule.OrderOfExecution = orderOfExecution;
                     newPartRule.PACAF_ID = selected_PACAF;
-                    newPartRule.FilterDependencyID = selected_FilterDependency;
-                    newPartRule.FilterDependencyName = selected_FilterDependencyName;
+                    newPartRule.FilterBehaviorID = selected_FilterDependency;
+                    newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.QuantityRule = quantityRule;
+                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
 
 
                     try
                     {
                         db.SaveChanges();
-                        PartRules.NewMessage().AddText(G_PartName + ": Filter Type 1 Added/Edited to Part Filter Table.").PrependMessageType().Log();
+                        PartRules.NewMessage().AddText(G_PartName + ": Filter Type 4 Added/Edited to Part Filter Table.").PrependMessageType().Log();
 
                     }
                     catch
                     {
-                        PartRules.NewMessage().AddText(G_PartName + ": Filter Type 1 not Added/Edited to Part Filter Table.").IsError().PrependMessageType().Log();
+                        PartRules.NewMessage().AddText(G_PartName + ": Filter Type 4 not Added/Edited to Part Filter Table.").IsError().PrependMessageType().Log();
                     }
 
                     RefreshDataGridView_PartRules();
@@ -2896,9 +3039,7 @@ namespace BOM_MANAGER
 
             else if (FilterType_comboBox4.Text == "NONE" && FilterExists4)
             {
-                eventLog_PR_richTextBox.Clear();
-
-                newPartRule = db.PartRulesFilters.Where(o => o.PartName == selected_PartName && o.OrderOfExecution == 4).First();
+                newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == 4 && o.ProductCode == productID_comboBox_PR.Text).First();
                 db.PartRulesFilters.Remove(newPartRule);
 
                 try
@@ -2912,6 +3053,7 @@ namespace BOM_MANAGER
                 {
                     PartRules.NewMessage().AddText(G_PartName + ": Filter Type 4 not Removed From DataBase. ").IsError().PrependMessageType().Log();
                 }
+                RefreshDataGridView_PartRules();
 
             }
 
@@ -2949,9 +3091,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter1.Enabled = false;
             ParameterPR_ListView1.Enabled = false;
             FilterBehavior_ComboBox1.Enabled = false;
-            Qty_textBox1.Enabled = false;
             Qty_NumericUpDown1.Enabled = false;
-
+            DependableQtyPR_comboBoxFilter1.Enabled = false;
+            RE_comboBox1.Enabled = false;
         }
 
         private void Disable_Filter2()
@@ -2960,9 +3102,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter2.Enabled = false;
             ParameterPR_ListView2.Enabled = false;
             FilterBehavior_ComboBox2.Enabled = false;
-            Qty_textBox2.Enabled = false;
             Qty_NumericUpDown2.Enabled = false;
-
+            DependableQtyPR_comboBoxFilter2.Enabled = false;
+            RE_comboBox2.Enabled = false;
         }
 
         private void Disable_Filter3()
@@ -2971,9 +3113,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter3.Enabled = false;
             ParameterPR_ListView3.Enabled = false;
             FilterBehavior_ComboBox3.Enabled = false;
-            Qty_textBox3.Enabled = false;
             Qty_NumericUpDown3.Enabled = false;
-
+            DependableQtyPR_comboBoxFilter3.Enabled = false;
+            RE_comboBox3.Enabled = false;
         }
 
         private void Disable_Filter4()
@@ -2982,9 +3124,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter4.Enabled = false;
             ParameterPR_ListView4.Enabled = false;
             FilterBehavior_ComboBox4.Enabled = false;
-            Qty_textBox4.Enabled = false;
             Qty_NumericUpDown4.Enabled = false;
-
+            DependableQtyPR_comboBoxFilter4.Enabled = false;
+            RE_comboBox4.Enabled = false;
         }
 
         private void Enable_Filter1()
@@ -2993,8 +3135,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter1.Enabled = true;
             ParameterPR_ListView1.Enabled = true;
             FilterBehavior_ComboBox1.Enabled = true;
-            Qty_textBox1.Enabled = true;
             Qty_NumericUpDown1.Enabled = true;
+            DependableQtyPR_comboBoxFilter1.Enabled = true;
+            RE_comboBox1.Enabled = true;
         }
 
         private void Enable_Filter2()
@@ -3003,8 +3146,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter2.Enabled = true;
             ParameterPR_ListView2.Enabled = true;
             FilterBehavior_ComboBox2.Enabled = true;
-            Qty_textBox2.Enabled = true;
             Qty_NumericUpDown2.Enabled = true;
+            DependableQtyPR_comboBoxFilter2.Enabled = true;
+            RE_comboBox2.Enabled = true;
         }
 
         private void Enable_Filter3()
@@ -3013,8 +3157,9 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter3.Enabled = true;
             ParameterPR_ListView3.Enabled = true;
             FilterBehavior_ComboBox3.Enabled = true;
-            Qty_textBox3.Enabled = true;
             Qty_NumericUpDown3.Enabled = true;
+            DependableQtyPR_comboBoxFilter3.Enabled = true;
+            RE_comboBox3.Enabled = true;
         }
 
         private void Enable_Filter4()
@@ -3023,11 +3168,479 @@ namespace BOM_MANAGER
             CategoryPR_comboBoxFilter4.Enabled = true;
             ParameterPR_ListView4.Enabled = true;
             FilterBehavior_ComboBox4.Enabled = true;
-            Qty_textBox4.Enabled = true;
             Qty_NumericUpDown4.Enabled = true;
+            DependableQtyPR_comboBoxFilter4.Enabled = true;
+            RE_comboBox4.Enabled = true;
         }
 
 
+
+        //Rules Interface Visibility
+        private void Filter1_Visibility()
+        {
+            if (FilterType_comboBox1.Text == "NONE")
+            {
+
+                FILTER1_TableLayoutPanel.Visible = false;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "PACAF")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 256;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = true;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "QUANTITY")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 72;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = true;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox1.Text == "JOINER QTY")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "JOINER")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "ENDCAP QTY")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 41;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = true;
+                RE_TableLayOut1.Visible = false;
+            }
+
+            else if (FilterType_comboBox1.Text == "RENAMINGEXPRESSION")
+            {
+                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER1_TableLayoutPanel.RowStyles[3].Height = 41;
+
+                FILTER1_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut1.Visible = false;
+                Qty_TableLayOut1.Visible = false;
+                EX_TableLayOut1.Visible = false;
+                RE_TableLayOut1.Visible = true;
+            }
+
+        }
+
+        private void Filter2_Visibility()
+        {
+            if (FilterType_comboBox2.Text == "NONE")
+            {
+                FILTER2_TableLayoutPanel.Visible = false;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "PACAF")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 256;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = true;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "QUANTITY")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 72;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = true;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "JOINER QTY")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "JOINER")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "ENDCAP QTY")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 41;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = true;
+                RE_TableLayOut2.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox2.Text == "RENAMINGEXPRESSION")
+            {
+                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER2_TableLayoutPanel.RowStyles[3].Height = 41;
+
+                FILTER2_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut2.Visible = false;
+                Qty_TableLayOut2.Visible = false;
+                EX_TableLayOut2.Visible = false;
+                RE_TableLayOut2.Visible = true;
+            }
+        }
+
+        private void Filter3_Visibility()
+        {
+            if (FilterType_comboBox3.Text == "NONE")
+            {
+                FILTER3_TableLayoutPanel.Visible = false;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "PACAF")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 256;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = true;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "QUANTITY")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 72;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = true;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "JOINER QTY")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "JOINER")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "ENDCAP QTY")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 41;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = true;
+                RE_TableLayOut3.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox3.Text == "RENAMINGEXPRESSION")
+            {
+                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER3_TableLayoutPanel.RowStyles[3].Height = 41;
+
+                FILTER3_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut3.Visible = false;
+                Qty_TableLayOut3.Visible = false;
+                EX_TableLayOut3.Visible = false;
+                RE_TableLayOut3.Visible = true;
+            }
+        }
+
+        private void Filter4_Visibility()
+        {
+            if (FilterType_comboBox4.Text == "NONE")
+            {
+                FILTER4_TableLayoutPanel.Visible = false;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "PACAF")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 256;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = true;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "QUANTITY")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 72;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = true;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "JOINER QTY")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "JOINER")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "ENDCAP QTY")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 41;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = true;
+                RE_TableLayOut4.Visible = false;
+
+            }
+
+            else if (FilterType_comboBox4.Text == "RENAMINGEXPRESSION")
+            {
+                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+                FILTER4_TableLayoutPanel.RowStyles[3].Height = 41;
+
+                FILTER4_TableLayoutPanel.Visible = true;
+                PACAF_TableLayOut4.Visible = false;
+                Qty_TableLayOut4.Visible = false;
+                EX_TableLayOut4.Visible = false;
+                RE_TableLayOut4.Visible = true;
+            }
+        }
+
+       
 
         /****************************************************************************************************************************************************************/
         /*                                                                                                                                                              */
@@ -3051,68 +3664,77 @@ namespace BOM_MANAGER
         {
             Log2_RichTextBox.Clear();
 
-            NewBOM = new _BOM(_FixtureSetupCode, db);
-            //NewBOM.ProductTemplate(NonApplicablePartSummary);
-            // _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
-            NewBOM.FixtureConfiguration.ConfigureClientRequest();
-            NewBOM.FixtureConfiguration.ConfigureSections();
-            NewBOM.FixtureConfiguration.ConfigureCoverElements();
+            _FixtureConfiguration FixtureConfiguration = new _FixtureConfiguration(FixtureSetupCode_TextBox.Text, FixtureConfigurtorDBConn);
 
-            NewBOM.FixtureConfiguration.CustomerRequest.Template.SummarizeIntoRTB(NonApplicablePartSummary);
+            FixtureConfiguration.CustomerRequest.Template.SummarizeIntoRTB(Template);
 
-            Log2_RichTextBox.SelectionStart = 0;
-            Log2_RichTextBox.ScrollToCaret();
+            Template.MoveCursorToStart();
+
         }
 
         private void Match_Summary_Button_Click(object sender, EventArgs e)
         {
             Log2_RichTextBox.Clear();
-            _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
-            NewFixture.ConfigureClientRequest();
-            NewFixture.ConfigureSections();
-            NewFixture.ConfigureCoverElements();
+            
+            _FixtureConfiguration NewFixture = new _FixtureConfiguration(FixtureSetupCode_TextBox.Text, FixtureConfigurtorDBConn);
+            
 
-            NewFixture.CustomerRequest.Template.SummarizeMatchesIntoRTB(NonApplicablePartSummary);
+            NewFixture.CustomerRequest.Template.SummarizeMatchesIntoRTB(MatchSummary);
 
-            Log2_RichTextBox.SelectionStart = 0;
-            Log2_RichTextBox.ScrollToCaret();
+            MatchSummary.MoveCursorToStart();
+
 
         }
 
         private void Solve_Mechanical_Button_Click(object sender, EventArgs e)
         {
             Log2_RichTextBox.Clear();
-            _FixtureConfiguration NewFixture = new _FixtureConfiguration(_FixtureSetupCode);
-            NewFixture.ConfigureClientRequest();
-            NewFixture.ConfigureSections();
-            NewFixture.ConfigureCoverElements();
+            _FixtureConfiguration NewFixture = new _FixtureConfiguration(FixtureSetupCode_TextBox.Text, FixtureConfigurtorDBConn);
+            
+            NewFixture.Sections.SummarizeMechanicalIntoRTB(SolveMechanical);
 
-            NewFixture.Sections.SummarizeMechanicalIntoRTB(NonApplicablePartSummary);
+            SolveMechanical.MoveCursorToStart();
 
-            Log2_RichTextBox.SelectionStart = 0;
-            Log2_RichTextBox.ScrollToCaret();
         }
 
-
-        private void GetPart_Button_Click(object sender, EventArgs e)
+        private void FixtureSetupCode_TextBox_TextChanged(object sender, EventArgs e)
         {
 
-            Log_RichTextBox.Clear();
-            Log2_RichTextBox.Clear();
-            NewBOM = new _BOM(_FixtureSetupCode, db);
-
-            ApplicableParts.NewMessage().SetSpaceAfter(0).AddBoldText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).Log();
-
-            NewBOM.SummarizeBOMInToRTB(ApplicableParts, NonApplicablePartSummary);
-
-            Log_RichTextBox.SelectionStart = 0;
-            Log_RichTextBox.ScrollToCaret();
-
-            Log2_RichTextBox.SelectionStart = 0;
-            Log2_RichTextBox.ScrollToCaret();
-;
+            RefreshTreeView();
         }
 
+        private void GetIndentedBOM_Button_Click(object sender, EventArgs e)
+        {
+            Log_RichTextBox.Clear();
+            Log2_RichTextBox.Clear();
+            NewBOM = new _BOM(FixtureSetupCode_TextBox.Text, db);
+
+            ApplicableParts.NewMessage().SetSpaceAfter(0).AddBoldText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).NewLine().Log();
+
+            NewBOM.SummarizeExistingComponentInToRTB_IN(ApplicableParts);
+            NewBOM.SummarizeNonExistingComponentIntoRTB(NonApplicablePartSummary);
+
+            ApplicableParts.MoveCursorToStart();
+            NonApplicablePartSummary.MoveCursorToStart();
+        }
+
+        private void GetFlatBOM_Button_Click(object sender, EventArgs e)
+        {
+            Log_RichTextBox.Clear();
+            Log2_RichTextBox.Clear();
+            NewBOM = new _BOM(FixtureSetupCode_TextBox.Text, db);
+
+            ApplicableParts.NewMessage().SetSpaceAfter(0).AddBoldText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).NewLine().Log();
+
+
+            NewBOM.FlatBOMList();
+            NewBOM.SummarizeExistingComponentIntoRTB_FB(ApplicableParts);
+            NewBOM.SummarizeNonExistingComponentIntoRTB(NonApplicablePartSummary);
+
+
+            ApplicableParts.MoveCursorToStart();
+            NonApplicablePartSummary.MoveCursorToStart();
+        }
     }
 }
 

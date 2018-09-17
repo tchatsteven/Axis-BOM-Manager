@@ -133,8 +133,8 @@ namespace BOM_MANAGER
                 newPartRule.ParameterName = ParameterName_comboBox.Text;
                 newPartRule.ParameterID = ParameterName_comboBox.SelectedValue.ToString();
 
-                newPartRule.FilterDependencyID = Int32.Parse(FilterRuleEdit_comboBox.SelectedValue.ToString());
-                newPartRule.FilterDependencyName = FilterRuleEdit_comboBox.Text;
+                newPartRule.FilterBehaviorID = Int32.Parse(FilterRuleEdit_comboBox.SelectedValue.ToString());
+                //newPartRule.RenamingExpressionID = Int32.Parse(RE_comboBox.SelectedValue.ToString());
 
                 newPartRule.PACAF_ID = PACAF_textBox.Text;
 

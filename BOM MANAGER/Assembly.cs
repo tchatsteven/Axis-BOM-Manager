@@ -17,18 +17,24 @@ namespace BOM_MANAGER
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Assembly()
         {
-            this.AssemblyAtAssembliesToAssembly = new HashSet<AssemblyAtAssembly>();
-            this.AssemblyAtAssembliesToParent = new HashSet<AssemblyAtAssembly>();
+            this.ParentAssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
+            this.AssemblyAtAssemblies = new HashSet<AssemblyAtAssembly>();
+            this.PartAtAssemblies = new HashSet<PartAtAssembly>();
+            this.PartRulesFilters = new HashSet<PartRulesFilter>();
         }
     
         public int id { get; set; }
         public string Name { get; set; }
         public Nullable<int> AssemblyTypeID { get; set; }
     
-        public virtual AssemblyType AssemblyType { get; set; }
+        public virtual AvailableAssemblyType AvailableAssemblyType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssembliesToAssembly { get; set; }
+        public virtual ICollection<AssemblyAtAssembly> ParentAssemblyAtAssemblies { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssembliesToParent { get; set; }
+        public virtual ICollection<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PartAtAssembly> PartAtAssemblies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PartRulesFilter> PartRulesFilters { get; set; }
     }
 }

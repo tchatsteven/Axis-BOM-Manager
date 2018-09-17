@@ -14,27 +14,20 @@ namespace BOM_MANAGER
     
     public partial class BOM
     {
-        public int AssyAtAssembly_ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public int AssemblyID { get; set; }
-        public int FixtureID { get; set; }
-        public Nullable<int> PartAtAssembly_ID { get; set; }
-        public Nullable<int> PartRefID { get; set; }
-        public Nullable<int> AssRefID { get; set; }
-        public Nullable<int> FixRefID { get; set; }
-        public Nullable<int> id { get; set; }
-        public string Name { get; set; }
+        public int AssembliesID { get; set; }
+        public string AssemblyName { get; set; }
         public Nullable<int> AssemblyTypeID { get; set; }
-        public Nullable<int> AssyType_ID { get; set; }
-        public string AssemblyType { get; set; }
-        public Nullable<int> Parts_ID { get; set; }
+        public Nullable<int> PartAtAssemblyID { get; set; }
+        public Nullable<int> PartID { get; set; }
+        public Nullable<int> AssemblyID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<int> AssyTypeID { get; set; }
+        public string AssemblyTypeName { get; set; }
+        public Nullable<int> PartsID { get; set; }
         public string PartName { get; set; }
         public Nullable<int> TypeID { get; set; }
         public string Description { get; set; }
-        public Nullable<int> PartsType_ID { get; set; }
-        public string PartType { get; set; }
-        public Nullable<int> Fixtures_ID { get; set; }
-        public string Code { get; set; }
-        public Nullable<int> FixFamilyID { get; set; }
+        public Nullable<int> PartsTypeID { get; set; }
+        public string PartTypeName { get; set; }
     }
 }

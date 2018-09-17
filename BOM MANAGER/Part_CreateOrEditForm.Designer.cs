@@ -44,8 +44,6 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.CancelButton = new System.Windows.Forms.Button();
             this.OKButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.FixFamily_ComboBox = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -128,9 +126,7 @@
             this.tableLayoutPanel3.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.PartNameDescriptionTextBox, 1, 2);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 2, 3);
-            this.tableLayoutPanel3.Controls.Add(this.label5, 0, 3);
-            this.tableLayoutPanel3.Controls.Add(this.FixFamily_ComboBox, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel5, 2, 2);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 4;
@@ -269,12 +265,12 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.Controls.Add(this.CancelButton, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.OKButton, 0, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(248, 81);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(248, 54);
             this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(249, 29);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(249, 27);
             this.tableLayoutPanel5.TabIndex = 0;
             // 
             // CancelButton
@@ -285,7 +281,7 @@
             this.CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelButton.Location = new System.Drawing.Point(127, 3);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(119, 23);
+            this.CancelButton.Size = new System.Drawing.Size(119, 21);
             this.CancelButton.TabIndex = 1;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
@@ -298,38 +294,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.OKButton.Location = new System.Drawing.Point(3, 3);
             this.OKButton.Name = "OKButton";
-            this.OKButton.Size = new System.Drawing.Size(118, 23);
+            this.OKButton.Size = new System.Drawing.Size(118, 21);
             this.OKButton.TabIndex = 0;
             this.OKButton.Text = "OK";
             this.OKButton.UseVisualStyleBackColor = true;
             this.OKButton.Click += new System.EventHandler(this.OKButton_Click);
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label5.Location = new System.Drawing.Point(5, 86);
-            this.label5.Margin = new System.Windows.Forms.Padding(5);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 19);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Fixture Family: ";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // FixFamily_ComboBox
-            // 
-            this.FixFamily_ComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.FixFamily_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.FixFamily_ComboBox.FormattingEnabled = true;
-            this.FixFamily_ComboBox.Location = new System.Drawing.Point(102, 84);
-            this.FixFamily_ComboBox.Name = "FixFamily_ComboBox";
-            this.FixFamily_ComboBox.Size = new System.Drawing.Size(143, 21);
-            this.FixFamily_ComboBox.TabIndex = 9;
             // 
             // tableLayoutPanel4
             // 
@@ -436,7 +405,5 @@
         private System.Windows.Forms.Button NewPartTypeButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox PartNameDescriptionTextBox;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox FixFamily_ComboBox;
     }
 }

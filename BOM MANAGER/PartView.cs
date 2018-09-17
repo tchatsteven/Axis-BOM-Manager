@@ -15,26 +15,15 @@ namespace BOM_MANAGER
     public partial class PartView
     {
         public int id { get; set; }
-        public int PartRefID { get; set; }
-        public int AssRefID { get; set; }
-        public int FixtureID { get; set; }
-        public Nullable<int> AssyAtassmbly_ID { get; set; }
-        public Nullable<int> ParentID { get; set; }
-        public Nullable<int> AssemblyID { get; set; }
-        public Nullable<int> FixtureCodeID { get; set; }
-        public Nullable<int> Assembly_ID { get; set; }
-        public string Name { get; set; }
+        public int PartID { get; set; }
+        public int AssemblyID { get; set; }
+        public string ProductCode { get; set; }
         public Nullable<int> AssemblyTypeID { get; set; }
-        public Nullable<int> AssyType_ID { get; set; }
-        public string AssemblyType { get; set; }
-        public Nullable<int> Parts_ID { get; set; }
+        public string AssemblyTypeName { get; set; }
+        public Nullable<int> PartsID { get; set; }
         public string PartName { get; set; }
-        public Nullable<int> TypeID { get; set; }
         public string Description { get; set; }
-        public Nullable<int> PartTypes_ID { get; set; }
-        public string PartType { get; set; }
-        public Nullable<int> Fixture_ID { get; set; }
-        public string Code { get; set; }
-        public Nullable<int> FixFamilyID { get; set; }
+        public Nullable<int> PartTypeID { get; set; }
+        public string PartTypeName { get; set; }
     }
 }

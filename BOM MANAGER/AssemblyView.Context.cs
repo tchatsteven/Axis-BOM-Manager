@@ -25,28 +25,29 @@ namespace BOM_MANAGER
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
-        public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
-        public virtual DbSet<BOM> BOMs { get; set; }
-        public virtual DbSet<PartTypeAtPart> PartTypeAtParts { get; set; }
-        public virtual DbSet<PartView> PartViews { get; set; }
         public virtual DbSet<CategoryAtFixture> CategoryAtFixtures { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ParameterAtCategoryAtFixture> ParameterAtCategoryAtFixtures { get; set; }
         public virtual DbSet<FixtureApplicationType> FixtureApplicationTypes { get; set; }
         public virtual DbSet<FixtureDirectionality> FixtureDirectionalities { get; set; }
-        public virtual DbSet<Fixture> Fixtures { get; set; }
         public virtual DbSet<FilterBehavior> FilterBehaviors { get; set; }
         public virtual DbSet<FilterType> FilterTypes { get; set; }
         public virtual DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<ProductTemplate> ProductTemplates { get; set; }
-        public virtual DbSet<PartRulesFilter> PartRulesFilters { get; set; }
+        public virtual DbSet<DependableQuantity> DependableQuantities { get; set; }
+        public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
+        public virtual DbSet<PartTypeAtPart> PartTypeAtParts { get; set; }
+        public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
+        public virtual DbSet<BOM> BOMs { get; set; }
+        public virtual DbSet<PartView> PartViews { get; set; }
         public virtual DbSet<Assembly> Assemblies { get; set; }
         public virtual DbSet<AssemblyAtAssembly> AssemblyAtAssemblies { get; set; }
-        public virtual DbSet<AssemblyType> AssemblyTypes { get; set; }
-        public virtual DbSet<FamilyName> FamilyNames { get; set; }
+        public virtual DbSet<AvailableAssemblyType> AvailableAssemblyTypes { get; set; }
+        public virtual DbSet<AvailablePartType> AvailablePartTypes { get; set; }
         public virtual DbSet<PartAtAssembly> PartAtAssemblies { get; set; }
-        public virtual DbSet<PartType> PartTypes { get; set; }
+        public virtual DbSet<Fixture> Fixtures { get; set; }
         public virtual DbSet<Part> Parts { get; set; }
+        public virtual DbSet<PartRulesFilter> PartRulesFilters { get; set; }
+        public virtual DbSet<RenamingExpression> RenamingExpressions { get; set; }
     }
 }

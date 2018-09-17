@@ -22,13 +22,13 @@ namespace BOM_MANAGER
         private void OKButton_Click(object sender, EventArgs e)
         {
             NewAssemblyTypeTextBox.CharacterCasing = CharacterCasing.Upper;
-            AssemblyType NewAssemblyType = new AssemblyType()
-            {                
-                AssemblyType1 = NewAssemblyTypeTextBox.Text
+            AvailableAssemblyType NewAssemblyType = new AvailableAssemblyType()
+            {
+                Name = NewAssemblyTypeTextBox.Text
 
             };
 
-            db.AssemblyTypes.Add(NewAssemblyType);
+            db.AvailableAssemblyTypes.Add(NewAssemblyType);
             db.SaveChanges();
             DialogResult = DialogResult.OK;
             Close();
@@ -55,7 +55,24 @@ namespace BOM_MANAGER
 
         private Boolean AssemblyNameFieldIsEmpty
         {
-            get { return NewAssemblyTypeTextBox.Text == String.Empty; }
+            get
+            {
+                if (NewAssemblyTypeTextBox.Text == String.Empty)
+                {
+                    return true;
+
+                }
+                else if (db.AvailableAssemblyTypes.Any(o=> o.Name == NewAssemblyTypeTextBox.Text))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+    
+
         }         
 
         private void NewAssemblyTypeTextBox_KeyUp(object sender, KeyEventArgs e)

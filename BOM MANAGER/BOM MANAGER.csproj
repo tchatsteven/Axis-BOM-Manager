@@ -36,8 +36,13 @@
     <OutputPath>bin\Debug 1.0\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AXISAutomation">
-      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.1\AXISAutomation.dll</HintPath>
+    <Reference Include="AXISAutomation, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.10\AXISAutomation.dll</HintPath>
+    </Reference>
+    <Reference Include="DBConnection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.10\DBConnection.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\BOM Data Manager\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -65,21 +70,48 @@
     <Compile Include="Assembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyView1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="_Assembly.cs" />
     <Compile Include="AssemblyAtAssembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyType.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="AssemblyTypeAtAssembly.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
+    <Compile Include="AssemblyView1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AvailableAssemblyType.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AvailablePartType.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BOM.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DependableQuantity.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fixture.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Part.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartAtAssembly.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartTypeAtPart.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PartView.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RenamingExpression.cs">
+      <DependentUpon>AssemblyView.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\BOM Solver\_Assembly.cs" />
     <Compile Include="AssemblyTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,25 +143,16 @@
     <Compile Include="Assembly_CreatOrEditForm.Designer.cs">
       <DependentUpon>Assembly_CreatOrEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BOM.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="Category.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="CategoryAtFixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="FamilyName.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="FilterBehavior.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="FilterType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Fixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="FixtureApplicationType.cs">
@@ -144,19 +167,7 @@
     <Compile Include="ParameterAtCategoryAtFixture.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
-    <Compile Include="Part.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartAtAssembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="PartRulesFilter.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartTypeAtPart.cs">
       <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="PartTypeForm.cs">
@@ -164,9 +175,6 @@
     </Compile>
     <Compile Include="PartTypeForm.Designer.cs">
       <DependentUpon>PartTypeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PartView.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
     </Compile>
     <Compile Include="Part_CreateOrEditForm.cs">
       <SubType>Form</SubType>
@@ -179,16 +187,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\BOM Solver\_FlatBOM.cs" />
     <Compile Include="Rules_EditForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Rules_EditForm.Designer.cs">
       <DependentUpon>Rules_EditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="_BOM.cs" />
-    <Compile Include="_BOMSection.cs" />
-    <Compile Include="_Filter.cs" />
-    <Compile Include="_Part.cs" />
+    <Compile Include="Resources\BOM Solver\_BOM.cs" />
+    <Compile Include="Resources\BOM Solver\_BOMSection.cs" />
+    <Compile Include="Resources\BOM Solver\_Filter.cs" />
+    <Compile Include="Resources\BOM Solver\_Part.cs" />
     <EmbeddedResource Include="AssemblyTypeForm.resx">
       <DependentUpon>AssemblyTypeForm.cs</DependentUpon>
     </EmbeddedResource>

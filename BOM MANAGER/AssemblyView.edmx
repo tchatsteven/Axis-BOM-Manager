@@ -19,36 +19,12 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Direction" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <EntityType Name="Assembly">
+        <EntityType Name="DependableQuantity">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="AssemblyTypeID" Type="int" />
-        </EntityType>
-        <EntityType Name="AssemblyAtAssembly">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ParentID" Type="int" />
-          <Property Name="AssemblyID" Type="int" Nullable="false" />
-          <Property Name="FixtureID" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="AssemblyType">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="FamilyName">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FamilyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DependableQuantityName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="FilterBehavior">
           <Key>
@@ -64,22 +40,13 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FilterTypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <EntityType Name="PartAtAssembly">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartRefID" Type="int" Nullable="false" />
-          <Property Name="AssRefID" Type="int" Nullable="false" />
-          <Property Name="FixtureID" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="PartRulesFilter">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartID" Type="int" Nullable="false" />
-          <Property Name="PartName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="AssemblyID" Type="int" />
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="ProductCode" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="CategoryID" Type="int" />
@@ -89,17 +56,17 @@
           <Property Name="FilterTypeID" Type="int" Nullable="false" />
           <Property Name="OrderOfExecution" Type="int" Nullable="false" />
           <Property Name="PACAF_ID" Type="nvarchar" MaxLength="700" />
-          <Property Name="FilterDependencyID" Type="int" />
-          <Property Name="FilterDependencyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FilterBehaviorID" Type="int" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="QuantityRule" Type="nvarchar" MaxLength="100" />
+          <Property Name="DependableQuantityID" Type="int" />
+          <Property Name="RenamingExpressionID" Type="int" />
         </EntityType>
-        <EntityType Name="PartTypes">
+        <EntityType Name="RenamingExpression">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ExpressionName" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
@@ -161,129 +128,54 @@
           <Property Name="Description" Type="nvarchar" MaxLength="75" />
           <Property Name="Footnote" Type="nvarchar" MaxLength="250" Nullable="false" />
         </EntityType>
+        <EntityType Name="Assemblies">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssemblyTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="AssemblyAtAssembly">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="AssemblyID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AvailableAssemblyTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AvailablePartTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartAtAssembly">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="AssemblyID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Parts">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PartName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="TypeID" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="200" />
-          <Property Name="FixFamilyID" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.AssemblyTypeAtAssembly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AssemblyTypeAtAssembly">
-          <Key>
-            <PropertyRef Name="Assembly_ID" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Assembly_ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="AssemblyTypeID" Type="int" />
-          <Property Name="AssemblyType_ID" Type="int" />
-          <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.AssemblyView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AssemblyView">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="AssemblyID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="ParentID" Type="int" />
-          <Property Name="AssemblyID" Type="int" Nullable="false" />
-          <Property Name="FixtureID" Type="int" Nullable="false" />
-          <Property Name="Fixture_ID" Type="int" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" />
-          <Property Name="Assembly_ID" Type="int" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="AssemblyTypeID" Type="int" />
-          <Property Name="AssemblyType_ID" Type="int" />
-          <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.BOM' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="BOM">
-          <Key>
-            <PropertyRef Name="AssyAtAssembly_ID" />
-            <PropertyRef Name="AssemblyID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="AssyAtAssembly_ID" Type="int" Nullable="false" />
-          <Property Name="ParentID" Type="int" />
-          <Property Name="AssemblyID" Type="int" Nullable="false" />
-          <Property Name="FixtureID" Type="int" Nullable="false" />
-          <Property Name="PartAtAssembly_ID" Type="int" />
-          <Property Name="PartRefID" Type="int" />
-          <Property Name="AssRefID" Type="int" />
-          <Property Name="FixRefID" Type="int" />
-          <Property Name="id" Type="int" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="AssemblyTypeID" Type="int" />
-          <Property Name="AssyType_ID" Type="int" />
-          <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Parts_ID" Type="int" />
-          <Property Name="PartName" Type="nvarchar" MaxLength="50" />
-          <Property Name="TypeID" Type="int" />
-          <Property Name="Description" Type="nvarchar" MaxLength="200" />
-          <Property Name="PartsType_ID" Type="int" />
-          <Property Name="PartType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Fixtures_ID" Type="int" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" />
-          <Property Name="FixFamilyID" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.PartTypeAtPart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="PartTypeAtPart">
-          <Key>
-            <PropertyRef Name="Part_ID" />
-            <PropertyRef Name="PartName" />
-          </Key>
-          <Property Name="Part_ID" Type="int" Nullable="false" />
-          <Property Name="PartName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="TypeID" Type="int" />
-          <Property Name="PartType_ID" Type="int" />
-          <Property Name="PartType" Type="nvarchar" MaxLength="50" />
-          <Property Name="FixFamilyID" Type="int" />
-          <Property Name="Description" Type="nvarchar" MaxLength="200" />
-          <Property Name="FamilyName_ID" Type="int" />
-          <Property Name="FamilyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="FixtureFamilyId" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AXIS Automation.bom.PartView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="PartView">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="PartRefID" />
-            <PropertyRef Name="AssRefID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="PartRefID" Type="int" Nullable="false" />
-          <Property Name="AssRefID" Type="int" Nullable="false" />
-          <Property Name="FixtureID" Type="int" Nullable="false" />
-          <Property Name="AssyAtassmbly_ID" Type="int" />
-          <Property Name="ParentID" Type="int" />
-          <Property Name="AssemblyID" Type="int" />
-          <Property Name="FixtureCodeID" Type="int" />
-          <Property Name="Assembly_ID" Type="int" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="AssemblyTypeID" Type="int" />
-          <Property Name="AssyType_ID" Type="int" />
-          <Property Name="AssemblyType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Parts_ID" Type="int" />
-          <Property Name="PartName" Type="nvarchar" MaxLength="50" />
-          <Property Name="TypeID" Type="int" />
-          <Property Name="Description" Type="nvarchar" MaxLength="200" />
-          <Property Name="PartTypes_ID" Type="int" />
-          <Property Name="PartType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Fixture_ID" Type="int" />
-          <Property Name="Code" Type="nvarchar" MaxLength="50" />
-          <Property Name="FixFamilyID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -331,55 +223,123 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <Property Name="RVO_ValueReAssemblyString" Type="nvarchar" MaxLength="50" />
           <Property Name="ParameterDescriptionOverride" Type="nvarchar" MaxLength="75" />
         </EntityType>
-        <Association Name="FK_Assembly_AssemblyType">
-          <End Role="AssemblyType" Type="Self.AssemblyType" Multiplicity="0..1" />
-          <End Role="Assembly" Type="Self.Assembly" Multiplicity="*" />
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.Materials.AssemblyTypeAtAssembly' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AssemblyTypeAtAssembly">
+          <Key>
+            <PropertyRef Name="AssemblyID" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="AssemblyID" Type="int" Nullable="false" />
+          <Property Name="AssemblyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssemblyTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.Materials.AssemblyView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AssemblyView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="AssemblyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssemblyTypeID" Type="int" />
+          <Property Name="AssemblyTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssyAtAssyID" Type="int" />
+          <Property Name="ParentIDAtAssyAtAssy" Type="int" />
+          <Property Name="AssemblyIDAtAssyAtAssy" Type="int" />
+          <Property Name="Quantity" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.Materials.BOM' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BOM">
+          <Key>
+            <PropertyRef Name="AssembliesID" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="AssembliesID" Type="int" Nullable="false" />
+          <Property Name="AssemblyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AssemblyTypeID" Type="int" />
+          <Property Name="PartAtAssemblyID" Type="int" />
+          <Property Name="PartID" Type="int" />
+          <Property Name="AssemblyID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="AssyTypeID" Type="int" />
+          <Property Name="AssemblyTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PartsID" Type="int" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="100" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="PartsTypeID" Type="int" />
+          <Property Name="PartTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.Materials.PartTypeAtPart' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PartTypeAtPart">
+          <Key>
+            <PropertyRef Name="PartID" />
+            <PropertyRef Name="PartName" />
+          </Key>
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PartTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="PartType_ID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'AXIS Automation.Materials.PartView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PartView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="PartID" />
+            <PropertyRef Name="AssemblyID" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="PartID" Type="int" Nullable="false" />
+          <Property Name="AssemblyID" Type="int" Nullable="false" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssemblyTypeID" Type="int" />
+          <Property Name="AssemblyTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PartsID" Type="int" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="PartTypeID" Type="int" />
+          <Property Name="PartTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Assemblies_AvailableAssemblyTypes">
+          <End Role="AvailableAssemblyTypes" Type="Self.AvailableAssemblyTypes" Multiplicity="0..1" />
+          <End Role="Assemblies" Type="Self.Assemblies" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="AssemblyType">
+            <Principal Role="AvailableAssemblyTypes">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Assembly">
+            <Dependent Role="Assemblies">
               <PropertyRef Name="AssemblyTypeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_AssemblyAtAssembly_Fixtures">
-          <End Role="Fixtures" Type="Self.Fixtures" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+        <Association Name="FK_AssemblyAtAssembly_Assemblies">
+          <End Role="Assemblies" Type="Self.Assemblies" Multiplicity="1" />
           <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Fixtures">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="AssemblyAtAssembly">
-              <PropertyRef Name="FixtureID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssemblyAtAssembly_ToAssembly">
-          <End Role="Assembly" Type="Self.Assembly" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assembly">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="AssemblyAtAssembly">
-              <PropertyRef Name="AssemblyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssemblyAtAssembly_ToParent">
-          <End Role="Assembly" Type="Self.Assembly" Multiplicity="0..1" />
-          <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assembly">
+            <Principal Role="Assemblies">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="AssemblyAtAssembly">
               <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssemblyAtAssembly_Assemblies1">
+          <End Role="Assemblies" Type="Self.Assemblies" Multiplicity="1" />
+          <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assemblies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AssemblyAtAssembly">
+              <PropertyRef Name="AssemblyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -403,7 +363,7 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PartRulesFilter">
-              <PropertyRef Name="FilterDependencyID" />
+              <PropertyRef Name="FilterBehaviorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -487,17 +447,17 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PartAtAssembly_Assembly">
-          <End Role="AssemblyAtAssembly" Type="Self.AssemblyAtAssembly" Multiplicity="1">
+        <Association Name="FK_PartAtAssembly_Assemblies">
+          <End Role="Assemblies" Type="Self.Assemblies" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="PartAtAssembly" Type="Self.PartAtAssembly" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="AssemblyAtAssembly">
+            <Principal Role="Assemblies">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PartAtAssembly">
-              <PropertyRef Name="AssRefID" />
+              <PropertyRef Name="AssemblyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -511,12 +471,12 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PartAtAssembly">
-              <PropertyRef Name="PartRefID" />
+              <PropertyRef Name="PartID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PartRules_Parts">
-          <End Role="Parts" Type="Self.Parts" Multiplicity="1">
+          <End Role="Parts" Type="Self.Parts" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
@@ -526,6 +486,34 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             </Principal>
             <Dependent Role="PartRulesFilter">
               <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartRulesFilter_Assembly">
+          <End Role="Assemblies" Type="Self.Assemblies" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assemblies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartRulesFilter_DependableQuantity">
+          <End Role="DependableQuantity" Type="Self.DependableQuantity" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DependableQuantity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="DependableQuantityID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -541,25 +529,25 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Parts_FamilyName1">
-          <End Role="FamilyName" Type="Self.FamilyName" Multiplicity="0..1" />
-          <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
+        <Association Name="FK_PartRulesFilter_RenamingExpression">
+          <End Role="RenamingExpression" Type="Self.RenamingExpression" Multiplicity="0..1" />
+          <End Role="PartRulesFilter" Type="Self.PartRulesFilter" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="FamilyName">
+            <Principal Role="RenamingExpression">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Parts">
-              <PropertyRef Name="FixFamilyID" />
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="RenamingExpressionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Parts_PartTypes">
-          <End Role="PartTypes" Type="Self.PartTypes" Multiplicity="0..1">
+          <End Role="AvailablePartTypes" Type="Self.AvailablePartTypes" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Parts" Type="Self.Parts" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PartTypes">
+            <Principal Role="AvailablePartTypes">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="Parts">
@@ -570,111 +558,22 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="FixtureApplicationTypes" EntityType="Self.FixtureApplicationTypes" Schema="AvailableOptions" store:Type="Tables" />
           <EntitySet Name="FixtureDirectionality" EntityType="Self.FixtureDirectionality" Schema="AvailableOptions" store:Type="Tables" />
-          <EntitySet Name="Assembly" EntityType="Self.Assembly" Schema="bom" store:Type="Tables" />
-          <EntitySet Name="AssemblyAtAssembly" EntityType="Self.AssemblyAtAssembly" Schema="bom" store:Type="Tables" />
-          <EntitySet Name="AssemblyType" EntityType="Self.AssemblyType" Schema="bom" store:Type="Tables" />
-          <EntitySet Name="FamilyName" EntityType="Self.FamilyName" Schema="bom" store:Type="Tables" />
+          <EntitySet Name="DependableQuantity" EntityType="Self.DependableQuantity" Schema="bom" store:Type="Tables" />
           <EntitySet Name="FilterBehavior" EntityType="Self.FilterBehavior" Schema="bom" store:Type="Tables" />
           <EntitySet Name="FilterType" EntityType="Self.FilterType" Schema="bom" store:Type="Tables" />
-          <EntitySet Name="PartAtAssembly" EntityType="Self.PartAtAssembly" Schema="bom" store:Type="Tables" />
           <EntitySet Name="PartRulesFilter" EntityType="Self.PartRulesFilter" Schema="bom" store:Type="Tables" />
-          <EntitySet Name="PartTypes" EntityType="Self.PartTypes" Schema="bom" store:Type="Tables" />
+          <EntitySet Name="RenamingExpression" EntityType="Self.RenamingExpression" Schema="bom" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="FixtureSetupCodes" store:Type="Tables" />
           <EntitySet Name="CategoryAtFixture" EntityType="Self.CategoryAtFixture" Schema="FixtureSetupCodes" store:Type="Tables" />
           <EntitySet Name="Fixtures" EntityType="Self.Fixtures" Schema="FixtureSetupCodes" store:Type="Tables" />
           <EntitySet Name="ParameterAtCategoryAtFixture" EntityType="Self.ParameterAtCategoryAtFixture" Schema="FixtureSetupCodes" store:Type="Tables" />
           <EntitySet Name="Parameters" EntityType="Self.Parameters" Schema="FixtureSetupCodes" store:Type="Tables" />
-          <EntitySet Name="Parts" EntityType="Self.Parts" Schema="Parts" store:Type="Tables" />
-          <EntitySet Name="AssemblyTypeAtAssembly" EntityType="Self.AssemblyTypeAtAssembly" store:Type="Views" store:Schema="bom">
-            <DefiningQuery>SELECT 
-    [AssemblyTypeAtAssembly].[Assembly_ID] AS [Assembly_ID], 
-    [AssemblyTypeAtAssembly].[Name] AS [Name], 
-    [AssemblyTypeAtAssembly].[AssemblyTypeID] AS [AssemblyTypeID], 
-    [AssemblyTypeAtAssembly].[AssemblyType_ID] AS [AssemblyType_ID], 
-    [AssemblyTypeAtAssembly].[AssemblyType] AS [AssemblyType]
-    FROM [bom].[AssemblyTypeAtAssembly] AS [AssemblyTypeAtAssembly]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="AssemblyView" EntityType="Self.AssemblyView" store:Type="Views" store:Schema="bom">
-            <DefiningQuery>SELECT 
-    [AssemblyView].[id] AS [id], 
-    [AssemblyView].[ParentID] AS [ParentID], 
-    [AssemblyView].[AssemblyID] AS [AssemblyID], 
-    [AssemblyView].[FixtureID] AS [FixtureID], 
-    [AssemblyView].[Fixture_ID] AS [Fixture_ID], 
-    [AssemblyView].[Code] AS [Code], 
-    [AssemblyView].[Assembly_ID] AS [Assembly_ID], 
-    [AssemblyView].[Name] AS [Name], 
-    [AssemblyView].[AssemblyTypeID] AS [AssemblyTypeID], 
-    [AssemblyView].[AssemblyType_ID] AS [AssemblyType_ID], 
-    [AssemblyView].[AssemblyType] AS [AssemblyType]
-    FROM [bom].[AssemblyView] AS [AssemblyView]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="BOM" EntityType="Self.BOM" store:Type="Views" store:Schema="bom">
-            <DefiningQuery>SELECT 
-    [BOM].[AssyAtAssembly_ID] AS [AssyAtAssembly_ID], 
-    [BOM].[ParentID] AS [ParentID], 
-    [BOM].[AssemblyID] AS [AssemblyID], 
-    [BOM].[FixtureID] AS [FixtureID], 
-    [BOM].[PartAtAssembly_ID] AS [PartAtAssembly_ID], 
-    [BOM].[PartRefID] AS [PartRefID], 
-    [BOM].[AssRefID] AS [AssRefID], 
-    [BOM].[FixRefID] AS [FixRefID], 
-    [BOM].[id] AS [id], 
-    [BOM].[Name] AS [Name], 
-    [BOM].[AssemblyTypeID] AS [AssemblyTypeID], 
-    [BOM].[AssyType_ID] AS [AssyType_ID], 
-    [BOM].[AssemblyType] AS [AssemblyType], 
-    [BOM].[Parts_ID] AS [Parts_ID], 
-    [BOM].[PartName] AS [PartName], 
-    [BOM].[TypeID] AS [TypeID], 
-    [BOM].[Description] AS [Description], 
-    [BOM].[PartsType_ID] AS [PartsType_ID], 
-    [BOM].[PartType] AS [PartType], 
-    [BOM].[Fixtures_ID] AS [Fixtures_ID], 
-    [BOM].[Code] AS [Code], 
-    [BOM].[FixFamilyID] AS [FixFamilyID]
-    FROM [bom].[BOM] AS [BOM]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PartTypeAtPart" EntityType="Self.PartTypeAtPart" store:Type="Views" store:Schema="bom">
-            <DefiningQuery>SELECT 
-    [PartTypeAtPart].[Part_ID] AS [Part_ID], 
-    [PartTypeAtPart].[PartName] AS [PartName], 
-    [PartTypeAtPart].[TypeID] AS [TypeID], 
-    [PartTypeAtPart].[PartType_ID] AS [PartType_ID], 
-    [PartTypeAtPart].[PartType] AS [PartType], 
-    [PartTypeAtPart].[FixFamilyID] AS [FixFamilyID], 
-    [PartTypeAtPart].[Description] AS [Description], 
-    [PartTypeAtPart].[FamilyName_ID] AS [FamilyName_ID], 
-    [PartTypeAtPart].[FamilyName] AS [FamilyName], 
-    [PartTypeAtPart].[FixtureFamilyId] AS [FixtureFamilyId]
-    FROM [bom].[PartTypeAtPart] AS [PartTypeAtPart]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="PartView" EntityType="Self.PartView" store:Type="Views" store:Schema="bom">
-            <DefiningQuery>SELECT 
-    [PartView].[id] AS [id], 
-    [PartView].[PartRefID] AS [PartRefID], 
-    [PartView].[AssRefID] AS [AssRefID], 
-    [PartView].[FixtureID] AS [FixtureID], 
-    [PartView].[AssyAtassmbly_ID] AS [AssyAtassmbly_ID], 
-    [PartView].[ParentID] AS [ParentID], 
-    [PartView].[AssemblyID] AS [AssemblyID], 
-    [PartView].[FixtureCodeID] AS [FixtureCodeID], 
-    [PartView].[Assembly_ID] AS [Assembly_ID], 
-    [PartView].[Name] AS [Name], 
-    [PartView].[AssemblyTypeID] AS [AssemblyTypeID], 
-    [PartView].[AssyType_ID] AS [AssyType_ID], 
-    [PartView].[AssemblyType] AS [AssemblyType], 
-    [PartView].[Parts_ID] AS [Parts_ID], 
-    [PartView].[PartName] AS [PartName], 
-    [PartView].[TypeID] AS [TypeID], 
-    [PartView].[Description] AS [Description], 
-    [PartView].[PartTypes_ID] AS [PartTypes_ID], 
-    [PartView].[PartType] AS [PartType], 
-    [PartView].[Fixture_ID] AS [Fixture_ID], 
-    [PartView].[Code] AS [Code], 
-    [PartView].[FixFamilyID] AS [FixFamilyID]
-    FROM [bom].[PartView] AS [PartView]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="Assemblies" EntityType="Self.Assemblies" Schema="Materials" store:Type="Tables" />
+          <EntitySet Name="AssemblyAtAssembly" EntityType="Self.AssemblyAtAssembly" Schema="Materials" store:Type="Tables" />
+          <EntitySet Name="AvailableAssemblyTypes" EntityType="Self.AvailableAssemblyTypes" Schema="Materials" store:Type="Tables" />
+          <EntitySet Name="AvailablePartTypes" EntityType="Self.AvailablePartTypes" Schema="Materials" store:Type="Tables" />
+          <EntitySet Name="PartAtAssembly" EntityType="Self.PartAtAssembly" Schema="Materials" store:Type="Tables" />
+          <EntitySet Name="Parts" EntityType="Self.Parts" Schema="Materials" store:Type="Tables" />
           <EntitySet Name="ProductTemplates" EntityType="Self.ProductTemplates" store:Type="Views" store:Schema="FixtureSetupCodes">
             <DefiningQuery>SELECT 
     [ProductTemplates].[FixtureId] AS [FixtureId], 
@@ -716,20 +615,79 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
     [ProductTemplates].[ParameterDescriptionOverride] AS [ParameterDescriptionOverride]
     FROM [FixtureSetupCodes].[ProductTemplates] AS [ProductTemplates]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK_Assembly_AssemblyType" Association="Self.FK_Assembly_AssemblyType">
-            <End Role="AssemblyType" EntitySet="AssemblyType" />
-            <End Role="Assembly" EntitySet="Assembly" />
+          <EntitySet Name="AssemblyTypeAtAssembly" EntityType="Self.AssemblyTypeAtAssembly" store:Type="Views" store:Schema="Materials">
+            <DefiningQuery>SELECT 
+    [AssemblyTypeAtAssembly].[AssemblyID] AS [AssemblyID], 
+    [AssemblyTypeAtAssembly].[AssemblyName] AS [AssemblyName], 
+    [AssemblyTypeAtAssembly].[AssemblyTypeName] AS [AssemblyTypeName]
+    FROM [Materials].[AssemblyTypeAtAssembly] AS [AssemblyTypeAtAssembly]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AssemblyView" EntityType="Self.AssemblyView" store:Type="Views" store:Schema="Materials">
+            <DefiningQuery>SELECT 
+    [AssemblyView].[id] AS [id], 
+    [AssemblyView].[AssemblyName] AS [AssemblyName], 
+    [AssemblyView].[AssemblyTypeID] AS [AssemblyTypeID], 
+    [AssemblyView].[AssemblyTypeName] AS [AssemblyTypeName], 
+    [AssemblyView].[AssyAtAssyID] AS [AssyAtAssyID], 
+    [AssemblyView].[ParentIDAtAssyAtAssy] AS [ParentIDAtAssyAtAssy], 
+    [AssemblyView].[AssemblyIDAtAssyAtAssy] AS [AssemblyIDAtAssyAtAssy], 
+    [AssemblyView].[Quantity] AS [Quantity]
+    FROM [Materials].[AssemblyView] AS [AssemblyView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BOM" EntityType="Self.BOM" store:Type="Views" store:Schema="Materials">
+            <DefiningQuery>SELECT 
+    [BOM].[AssembliesID] AS [AssembliesID], 
+    [BOM].[AssemblyName] AS [AssemblyName], 
+    [BOM].[AssemblyTypeID] AS [AssemblyTypeID], 
+    [BOM].[PartAtAssemblyID] AS [PartAtAssemblyID], 
+    [BOM].[PartID] AS [PartID], 
+    [BOM].[AssemblyID] AS [AssemblyID], 
+    [BOM].[Quantity] AS [Quantity], 
+    [BOM].[AssyTypeID] AS [AssyTypeID], 
+    [BOM].[AssemblyTypeName] AS [AssemblyTypeName], 
+    [BOM].[PartsID] AS [PartsID], 
+    [BOM].[PartName] AS [PartName], 
+    [BOM].[TypeID] AS [TypeID], 
+    [BOM].[Description] AS [Description], 
+    [BOM].[PartsTypeID] AS [PartsTypeID], 
+    [BOM].[PartTypeName] AS [PartTypeName]
+    FROM [Materials].[BOM] AS [BOM]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PartTypeAtPart" EntityType="Self.PartTypeAtPart" store:Type="Views" store:Schema="Materials">
+            <DefiningQuery>SELECT 
+    [PartTypeAtPart].[PartID] AS [PartID], 
+    [PartTypeAtPart].[PartName] AS [PartName], 
+    [PartTypeAtPart].[PartTypeName] AS [PartTypeName], 
+    [PartTypeAtPart].[TypeID] AS [TypeID], 
+    [PartTypeAtPart].[Description] AS [Description], 
+    [PartTypeAtPart].[PartType_ID] AS [PartType_ID]
+    FROM [Materials].[PartTypeAtPart] AS [PartTypeAtPart]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PartView" EntityType="Self.PartView" store:Type="Views" store:Schema="Materials">
+            <DefiningQuery>SELECT 
+    [PartView].[id] AS [id], 
+    [PartView].[PartID] AS [PartID], 
+    [PartView].[AssemblyID] AS [AssemblyID], 
+    [PartView].[ProductCode] AS [ProductCode], 
+    [PartView].[AssemblyTypeID] AS [AssemblyTypeID], 
+    [PartView].[AssemblyTypeName] AS [AssemblyTypeName], 
+    [PartView].[PartsID] AS [PartsID], 
+    [PartView].[PartName] AS [PartName], 
+    [PartView].[Description] AS [Description], 
+    [PartView].[PartTypeID] AS [PartTypeID], 
+    [PartView].[PartTypeName] AS [PartTypeName]
+    FROM [Materials].[PartView] AS [PartView]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Assemblies_AvailableAssemblyTypes" Association="Self.FK_Assemblies_AvailableAssemblyTypes">
+            <End Role="AvailableAssemblyTypes" EntitySet="AvailableAssemblyTypes" />
+            <End Role="Assemblies" EntitySet="Assemblies" />
           </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Self.FK_AssemblyAtAssembly_Fixtures">
-            <End Role="Fixtures" EntitySet="Fixtures" />
+          <AssociationSet Name="FK_AssemblyAtAssembly_Assemblies" Association="Self.FK_AssemblyAtAssembly_Assemblies">
+            <End Role="Assemblies" EntitySet="Assemblies" />
             <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
           </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_ToAssembly" Association="Self.FK_AssemblyAtAssembly_ToAssembly">
-            <End Role="Assembly" EntitySet="Assembly" />
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_ToParent" Association="Self.FK_AssemblyAtAssembly_ToParent">
-            <End Role="Assembly" EntitySet="Assembly" />
+          <AssociationSet Name="FK_AssemblyAtAssembly_Assemblies1" Association="Self.FK_AssemblyAtAssembly_Assemblies1">
+            <End Role="Assemblies" EntitySet="Assemblies" />
             <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
           </AssociationSet>
           <AssociationSet Name="FK_CategoryAtFixture_ParameterAtCategoryAtFixture" Association="Self.FK_CategoryAtFixture_ParameterAtCategoryAtFixture">
@@ -764,8 +722,8 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             <End Role="Parameters" EntitySet="Parameters" />
             <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixture" />
           </AssociationSet>
-          <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Self.FK_PartAtAssembly_Assembly">
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssembly" />
+          <AssociationSet Name="FK_PartAtAssembly_Assemblies" Association="Self.FK_PartAtAssembly_Assemblies">
+            <End Role="Assemblies" EntitySet="Assemblies" />
             <End Role="PartAtAssembly" EntitySet="PartAtAssembly" />
           </AssociationSet>
           <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Self.FK_PartAtAssembly_Parts">
@@ -776,16 +734,24 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             <End Role="Parts" EntitySet="Parts" />
             <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
           </AssociationSet>
+          <AssociationSet Name="FK_PartRulesFilter_Assembly" Association="Self.FK_PartRulesFilter_Assembly">
+            <End Role="Assemblies" EntitySet="Assemblies" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartRulesFilter_DependableQuantity" Association="Self.FK_PartRulesFilter_DependableQuantity">
+            <End Role="DependableQuantity" EntitySet="DependableQuantity" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
+          </AssociationSet>
           <AssociationSet Name="FK_PartRulesFilter_FilterType" Association="Self.FK_PartRulesFilter_FilterType">
             <End Role="FilterType" EntitySet="FilterType" />
             <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
           </AssociationSet>
-          <AssociationSet Name="FK_Parts_FamilyName1" Association="Self.FK_Parts_FamilyName1">
-            <End Role="FamilyName" EntitySet="FamilyName" />
-            <End Role="Parts" EntitySet="Parts" />
+          <AssociationSet Name="FK_PartRulesFilter_RenamingExpression" Association="Self.FK_PartRulesFilter_RenamingExpression">
+            <End Role="RenamingExpression" EntitySet="RenamingExpression" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilter" />
           </AssociationSet>
           <AssociationSet Name="FK_Parts_PartTypes" Association="Self.FK_Parts_PartTypes">
-            <End Role="PartTypes" EntitySet="PartTypes" />
+            <End Role="AvailablePartTypes" EntitySet="AvailablePartTypes" />
             <End Role="Parts" EntitySet="Parts" />
           </AssociationSet>
         </EntityContainer>
@@ -794,11 +760,6 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AXIS_AutomationEntitiesBOM" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="AssemblyTypeAtAssemblies" EntityType="Model.AssemblyTypeAtAssembly" />
-          <EntitySet Name="AssemblyViews" EntityType="Model.AssemblyView" />
-          <EntitySet Name="BOMs" EntityType="Model.BOM" />
-          <EntitySet Name="PartTypeAtParts" EntityType="Model.PartTypeAtPart" />
-          <EntitySet Name="PartViews" EntityType="Model.PartView" />
           <EntitySet Name="CategoryAtFixtures" EntityType="Model.CategoryAtFixture" />
           <EntitySet Name="Categories" EntityType="Model.Category" />
           <AssociationSet Name="FK_OrderingCode_CategoryBelonging" Association="Model.FK_OrderingCode_CategoryBelonging">
@@ -816,6 +777,41 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           </AssociationSet>
           <EntitySet Name="FixtureApplicationTypes" EntityType="Model.FixtureApplicationType" />
           <EntitySet Name="FixtureDirectionalities" EntityType="Model.FixtureDirectionality" />
+          <EntitySet Name="FilterBehaviors" EntityType="Model.FilterBehavior" />
+          <EntitySet Name="FilterTypes" EntityType="Model.FilterType" />
+          <EntitySet Name="Parameters" EntityType="Model.Parameter" />
+          <AssociationSet Name="FK_ParameterAtCategoryAtFixture_ParameterID" Association="Model.FK_ParameterAtCategoryAtFixture_ParameterID">
+            <End Role="Parameter" EntitySet="Parameters" />
+            <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
+          </AssociationSet>
+          <EntitySet Name="ProductTemplates" EntityType="Model.ProductTemplate" />
+          <EntitySet Name="DependableQuantities" EntityType="Model.DependableQuantity" />
+          <EntitySet Name="AssemblyTypeAtAssemblies" EntityType="Model.AssemblyTypeAtAssembly" />
+          <EntitySet Name="PartTypeAtParts" EntityType="Model.PartTypeAtPart" />
+          <EntitySet Name="AssemblyViews" EntityType="Model.AssemblyView" />
+          <EntitySet Name="BOMs" EntityType="Model.BOM" />
+          <EntitySet Name="PartViews" EntityType="Model.PartView" />
+          <EntitySet Name="Assemblies" EntityType="Model.Assembly" />
+          <EntitySet Name="AssemblyAtAssemblies" EntityType="Model.AssemblyAtAssembly" />
+          <EntitySet Name="AvailableAssemblyTypes" EntityType="Model.AvailableAssemblyType" />
+          <EntitySet Name="AvailablePartTypes" EntityType="Model.AvailablePartType" />
+          <EntitySet Name="PartAtAssemblies" EntityType="Model.PartAtAssembly" />
+          <AssociationSet Name="FK_Assemblies_AvailableAssemblyTypes" Association="Model.FK_Assemblies_AvailableAssemblyTypes">
+            <End Role="AvailableAssemblyType" EntitySet="AvailableAssemblyTypes" />
+            <End Role="Assembly" EntitySet="Assemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssemblyAtAssembly_Assemblies" Association="Model.FK_AssemblyAtAssembly_Assemblies">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AssemblyAtAssembly_Assemblies1" Association="Model.FK_AssemblyAtAssembly_Assemblies1">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartAtAssembly_Assemblies" Association="Model.FK_PartAtAssembly_Assemblies">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
+          </AssociationSet>
           <EntitySet Name="Fixtures" EntityType="Model.Fixture" />
           <AssociationSet Name="FK_Fixtures_FixtureApplicationTypes" Association="Model.FK_Fixtures_FixtureApplicationTypes">
             <End Role="FixtureApplicationType" EntitySet="FixtureApplicationTypes" />
@@ -829,15 +825,20 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             <End Role="Fixture" EntitySet="Fixtures" />
             <End Role="CategoryAtFixture" EntitySet="CategoryAtFixtures" />
           </AssociationSet>
-          <EntitySet Name="FilterBehaviors" EntityType="Model.FilterBehavior" />
-          <EntitySet Name="FilterTypes" EntityType="Model.FilterType" />
-          <EntitySet Name="Parameters" EntityType="Model.Parameter" />
-          <AssociationSet Name="FK_ParameterAtCategoryAtFixture_ParameterID" Association="Model.FK_ParameterAtCategoryAtFixture_ParameterID">
-            <End Role="Parameter" EntitySet="Parameters" />
-            <End Role="ParameterAtCategoryAtFixture" EntitySet="ParameterAtCategoryAtFixtures" />
+          <EntitySet Name="Parts" EntityType="Model.Part" />
+          <AssociationSet Name="FK_Parts_PartTypes" Association="Model.FK_Parts_PartTypes">
+            <End Role="AvailablePartType" EntitySet="AvailablePartTypes" />
+            <End Role="Part" EntitySet="Parts" />
           </AssociationSet>
-          <EntitySet Name="ProductTemplates" EntityType="Model.ProductTemplate" />
+          <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Model.FK_PartAtAssembly_Parts">
+            <End Role="Part" EntitySet="Parts" />
+            <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
+          </AssociationSet>
           <EntitySet Name="PartRulesFilters" EntityType="Model.PartRulesFilter" />
+          <AssociationSet Name="FK_PartRulesFilter_DependableQuantity" Association="Model.FK_PartRulesFilter_DependableQuantity">
+            <End Role="DependableQuantity" EntitySet="DependableQuantities" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
+          </AssociationSet>
           <AssociationSet Name="FK_FilterBehavior_PartRulesFilter" Association="Model.FK_FilterBehavior_PartRulesFilter">
             <End Role="FilterBehavior" EntitySet="FilterBehaviors" />
             <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
@@ -846,154 +847,20 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             <End Role="FilterType" EntitySet="FilterTypes" />
             <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
           </AssociationSet>
-          <EntitySet Name="Assemblies" EntityType="Model.Assembly" />
-          <EntitySet Name="AssemblyAtAssemblies" EntityType="Model.AssemblyAtAssembly" />
-          <EntitySet Name="AssemblyTypes" EntityType="Model.AssemblyType" />
-          <EntitySet Name="FamilyNames" EntityType="Model.FamilyName" />
-          <EntitySet Name="PartAtAssemblies" EntityType="Model.PartAtAssembly" />
-          <EntitySet Name="PartTypes" EntityType="Model.PartType" />
-          <AssociationSet Name="FK_Assembly_AssemblyType" Association="Model.FK_Assembly_AssemblyType">
-            <End Role="AssemblyType" EntitySet="AssemblyTypes" />
-            <End Role="Assembly" EntitySet="Assemblies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_ToAssembly" Association="Model.FK_AssemblyAtAssembly_ToAssembly">
-            <End Role="Assembly" EntitySet="Assemblies" />
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_ToParent" Association="Model.FK_AssemblyAtAssembly_ToParent">
-            <End Role="Assembly" EntitySet="Assemblies" />
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AssemblyAtAssembly_Fixtures" Association="Model.FK_AssemblyAtAssembly_Fixtures">
-            <End Role="Fixture" EntitySet="Fixtures" />
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PartAtAssembly_Assembly" Association="Model.FK_PartAtAssembly_Assembly">
-            <End Role="AssemblyAtAssembly" EntitySet="AssemblyAtAssemblies" />
-            <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
-          </AssociationSet>
-          <EntitySet Name="Parts" EntityType="Model.Part" />
-          <AssociationSet Name="FK_Parts_FamilyName1" Association="Model.FK_Parts_FamilyName1">
-            <End Role="FamilyName" EntitySet="FamilyNames" />
-            <End Role="Part" EntitySet="Parts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PartAtAssembly_Parts" Association="Model.FK_PartAtAssembly_Parts">
-            <End Role="Part" EntitySet="Parts" />
-            <End Role="PartAtAssembly" EntitySet="PartAtAssemblies" />
-          </AssociationSet>
           <AssociationSet Name="FK_PartRules_Parts" Association="Model.FK_PartRules_Parts">
             <End Role="Part" EntitySet="Parts" />
             <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
           </AssociationSet>
-          <AssociationSet Name="FK_Parts_PartTypes" Association="Model.FK_Parts_PartTypes">
-            <End Role="PartType" EntitySet="PartTypes" />
-            <End Role="Part" EntitySet="Parts" />
+          <AssociationSet Name="FK_PartRulesFilter_Assembly" Association="Model.FK_PartRulesFilter_Assembly">
+            <End Role="Assembly" EntitySet="Assemblies" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
+          </AssociationSet>
+          <EntitySet Name="RenamingExpressions" EntityType="Model.RenamingExpression" />
+          <AssociationSet Name="FK_PartRulesFilter_RenamingExpression" Association="Model.FK_PartRulesFilter_RenamingExpression">
+            <End Role="RenamingExpression" EntitySet="RenamingExpressions" />
+            <End Role="PartRulesFilter" EntitySet="PartRulesFilters" />
           </AssociationSet>
           </EntityContainer>
-        <EntityType Name="AssemblyTypeAtAssembly">
-          <Key>
-            <PropertyRef Name="Assembly_ID" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Assembly_ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AssemblyTypeID" Type="Int32" />
-          <Property Name="AssemblyType_ID" Type="Int32" />
-          <Property Name="AssemblyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="AssemblyView">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="AssemblyID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
-          <Property Name="FixtureID" Type="Int32" Nullable="false" />
-          <Property Name="Fixture_ID" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Assembly_ID" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AssemblyTypeID" Type="Int32" />
-          <Property Name="AssemblyType_ID" Type="Int32" />
-          <Property Name="AssemblyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="BOM">
-          <Key>
-            <PropertyRef Name="AssyAtAssembly_ID" />
-            <PropertyRef Name="AssemblyID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="AssyAtAssembly_ID" Type="Int32" Nullable="false" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
-          <Property Name="FixtureID" Type="Int32" Nullable="false" />
-          <Property Name="PartAtAssembly_ID" Type="Int32" />
-          <Property Name="PartRefID" Type="Int32" />
-          <Property Name="AssRefID" Type="Int32" />
-          <Property Name="FixRefID" Type="Int32" />
-          <Property Name="id" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AssemblyTypeID" Type="Int32" />
-          <Property Name="AssyType_ID" Type="Int32" />
-          <Property Name="AssemblyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Parts_ID" Type="Int32" />
-          <Property Name="PartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TypeID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="PartsType_ID" Type="Int32" />
-          <Property Name="PartType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Fixtures_ID" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixFamilyID" Type="Int32" />
-        </EntityType>
-        <EntityType Name="PartTypeAtPart">
-          <Key>
-            <PropertyRef Name="Part_ID" />
-            <PropertyRef Name="PartName" />
-          </Key>
-          <Property Name="Part_ID" Type="Int32" Nullable="false" />
-          <Property Name="PartName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TypeID" Type="Int32" />
-          <Property Name="PartType_ID" Type="Int32" />
-          <Property Name="PartType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixFamilyID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="FamilyName_ID" Type="Int32" />
-          <Property Name="FamilyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixtureFamilyId" Type="Int32" />
-        </EntityType>
-        <EntityType Name="PartView">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="PartRefID" />
-            <PropertyRef Name="AssRefID" />
-            <PropertyRef Name="FixtureID" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="PartRefID" Type="Int32" Nullable="false" />
-          <Property Name="AssRefID" Type="Int32" Nullable="false" />
-          <Property Name="FixtureID" Type="Int32" Nullable="false" />
-          <Property Name="AssyAtassmbly_ID" Type="Int32" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" />
-          <Property Name="FixtureCodeID" Type="Int32" />
-          <Property Name="Assembly_ID" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AssemblyTypeID" Type="Int32" />
-          <Property Name="AssyType_ID" Type="Int32" />
-          <Property Name="AssemblyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Parts_ID" Type="Int32" />
-          <Property Name="PartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TypeID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="PartTypes_ID" Type="Int32" />
-          <Property Name="PartType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Fixture_ID" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FixFamilyID" Type="Int32" />
-        </EntityType>
         <EntityType Name="CategoryAtFixture">
           <Key>
             <PropertyRef Name="id" />
@@ -1095,62 +962,6 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <Property Name="Direction" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Fixtures" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="FixtureDirectionality" ToRole="Fixture" />
         </EntityType>
-        <EntityType Name="Fixture">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="FamilyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="IsDWEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="ApplicationTypeId" Type="Int32" Nullable="false" />
-          <Property Name="DirectionalityId" Type="Int32" Nullable="false" />
-          <Property Name="HasSingleEmmiter" Type="Boolean" Nullable="false" />
-          <Property Name="DWGouverningProjectId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="FixtureApplicationType" Relationship="Model.FK_Fixtures_FixtureApplicationTypes" FromRole="Fixture" ToRole="FixtureApplicationType" />
-          <NavigationProperty Name="FixtureDirectionality" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="Fixture" ToRole="FixtureDirectionality" />
-          <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="Fixture" ToRole="CategoryAtFixture" />
-          <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="Fixture" ToRole="AssemblyAtAssembly" />
-        </EntityType>
-        <Association Name="FK_Fixtures_FixtureApplicationTypes">
-          <End Type="Model.FixtureApplicationType" Role="FixtureApplicationType" Multiplicity="1" />
-          <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FixtureApplicationType">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Fixture">
-              <PropertyRef Name="ApplicationTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Fixtures_FixtureDirectionality">
-          <End Type="Model.FixtureDirectionality" Role="FixtureDirectionality" Multiplicity="1" />
-          <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FixtureDirectionality">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Fixture">
-              <PropertyRef Name="DirectionalityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_OrderingCode_FixtureBelonging">
-          <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fixture">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="CategoryAtFixture">
-              <PropertyRef Name="FixtureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="FilterBehavior">
           <Key>
             <PropertyRef Name="id" />
@@ -1235,13 +1046,291 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <Property Name="RVO_ValueReAssemblyString" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ParameterDescriptionOverride" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="PartRulesFilter">
+        <EntityType Name="DependableQuantity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DependableQuantityName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRulesFilter_DependableQuantity" FromRole="DependableQuantity" ToRole="PartRulesFilter" />
+        </EntityType>
+        <EntityType Name="AssemblyTypeAtAssembly">
+          <Key>
+            <PropertyRef Name="AssemblyID" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PartTypeAtPart">
+          <Key>
+            <PropertyRef Name="PartID" />
+            <PropertyRef Name="PartName" />
+          </Key>
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="PartName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PartTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PartType_ID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AssemblyView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyTypeID" Type="Int32" />
+          <Property Name="AssemblyTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssyAtAssyID" Type="Int32" />
+          <Property Name="ParentIDAtAssyAtAssy" Type="Int32" />
+          <Property Name="AssemblyIDAtAssyAtAssy" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BOM">
+          <Key>
+            <PropertyRef Name="AssembliesID" />
+            <PropertyRef Name="AssemblyName" />
+          </Key>
+          <Property Name="AssembliesID" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyTypeID" Type="Int32" />
+          <Property Name="PartAtAssemblyID" Type="Int32" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="AssemblyID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="AssyTypeID" Type="Int32" />
+          <Property Name="AssemblyTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PartsID" Type="Int32" />
+          <Property Name="PartName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PartsTypeID" Type="Int32" />
+          <Property Name="PartTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PartView">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="PartID" />
+            <PropertyRef Name="AssemblyID" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="PartID" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
+          <Property Name="ProductCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyTypeID" Type="Int32" />
+          <Property Name="AssemblyTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PartsID" Type="Int32" />
+          <Property Name="PartName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PartTypeID" Type="Int32" />
+          <Property Name="PartTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Assembly">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyTypeID" Type="Int32" />
+          <NavigationProperty Name="AvailableAssemblyType" Relationship="Model.FK_Assemblies_AvailableAssemblyTypes" FromRole="Assembly" ToRole="AvailableAssemblyType" />
+          <NavigationProperty Name="ParentAssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Assemblies" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
+          <NavigationProperty Name="AssemblyAtAssemblies" Relationship="Model.FK_AssemblyAtAssembly_Assemblies1" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
+          <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Assemblies" FromRole="Assembly" ToRole="PartAtAssembly" />
+          <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRulesFilter_Assembly" FromRole="Assembly" ToRole="PartRulesFilter" />
+        </EntityType>
+        <EntityType Name="AssemblyAtAssembly">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ParentAssembly" Relationship="Model.FK_AssemblyAtAssembly_Assemblies" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
+          <NavigationProperty Name="Assembly" Relationship="Model.FK_AssemblyAtAssembly_Assemblies1" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
+        </EntityType>
+        <EntityType Name="AvailableAssemblyType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Assemblies" Relationship="Model.FK_Assemblies_AvailableAssemblyTypes" FromRole="AvailableAssemblyType" ToRole="Assembly" />
+        </EntityType>
+        <EntityType Name="AvailablePartType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_PartTypes" FromRole="AvailablePartType" ToRole="Part" />
+        </EntityType>
+        <EntityType Name="PartAtAssembly">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PartID" Type="Int32" Nullable="false" />
-          <Property Name="PartName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Assembly" Relationship="Model.FK_PartAtAssembly_Assemblies" FromRole="PartAtAssembly" ToRole="Assembly" />
+          <NavigationProperty Name="Part" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="PartAtAssembly" ToRole="Part" />
+        </EntityType>
+        <Association Name="FK_Assemblies_AvailableAssemblyTypes">
+          <End Type="Model.AvailableAssemblyType" Role="AvailableAssemblyType" Multiplicity="0..1" />
+          <End Type="Model.Assembly" Role="Assembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AvailableAssemblyType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Assembly">
+              <PropertyRef Name="AssemblyTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssemblyAtAssembly_Assemblies">
+          <End Type="Model.Assembly" Role="Assembly" Multiplicity="1" />
+          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AssemblyAtAssembly">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AssemblyAtAssembly_Assemblies1">
+          <End Type="Model.Assembly" Role="Assembly" Multiplicity="1" />
+          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AssemblyAtAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartAtAssembly_Assemblies">
+          <End Type="Model.Assembly" Role="Assembly" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Assembly">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartAtAssembly">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Fixture">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FamilyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsDWEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="ApplicationTypeId" Type="Int32" Nullable="false" />
+          <Property Name="DirectionalityId" Type="Int32" Nullable="false" />
+          <Property Name="HasSingleEmmiter" Type="Boolean" Nullable="false" />
+          <Property Name="DWGouverningProjectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="FixtureApplicationType" Relationship="Model.FK_Fixtures_FixtureApplicationTypes" FromRole="Fixture" ToRole="FixtureApplicationType" />
+          <NavigationProperty Name="FixtureDirectionality" Relationship="Model.FK_Fixtures_FixtureDirectionality" FromRole="Fixture" ToRole="FixtureDirectionality" />
+          <NavigationProperty Name="CategoryAtFixtures" Relationship="Model.FK_OrderingCode_FixtureBelonging" FromRole="Fixture" ToRole="CategoryAtFixture" />
+        </EntityType>
+        <Association Name="FK_Fixtures_FixtureApplicationTypes">
+          <End Type="Model.FixtureApplicationType" Role="FixtureApplicationType" Multiplicity="1" />
+          <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixtureApplicationType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="ApplicationTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Fixtures_FixtureDirectionality">
+          <End Type="Model.FixtureDirectionality" Role="FixtureDirectionality" Multiplicity="1" />
+          <End Type="Model.Fixture" Role="Fixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FixtureDirectionality">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Fixture">
+              <PropertyRef Name="DirectionalityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderingCode_FixtureBelonging">
+          <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.CategoryAtFixture" Role="CategoryAtFixture" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Fixture">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CategoryAtFixture">
+              <PropertyRef Name="FixtureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Part">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TypeID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AvailablePartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="AvailablePartType" />
+          <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
+          <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRulesFilter" />
+        </EntityType>
+        <Association Name="FK_Parts_PartTypes">
+          <End Type="Model.AvailablePartType" Role="AvailablePartType" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Part" Role="Part" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AvailablePartType">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Part">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartAtAssembly_Parts">
+          <End Type="Model.Part" Role="Part" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Part">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartAtAssembly">
+              <PropertyRef Name="PartID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PartRulesFilter">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartID" Type="Int32" />
+          <Property Name="AssemblyID" Type="Int32" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="ProductCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CategoryID" Type="Int32" />
@@ -1251,14 +1340,31 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <Property Name="FilterTypeID" Type="Int32" Nullable="false" />
           <Property Name="OrderOfExecution" Type="Int32" Nullable="false" />
           <Property Name="PACAF_ID" Type="String" MaxLength="700" FixedLength="false" Unicode="true" />
-          <Property Name="FilterDependencyID" Type="Int32" />
-          <Property Name="FilterDependencyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FilterBehaviorID" Type="Int32" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="QuantityRule" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DependableQuantityID" Type="Int32" />
+          <NavigationProperty Name="DependableQuantity" Relationship="Model.FK_PartRulesFilter_DependableQuantity" FromRole="PartRulesFilter" ToRole="DependableQuantity" />
           <NavigationProperty Name="FilterBehavior" Relationship="Model.FK_FilterBehavior_PartRulesFilter" FromRole="PartRulesFilter" ToRole="FilterBehavior" />
           <NavigationProperty Name="FilterType" Relationship="Model.FK_PartRulesFilter_FilterType" FromRole="PartRulesFilter" ToRole="FilterType" />
           <NavigationProperty Name="Part" Relationship="Model.FK_PartRules_Parts" FromRole="PartRulesFilter" ToRole="Part" />
+          <NavigationProperty Name="Assembly" Relationship="Model.FK_PartRulesFilter_Assembly" FromRole="PartRulesFilter" ToRole="Assembly" />
+          <Property Name="RenamingExpressionID" Type="Int32" />
+          <NavigationProperty Name="RenamingExpression" Relationship="Model.FK_PartRulesFilter_RenamingExpression" FromRole="PartRulesFilter" ToRole="RenamingExpression" />
         </EntityType>
+        <Association Name="FK_PartRulesFilter_DependableQuantity">
+          <End Type="Model.DependableQuantity" Role="DependableQuantity" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DependableQuantity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="DependableQuantityID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FilterBehavior_PartRulesFilter">
           <End Type="Model.FilterBehavior" Role="FilterBehavior" Multiplicity="0..1" />
           <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
@@ -1267,7 +1373,7 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="PartRulesFilter">
-              <PropertyRef Name="FilterDependencyID" />
+              <PropertyRef Name="FilterBehaviorID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1283,173 +1389,8 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Assembly">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AssemblyTypeID" Type="Int32" />
-          <NavigationProperty Name="AssemblyType" Relationship="Model.FK_Assembly_AssemblyType" FromRole="Assembly" ToRole="AssemblyType" />
-          <NavigationProperty Name="AssemblyAtAssembliesToAssembly" Relationship="Model.FK_AssemblyAtAssembly_ToAssembly" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
-          <NavigationProperty Name="AssemblyAtAssembliesToParent" Relationship="Model.FK_AssemblyAtAssembly_ToParent" FromRole="Assembly" ToRole="AssemblyAtAssembly" />
-        </EntityType>
-        <EntityType Name="AssemblyAtAssembly">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ParentID" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" Nullable="false" />
-          <Property Name="FixtureID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ToAssembly" Relationship="Model.FK_AssemblyAtAssembly_ToAssembly" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
-          <NavigationProperty Name="ToParent" Relationship="Model.FK_AssemblyAtAssembly_ToParent" FromRole="AssemblyAtAssembly" ToRole="Assembly" />
-          <NavigationProperty Name="Fixture" Relationship="Model.FK_AssemblyAtAssembly_Fixtures" FromRole="AssemblyAtAssembly" ToRole="Fixture" />
-          <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="AssemblyAtAssembly" ToRole="PartAtAssembly" />
-        </EntityType>
-        <EntityType Name="AssemblyType">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AssemblyType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Assemblies" Relationship="Model.FK_Assembly_AssemblyType" FromRole="AssemblyType" ToRole="Assembly" />
-        </EntityType>
-        <EntityType Name="FamilyName">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FamilyName1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_FamilyName1" FromRole="FamilyName" ToRole="Part" />
-        </EntityType>
-        <EntityType Name="PartAtAssembly">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartRefID" Type="Int32" Nullable="false" />
-          <Property Name="AssRefID" Type="Int32" Nullable="false" />
-          <Property Name="FixtureID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AssemblyAtAssembly" Relationship="Model.FK_PartAtAssembly_Assembly" FromRole="PartAtAssembly" ToRole="AssemblyAtAssembly" />
-          <NavigationProperty Name="Part" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="PartAtAssembly" ToRole="Part" />
-        </EntityType>
-        <EntityType Name="PartType">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartType1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Parts" Relationship="Model.FK_Parts_PartTypes" FromRole="PartType" ToRole="Part" />
-        </EntityType>
-        <Association Name="FK_Assembly_AssemblyType">
-          <End Type="Model.AssemblyType" Role="AssemblyType" Multiplicity="0..1" />
-          <End Type="Model.Assembly" Role="Assembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssemblyType">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Assembly">
-              <PropertyRef Name="AssemblyTypeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssemblyAtAssembly_ToAssembly">
-          <End Type="Model.Assembly" Role="Assembly" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assembly">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="AssemblyAtAssembly">
-              <PropertyRef Name="AssemblyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssemblyAtAssembly_ToParent">
-          <End Type="Model.Assembly" Role="Assembly" Multiplicity="0..1" />
-          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Assembly">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="AssemblyAtAssembly">
-              <PropertyRef Name="ParentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AssemblyAtAssembly_Fixtures">
-          <End Type="Model.Fixture" Role="Fixture" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Fixture">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="AssemblyAtAssembly">
-              <PropertyRef Name="FixtureID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PartAtAssembly_Assembly">
-          <End Type="Model.AssemblyAtAssembly" Role="AssemblyAtAssembly" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AssemblyAtAssembly">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="PartAtAssembly">
-              <PropertyRef Name="AssRefID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Part">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PartName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TypeID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="FixFamilyID" Type="Int32" />
-          <NavigationProperty Name="FamilyName" Relationship="Model.FK_Parts_FamilyName1" FromRole="Part" ToRole="FamilyName" />
-          <NavigationProperty Name="PartAtAssemblies" Relationship="Model.FK_PartAtAssembly_Parts" FromRole="Part" ToRole="PartAtAssembly" />
-          <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRules_Parts" FromRole="Part" ToRole="PartRulesFilter" />
-          <NavigationProperty Name="PartType" Relationship="Model.FK_Parts_PartTypes" FromRole="Part" ToRole="PartType" />
-        </EntityType>
-        <Association Name="FK_Parts_FamilyName1">
-          <End Type="Model.FamilyName" Role="FamilyName" Multiplicity="0..1" />
-          <End Type="Model.Part" Role="Part" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FamilyName">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="Part">
-              <PropertyRef Name="FixFamilyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PartAtAssembly_Parts">
-          <End Type="Model.Part" Role="Part" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="Model.PartAtAssembly" Role="PartAtAssembly" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Part">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="PartAtAssembly">
-              <PropertyRef Name="PartRefID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PartRules_Parts">
-          <End Type="Model.Part" Role="Part" Multiplicity="1">
+          <End Type="Model.Part" Role="Part" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
           <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
@@ -1462,17 +1403,37 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Parts_PartTypes">
-          <End Type="Model.PartType" Role="PartType" Multiplicity="0..1">
+        <Association Name="FK_PartRulesFilter_Assembly">
+          <End Type="Model.Assembly" Role="Assembly" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Model.Part" Role="Part" Multiplicity="*" />
+          <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PartType">
+            <Principal Role="Assembly">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="Part">
-              <PropertyRef Name="TypeID" />
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="AssemblyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="RenamingExpression">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpressionName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PartRulesFilters" Relationship="Model.FK_PartRulesFilter_RenamingExpression" FromRole="RenamingExpression" ToRole="PartRulesFilter" />
+        </EntityType>
+        <Association Name="FK_PartRulesFilter_RenamingExpression">
+          <End Type="Model.RenamingExpression" Role="RenamingExpression" Multiplicity="0..1" />
+          <End Type="Model.PartRulesFilter" Role="PartRulesFilter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RenamingExpression">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="PartRulesFilter">
+              <PropertyRef Name="RenamingExpressionID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1482,106 +1443,6 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="AXIS_AutomationEntitiesBOM">
-          <EntitySetMapping Name="AssemblyTypeAtAssemblies">
-            <EntityTypeMapping TypeName="Model.AssemblyTypeAtAssembly">
-              <MappingFragment StoreEntitySet="AssemblyTypeAtAssembly">
-                <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
-                <ScalarProperty Name="AssemblyType_ID" ColumnName="AssemblyType_ID" />
-                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Assembly_ID" ColumnName="Assembly_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AssemblyViews">
-            <EntityTypeMapping TypeName="Model.AssemblyView">
-              <MappingFragment StoreEntitySet="AssemblyView">
-                <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
-                <ScalarProperty Name="AssemblyType_ID" ColumnName="AssemblyType_ID" />
-                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Assembly_ID" ColumnName="Assembly_ID" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Fixture_ID" ColumnName="Fixture_ID" />
-                <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BOMs">
-            <EntityTypeMapping TypeName="Model.BOM">
-              <MappingFragment StoreEntitySet="BOM">
-                <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Fixtures_ID" ColumnName="Fixtures_ID" />
-                <ScalarProperty Name="PartType" ColumnName="PartType" />
-                <ScalarProperty Name="PartsType_ID" ColumnName="PartsType_ID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="PartName" ColumnName="PartName" />
-                <ScalarProperty Name="Parts_ID" ColumnName="Parts_ID" />
-                <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
-                <ScalarProperty Name="AssyType_ID" ColumnName="AssyType_ID" />
-                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="FixRefID" ColumnName="FixRefID" />
-                <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
-                <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
-                <ScalarProperty Name="PartAtAssembly_ID" ColumnName="PartAtAssembly_ID" />
-                <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="AssyAtAssembly_ID" ColumnName="AssyAtAssembly_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PartTypeAtParts">
-            <EntityTypeMapping TypeName="Model.PartTypeAtPart">
-              <MappingFragment StoreEntitySet="PartTypeAtPart">
-                <ScalarProperty Name="FixtureFamilyId" ColumnName="FixtureFamilyId" />
-                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-                <ScalarProperty Name="FamilyName_ID" ColumnName="FamilyName_ID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
-                <ScalarProperty Name="PartType" ColumnName="PartType" />
-                <ScalarProperty Name="PartType_ID" ColumnName="PartType_ID" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="PartName" ColumnName="PartName" />
-                <ScalarProperty Name="Part_ID" ColumnName="Part_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PartViews">
-            <EntityTypeMapping TypeName="Model.PartView">
-              <MappingFragment StoreEntitySet="PartView">
-                <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Fixture_ID" ColumnName="Fixture_ID" />
-                <ScalarProperty Name="PartType" ColumnName="PartType" />
-                <ScalarProperty Name="PartTypes_ID" ColumnName="PartTypes_ID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="PartName" ColumnName="PartName" />
-                <ScalarProperty Name="Parts_ID" ColumnName="Parts_ID" />
-                <ScalarProperty Name="AssemblyType" ColumnName="AssemblyType" />
-                <ScalarProperty Name="AssyType_ID" ColumnName="AssyType_ID" />
-                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Assembly_ID" ColumnName="Assembly_ID" />
-                <ScalarProperty Name="FixtureCodeID" ColumnName="FixtureCodeID" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-                <ScalarProperty Name="AssyAtassmbly_ID" ColumnName="AssyAtassmbly_ID" />
-                <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-                <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
-                <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CategoryAtFixtures">
             <EntityTypeMapping TypeName="Model.CategoryAtFixture">
               <MappingFragment StoreEntitySet="CategoryAtFixture">
@@ -1634,21 +1495,6 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
             <EntityTypeMapping TypeName="Model.FixtureDirectionality">
               <MappingFragment StoreEntitySet="FixtureDirectionality">
                 <ScalarProperty Name="Direction" ColumnName="Direction" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Fixtures">
-            <EntityTypeMapping TypeName="Model.Fixture">
-              <MappingFragment StoreEntitySet="Fixtures">
-                <ScalarProperty Name="DWGouverningProjectId" ColumnName="DWGouverningProjectId" />
-                <ScalarProperty Name="HasSingleEmmiter" ColumnName="HasSingleEmmiter" />
-                <ScalarProperty Name="DirectionalityId" ColumnName="DirectionalityId" />
-                <ScalarProperty Name="ApplicationTypeId" ColumnName="ApplicationTypeId" />
-                <ScalarProperty Name="IsDWEnabled" ColumnName="IsDWEnabled" />
-                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1722,23 +1568,82 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PartRulesFilters">
-            <EntityTypeMapping TypeName="Model.PartRulesFilter">
-              <MappingFragment StoreEntitySet="PartRulesFilter">
-                <ScalarProperty Name="QuantityRule" ColumnName="QuantityRule" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="FilterDependencyName" ColumnName="FilterDependencyName" />
-                <ScalarProperty Name="FilterDependencyID" ColumnName="FilterDependencyID" />
-                <ScalarProperty Name="PACAF_ID" ColumnName="PACAF_ID" />
-                <ScalarProperty Name="OrderOfExecution" ColumnName="OrderOfExecution" />
-                <ScalarProperty Name="FilterTypeID" ColumnName="FilterTypeID" />
-                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
-                <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <EntitySetMapping Name="DependableQuantities">
+            <EntityTypeMapping TypeName="Model.DependableQuantity">
+              <MappingFragment StoreEntitySet="DependableQuantity">
+                <ScalarProperty Name="DependableQuantityName" ColumnName="DependableQuantityName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssemblyTypeAtAssemblies">
+            <EntityTypeMapping TypeName="Model.AssemblyTypeAtAssembly">
+              <MappingFragment StoreEntitySet="AssemblyTypeAtAssembly">
+                <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartTypeAtParts">
+            <EntityTypeMapping TypeName="Model.PartTypeAtPart">
+              <MappingFragment StoreEntitySet="PartTypeAtPart">
+                <ScalarProperty Name="PartType_ID" ColumnName="PartType_ID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="PartTypeName" ColumnName="PartTypeName" />
                 <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AssemblyViews">
+            <EntityTypeMapping TypeName="Model.AssemblyView">
+              <MappingFragment StoreEntitySet="AssemblyView">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="AssemblyIDAtAssyAtAssy" ColumnName="AssemblyIDAtAssyAtAssy" />
+                <ScalarProperty Name="ParentIDAtAssyAtAssy" ColumnName="ParentIDAtAssyAtAssy" />
+                <ScalarProperty Name="AssyAtAssyID" ColumnName="AssyAtAssyID" />
+                <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
+                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BOMs">
+            <EntityTypeMapping TypeName="Model.BOM">
+              <MappingFragment StoreEntitySet="BOM">
+                <ScalarProperty Name="PartTypeName" ColumnName="PartTypeName" />
+                <ScalarProperty Name="PartsTypeID" ColumnName="PartsTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="PartsID" ColumnName="PartsID" />
+                <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
+                <ScalarProperty Name="AssyTypeID" ColumnName="AssyTypeID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PartAtAssemblyID" ColumnName="PartAtAssemblyID" />
+                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="AssembliesID" ColumnName="AssembliesID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartViews">
+            <EntityTypeMapping TypeName="Model.PartView">
+              <MappingFragment StoreEntitySet="PartView">
+                <ScalarProperty Name="PartTypeName" ColumnName="PartTypeName" />
+                <ScalarProperty Name="PartTypeID" ColumnName="PartTypeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="PartsID" ColumnName="PartsID" />
+                <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
+                <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
                 <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
@@ -1746,7 +1651,7 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           </EntitySetMapping>
           <EntitySetMapping Name="Assemblies">
             <EntityTypeMapping TypeName="Model.Assembly">
-              <MappingFragment StoreEntitySet="Assembly">
+              <MappingFragment StoreEntitySet="Assemblies">
                 <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -1756,25 +1661,25 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <EntitySetMapping Name="AssemblyAtAssemblies">
             <EntityTypeMapping TypeName="Model.AssemblyAtAssembly">
               <MappingFragment StoreEntitySet="AssemblyAtAssembly">
-                <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AssemblyTypes">
-            <EntityTypeMapping TypeName="Model.AssemblyType">
-              <MappingFragment StoreEntitySet="AssemblyType">
-                <ScalarProperty Name="AssemblyType1" ColumnName="AssemblyType" />
+          <EntitySetMapping Name="AvailableAssemblyTypes">
+            <EntityTypeMapping TypeName="Model.AvailableAssemblyType">
+              <MappingFragment StoreEntitySet="AvailableAssemblyTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="FamilyNames">
-            <EntityTypeMapping TypeName="Model.FamilyName">
-              <MappingFragment StoreEntitySet="FamilyName">
-                <ScalarProperty Name="FamilyName1" ColumnName="FamilyName" />
+          <EntitySetMapping Name="AvailablePartTypes">
+            <EntityTypeMapping TypeName="Model.AvailablePartType">
+              <MappingFragment StoreEntitySet="AvailablePartTypes">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1782,17 +1687,24 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <EntitySetMapping Name="PartAtAssemblies">
             <EntityTypeMapping TypeName="Model.PartAtAssembly">
               <MappingFragment StoreEntitySet="PartAtAssembly">
-                <ScalarProperty Name="FixtureID" ColumnName="FixtureID" />
-                <ScalarProperty Name="AssRefID" ColumnName="AssRefID" />
-                <ScalarProperty Name="PartRefID" ColumnName="PartRefID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PartTypes">
-            <EntityTypeMapping TypeName="Model.PartType">
-              <MappingFragment StoreEntitySet="PartTypes">
-                <ScalarProperty Name="PartType1" ColumnName="PartType" />
+          <EntitySetMapping Name="Fixtures">
+            <EntityTypeMapping TypeName="Model.Fixture">
+              <MappingFragment StoreEntitySet="Fixtures">
+                <ScalarProperty Name="DWGouverningProjectId" ColumnName="DWGouverningProjectId" />
+                <ScalarProperty Name="HasSingleEmmiter" ColumnName="HasSingleEmmiter" />
+                <ScalarProperty Name="DirectionalityId" ColumnName="DirectionalityId" />
+                <ScalarProperty Name="ApplicationTypeId" ColumnName="ApplicationTypeId" />
+                <ScalarProperty Name="IsDWEnabled" ColumnName="IsDWEnabled" />
+                <ScalarProperty Name="FamilyName" ColumnName="FamilyName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1800,10 +1712,39 @@ warning 6002: The table/view 'AXIS Automation.FixtureSetupCodes.ProductTemplates
           <EntitySetMapping Name="Parts">
             <EntityTypeMapping TypeName="Model.Part">
               <MappingFragment StoreEntitySet="Parts">
-                <ScalarProperty Name="FixFamilyID" ColumnName="FixFamilyID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartRulesFilters">
+            <EntityTypeMapping TypeName="Model.PartRulesFilter">
+              <MappingFragment StoreEntitySet="PartRulesFilter">
+                <ScalarProperty Name="RenamingExpressionID" ColumnName="RenamingExpressionID" />
+                <ScalarProperty Name="DependableQuantityID" ColumnName="DependableQuantityID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="FilterBehaviorID" ColumnName="FilterBehaviorID" />
+                <ScalarProperty Name="PACAF_ID" ColumnName="PACAF_ID" />
+                <ScalarProperty Name="OrderOfExecution" ColumnName="OrderOfExecution" />
+                <ScalarProperty Name="FilterTypeID" ColumnName="FilterTypeID" />
+                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+                <ScalarProperty Name="ParameterID" ColumnName="ParameterID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RenamingExpressions">
+            <EntityTypeMapping TypeName="Model.RenamingExpression">
+              <MappingFragment StoreEntitySet="RenamingExpression">
+                <ScalarProperty Name="ExpressionName" ColumnName="ExpressionName" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

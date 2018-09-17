@@ -15,8 +15,8 @@ namespace BOM_MANAGER
     public partial class PartRulesFilter
     {
         public int id { get; set; }
-        public int PartID { get; set; }
-        public string PartName { get; set; }
+        public Nullable<int> PartID { get; set; }
+        public Nullable<int> AssemblyID { get; set; }
         public int ProductID { get; set; }
         public string ProductCode { get; set; }
         public Nullable<int> CategoryID { get; set; }
@@ -26,13 +26,16 @@ namespace BOM_MANAGER
         public int FilterTypeID { get; set; }
         public int OrderOfExecution { get; set; }
         public string PACAF_ID { get; set; }
-        public Nullable<int> FilterDependencyID { get; set; }
-        public string FilterDependencyName { get; set; }
+        public Nullable<int> FilterBehaviorID { get; set; }
         public Nullable<int> Quantity { get; set; }
-        public string QuantityRule { get; set; }
+        public Nullable<int> DependableQuantityID { get; set; }
+        public Nullable<int> RenamingExpressionID { get; set; }
     
+        public virtual DependableQuantity DependableQuantity { get; set; }
         public virtual FilterBehavior FilterBehavior { get; set; }
         public virtual FilterType FilterType { get; set; }
         public virtual Part Part { get; set; }
+        public virtual Assembly Assembly { get; set; }
+        public virtual RenamingExpression RenamingExpression { get; set; }
     }
 }
