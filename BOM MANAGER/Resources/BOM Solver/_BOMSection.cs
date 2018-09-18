@@ -72,10 +72,6 @@ namespace BOM_MANAGER
             _RootAssembly = new _Assembly(RootAssemblyView, this);
         }
 
-
-
-
-
         public void SummarizeExistingComponentInToRTB(_RTFMessenger ApplicableParts)
         {
             _RootAssembly.SummarizeExistingComponentInToRTB(ApplicableParts);

@@ -33,14 +33,14 @@ namespace BOM_MANAGER
             DbConn = dbConn;
             _fixtureConfiguration = new _FixtureConfiguration(FullOrderingCode, FixtureConfigurtorDBConn);
 
-            //try
-            //{                
+            try
+            {
                 InitBOMSections();
-            //}
-            //catch
-            //{
-                
-            //}
+            }
+            catch
+            {
+
+            }
 
 
         }

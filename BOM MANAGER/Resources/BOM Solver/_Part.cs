@@ -60,8 +60,6 @@ namespace BOM_MANAGER
             }
         }
 
-
-
         private void Get_Filters()
         {
             DbConn.PartRulesFilters.Where(o => o.Part.Name == Name && o.ProductCode == MyFixtureCode).OrderBy(p=> p.OrderOfExecution).ToList().ForEach(o=> Filters.Add(new _Filter(o,this)));

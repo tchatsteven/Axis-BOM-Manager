@@ -47,7 +47,6 @@ namespace BOM_MANAGER
                 }
             }
         }
-        //private String _ComponentName;
         public String ComponentName
         {
             get
@@ -374,20 +373,7 @@ namespace BOM_MANAGER
         }
 
 
-        //private void EndCapDropLens_Selection()
-        //{
-        //    if (!IsMiddle)
-        //    {
-        //        ComponentExist = true;
-        //    }
-
-        //    else
-        //    {
-        //        ComponentExist = false;
-        //    }
-        //}
-
-
+        
         //Solvers
         private void SolveDependableDriverQty()
         {

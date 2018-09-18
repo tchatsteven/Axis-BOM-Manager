@@ -118,9 +118,6 @@ namespace BOM_MANAGER
         }
 
 
-
-
-
         public void SummarizeExistingComponentInToRTB(_RTFMessenger ApplicableParts)
         {
             ApplicableParts.NewMessage();

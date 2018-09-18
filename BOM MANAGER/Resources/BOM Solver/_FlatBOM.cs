@@ -37,7 +37,6 @@ namespace BOM_MANAGER
         public Int32 FilterCount => IsAssembly ? MyAssembly._Filters.Count : MyPart.Filters.Count;
 
 
-
         void CheckIndentation(TreeNode parentTreeNode)
         {
             PartView AssyTypeName = (PartView)parentTreeNode.Tag;
