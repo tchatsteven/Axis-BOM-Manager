@@ -37,7 +37,6 @@ namespace BOM_MANAGER
         public virtual DbSet<DependableQuantity> DependableQuantities { get; set; }
         public virtual DbSet<AssemblyTypeAtAssembly> AssemblyTypeAtAssemblies { get; set; }
         public virtual DbSet<PartTypeAtPart> PartTypeAtParts { get; set; }
-        public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
         public virtual DbSet<BOM> BOMs { get; set; }
         public virtual DbSet<PartView> PartViews { get; set; }
         public virtual DbSet<Assembly> Assemblies { get; set; }
@@ -49,5 +48,6 @@ namespace BOM_MANAGER
         public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<PartRulesFilter> PartRulesFilters { get; set; }
         public virtual DbSet<RenamingExpression> RenamingExpressions { get; set; }
+        public virtual DbSet<AssemblyView> AssemblyViews { get; set; }
     }
 }

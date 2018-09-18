@@ -581,6 +581,7 @@ namespace BOM_MANAGER
                 NewAssemblyAtAssembly.ParentID = (Int32)ParentID;
                 NewAssemblyAtAssembly.AssemblyID = currentAssemblyId;
                 db.SaveChanges();
+                db = new AXIS_AutomationEntitiesBOM();
 
                 //do not show message if assembly has not been deleted.
                 BomManagerFormMsg.NewMessage().AddText("Assembly : " + assemblyNameToAdd + " has been added to TreeView").PrependMessageType().Log();
@@ -609,6 +610,7 @@ namespace BOM_MANAGER
                     Assy_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                     db.SaveChanges();
+                    db = new AXIS_AutomationEntitiesBOM();
                     RefreshTreeView();
 
                     //Association Check
@@ -747,6 +749,7 @@ namespace BOM_MANAGER
                 NewPartAtAssembly.AssemblyID = (Int32)assemblyId;
                 //NewPartAtAssembly.FixtureID = (Int32)FixtureId;
                 db.SaveChanges();
+                db = new AXIS_AutomationEntitiesBOM();
 
                 //do not show message if assembly has not been deleted.
                 BomManagerFormMsg.NewMessage().AddText("Part : " + PartNameToAdd + " has been added to TreeView and DataBase").PrependMessageType().Log();
@@ -768,6 +771,7 @@ namespace BOM_MANAGER
                 Part_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                 db.SaveChanges();
+                db = new AXIS_AutomationEntitiesBOM();
 
                 RefreshTreeView();
 

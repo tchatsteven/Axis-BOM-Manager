@@ -155,20 +155,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AssemblyViews">
-      <EntityTypeMapping TypeName="Model.AssemblyView">
-        <MappingFragment StoreEntitySet="AssemblyView">
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="AssemblyIDAtAssyAtAssy" ColumnName="AssemblyIDAtAssyAtAssy" />
-          <ScalarProperty Name="ParentIDAtAssyAtAssy" ColumnName="ParentIDAtAssyAtAssy" />
-          <ScalarProperty Name="AssyAtAssyID" ColumnName="AssyAtAssyID" />
-          <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
-          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
-          <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="BOMs">
       <EntityTypeMapping TypeName="Model.BOM">
         <MappingFragment StoreEntitySet="BOM">
@@ -303,6 +289,20 @@
       <EntityTypeMapping TypeName="Model.RenamingExpression">
         <MappingFragment StoreEntitySet="RenamingExpression">
           <ScalarProperty Name="ExpressionName" ColumnName="ExpressionName" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AssemblyViews">
+      <EntityTypeMapping TypeName="Model.AssemblyView">
+        <MappingFragment StoreEntitySet="AssemblyView">
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="AssemblyIDAtAssyAtAssy" ColumnName="AssemblyIDAtAssyAtAssy" />
+          <ScalarProperty Name="ParentIDAtAssyAtAssy" ColumnName="ParentIDAtAssyAtAssy" />
+          <ScalarProperty Name="AssyAtAssyID" ColumnName="AssyAtAssyID" />
+          <ScalarProperty Name="AssemblyTypeName" ColumnName="AssemblyTypeName" />
+          <ScalarProperty Name="AssemblyTypeID" ColumnName="AssemblyTypeID" />
+          <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
