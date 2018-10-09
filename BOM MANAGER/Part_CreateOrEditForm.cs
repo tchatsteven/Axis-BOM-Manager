@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AXISAutomation.Tools.Logging;
+using BOM_CLASS;
 
 namespace BOM_MANAGER
 {
     public partial class Part_CreateOrEditForm : Form
     {
         _RTFMessenger EditFormMsg;
-        AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
+        AutomationEntitiesBOM db = new AutomationEntitiesBOM();
         Part newPart = null;
 
         //Constructor for NEW BUTTON

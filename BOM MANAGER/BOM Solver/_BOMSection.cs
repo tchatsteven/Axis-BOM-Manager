@@ -11,8 +11,10 @@ using AXISAutomation.Solvers.LightingEmittersLayout.BEAMCartridges;
 using AXISAutomation.Solvers.LightingEmittersLayout.SCRTape;
 using AXISAutomation.Solvers.LightingEmittersLayout.BEAMCartridges.Exceptions;
 using AXISAutomation.Solvers.FixtureSetupCodeParser;
+using BOM_MANAGER;
 
-namespace BOM_MANAGER
+
+namespace AXISAutomation.Solvers.BOM
 {
     public class _BOMSection
     {

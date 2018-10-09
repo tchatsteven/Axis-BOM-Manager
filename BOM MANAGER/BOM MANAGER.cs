@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using AXISAutomation.Solvers.FixtureConfiguration;
 using AXISAutomation.Tools.Logging;
 using AXISAutomation.Tools.DBConnection;
+using AXISAutomation.Solvers.BOM;
+using BOM_CLASS;
 
 namespace BOM_MANAGER
 {
@@ -33,7 +35,7 @@ namespace BOM_MANAGER
         _RTFMessenger MatchSummary;
         _RTFMessenger SolveMechanical;
 
-        AXIS_AutomationEntitiesBOM db;
+        AutomationEntitiesBOM db;
         _BOM NewBOM;
         AXIS_AutomationEntities FixtureConfigurtorDBConn = new AXIS_AutomationEntities();
 
@@ -41,7 +43,7 @@ namespace BOM_MANAGER
         public BOM_MANAGER()
         {
             InitializeComponent();
-            db = new AXIS_AutomationEntitiesBOM();            
+            db = new AutomationEntitiesBOM();            
             BomManagerFormMsg = new _RTFMessenger(eventLog_richTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };//
             PartRules = new _RTFMessenger(eventLog_PR_richTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };
             ApplicableParts = new _RTFMessenger(Log_RichTextBox, 0, true) { DefaulSpaceAfter = 0 };//, On = true };
@@ -225,7 +227,7 @@ namespace BOM_MANAGER
                 if (NewForm == DialogResult.OK)
                 {
                     BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Added").PrependMessageType().Log();
-                    db = new AXIS_AutomationEntitiesBOM();
+                    db = new AutomationEntitiesBOM();
                     RefreshDataGridView_Assemblies();
                     eventLog_richTextBox.ScrollToCaret();
                 }
@@ -247,7 +249,8 @@ namespace BOM_MANAGER
 
 
             Int32 currentAssemblyId = Int32.Parse(dataGridView_Ass.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
+            //Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
+            BOM_CLASS.Assembly assemblyToEdit = db.Assemblies.Find(currentAssemblyId);
             editAssemblyName = assemblyToEdit.Name;
 
             Assembly_CreatOrEditForm editAssemblyForm = new Assembly_CreatOrEditForm(editAssemblyName);
@@ -257,7 +260,7 @@ namespace BOM_MANAGER
             {
                 if (NewForm == DialogResult.OK)
                 {
-                    db = new AXIS_AutomationEntitiesBOM();
+                    db = new AutomationEntitiesBOM();
                     RefreshDataGridView_Assemblies();
                     BomManagerFormMsg.NewMessage().AddText("Assembly Successfully Edited").PrependMessageType().Log();
                     RefreshTreeView();
@@ -292,7 +295,7 @@ namespace BOM_MANAGER
                     {
                         //Delete_Function_Ass(currentDeletionRow);
                         Int32 currentAssemblyId = Int32.Parse(currentDeletionRow.Cells["AssemblyID"].Value.ToString());
-                        Assembly AssemblyToDelete = db.Assemblies.Find(currentAssemblyId);
+                        BOM_CLASS.Assembly AssemblyToDelete = db.Assemblies.Find(currentAssemblyId);
                         String assemblyNameToDelete = db.Assemblies.Find(currentAssemblyId).Name;
 
                         Boolean myAssociation = db.AssemblyAtAssemblies.Any(o => o.AssemblyID == currentAssemblyId);
@@ -384,7 +387,7 @@ namespace BOM_MANAGER
                 {
                     BomManagerFormMsg.NewMessage().AddText("Part Successfully Added").PrependMessageType().Log();
 
-                    db = new AXIS_AutomationEntitiesBOM();
+                    db = new AutomationEntitiesBOM();
                     RefreshDataGridView_Part();
                 }
                 else if (NewForm == DialogResult.Cancel)
@@ -409,13 +412,13 @@ namespace BOM_MANAGER
             String editPartType;
            
             Int32 currentPartId = Int32.Parse(dataGridView_Part.SelectedCells[0].OwningRow.Cells[0].Value.ToString());
-            Part partToEdit = db.Parts.Find(currentPartId);
+            BOM_CLASS.Part partToEdit = db.Parts.Find(currentPartId);
 
             editDescription = partToEdit.Description;
             editPartName = partToEdit.Name;
             editPartTypeIndex = partToEdit.TypeID;
 
-            AvailablePartType partTypeToEdit = db.AvailablePartTypes.Find(editPartTypeIndex);
+            BOM_CLASS.AvailablePartType partTypeToEdit = db.AvailablePartTypes.Find(editPartTypeIndex);
             editPartType = partTypeToEdit.Name;
                       
             Part_CreateOrEditForm editPartForm = new Part_CreateOrEditForm(editPartName, editDescription, editPartType);
@@ -426,7 +429,7 @@ namespace BOM_MANAGER
                 if (NewForm == DialogResult.OK)
                 {
 
-                    db = new AXIS_AutomationEntitiesBOM();
+                    db = new AutomationEntitiesBOM();
                     RefreshDataGridView_Part();
 
                     BomManagerFormMsg.NewMessage().AddText("Part Successfully Edited").PrependMessageType().Log();
@@ -459,7 +462,7 @@ namespace BOM_MANAGER
                     foreach (DataGridViewRow currentDeletionRow in dataGridView_Part.SelectedRows)
                     {
                         Int32 currentPartId = Int32.Parse(currentDeletionRow.Cells["PartID"].Value.ToString());
-                        Part partToDelete = db.Parts.Find(currentPartId);
+                        BOM_CLASS.Part partToDelete = db.Parts.Find(currentPartId);
                         String partyNameToDelete = db.Parts.Find(currentPartId).Name;
 
                         Boolean myAssociation = db.PartAtAssemblies.Any(o => o.PartID == currentPartId);
@@ -574,14 +577,14 @@ namespace BOM_MANAGER
             //Check if Sub-Assembly is ROOT Assembly... if yues do not add
             if (!myAssociation)
             {
-                AssemblyAtAssembly NewAssemblyAtAssembly = new AssemblyAtAssembly();
+                BOM_CLASS.AssemblyAtAssembly NewAssemblyAtAssembly = new BOM_CLASS.AssemblyAtAssembly();
 
                 db.AssemblyAtAssemblies.Add(NewAssemblyAtAssembly);
 
                 NewAssemblyAtAssembly.ParentID = (Int32)ParentID;
                 NewAssemblyAtAssembly.AssemblyID = currentAssemblyId;
                 db.SaveChanges();
-                db = new AXIS_AutomationEntitiesBOM();
+                db = new AutomationEntitiesBOM();
 
                 //do not show message if assembly has not been deleted.
                 BomManagerFormMsg.NewMessage().AddText("Assembly : " + assemblyNameToAdd + " has been added to TreeView").PrependMessageType().Log();
@@ -610,7 +613,7 @@ namespace BOM_MANAGER
                     Assy_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                     db.SaveChanges();
-                    db = new AXIS_AutomationEntitiesBOM();
+                    db = new AutomationEntitiesBOM();
                     RefreshTreeView();
 
                     //Association Check
@@ -633,7 +636,7 @@ namespace BOM_MANAGER
             {
                 Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).AssyAtAssyID;
                 String CurrentAssemblyViewName = ((AssemblyView)selectedNode.Tag).AssemblyName;
-                AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
+                BOM_CLASS.AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
                 //if (deletionTarget.ParentID is null)
                 //{
                 //    BomManagerFormMsg.NewMessage().AddText("Root Assembly deletion is forbidden").IsError().PrependMessageType().Log();
@@ -741,7 +744,7 @@ namespace BOM_MANAGER
 
             try
             {
-                PartAtAssembly NewPartAtAssembly = new PartAtAssembly();
+                BOM_CLASS.PartAtAssembly NewPartAtAssembly = new BOM_CLASS.PartAtAssembly();
 
                 db.PartAtAssemblies.Add(NewPartAtAssembly);
 
@@ -749,7 +752,7 @@ namespace BOM_MANAGER
                 NewPartAtAssembly.AssemblyID = (Int32)assemblyId;
                 //NewPartAtAssembly.FixtureID = (Int32)FixtureId;
                 db.SaveChanges();
-                db = new AXIS_AutomationEntitiesBOM();
+                db = new AutomationEntitiesBOM();
 
                 //do not show message if assembly has not been deleted.
                 BomManagerFormMsg.NewMessage().AddText("Part : " + PartNameToAdd + " has been added to TreeView and DataBase").PrependMessageType().Log();
@@ -771,7 +774,7 @@ namespace BOM_MANAGER
                 Part_Recursive_Delete_Function(Fixture_treeView.SelectedNode);
 
                 db.SaveChanges();
-                db = new AXIS_AutomationEntitiesBOM();
+                db = new AutomationEntitiesBOM();
 
                 RefreshTreeView();
 
@@ -799,7 +802,7 @@ namespace BOM_MANAGER
             {
                 Int32 currentId = ((PartView)selectedNode.Tag).id;
                 String currentPartNameId = ((PartView)selectedNode.Tag).PartName;
-                PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentId);
+                BOM_CLASS.PartAtAssembly deletionTarget = db.PartAtAssemblies.Find(currentId);
 
                 //Delete part in Rules List
                 Int32 currentPartID = ((PartView)selectedNode.Tag).PartID;
@@ -828,7 +831,7 @@ namespace BOM_MANAGER
             try
             {
                 Int32? currentAssemblyViewIndex = ((AssemblyView)selectedNode.Tag).id;
-                AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
+                BOM_CLASS.AssemblyAtAssembly deletionTarget = db.AssemblyAtAssemblies.Find(currentAssemblyViewIndex);
             }
 
             catch
@@ -1189,16 +1192,16 @@ namespace BOM_MANAGER
 
             }
 
-            if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox1.Text == "DEPENDABILITY")
             {               
                 //Dependable ComboBox
-                DependableQtyPR_comboBoxFilter1.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter1.DataSource = db.Dependabilities.OrderBy(o => o.DependableQuantityName).ToList();
                 DependableQtyPR_comboBoxFilter1.ValueMember = "id";
                 DependableQtyPR_comboBoxFilter1.DisplayMember = "DependableQuantityName";
 
             }
 
-            else if (FilterType_comboBox1.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox1.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter1.SelectedValue = -1;
 
@@ -1245,16 +1248,16 @@ namespace BOM_MANAGER
 
             }
 
-            if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox2.Text == "DEPENDABILITY")
             {
                 //Dependable ComboBox
-                DependableQtyPR_comboBoxFilter2.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter2.DataSource = db.Dependabilities.OrderBy(o => o.DependableQuantityName).ToList();
                 DependableQtyPR_comboBoxFilter2.ValueMember = "id";
                 DependableQtyPR_comboBoxFilter2.DisplayMember = "DependableQuantityName";
 
             }
 
-            else if (FilterType_comboBox2.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox2.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter2.SelectedValue = -1;
 
@@ -1301,16 +1304,16 @@ namespace BOM_MANAGER
 
             }
 
-            if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox3.Text == "DEPENDABILITY")
             {
                 //Dependable ComboBox
-                DependableQtyPR_comboBoxFilter3.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter3.DataSource = db.Dependabilities.OrderBy(o => o.DependableQuantityName).ToList();
                 DependableQtyPR_comboBoxFilter3.ValueMember = "id";
                 DependableQtyPR_comboBoxFilter3.DisplayMember = "DependableQuantityName";
 
             }
 
-            else if (FilterType_comboBox3.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox3.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter3.SelectedValue = -1;
 
@@ -1357,16 +1360,16 @@ namespace BOM_MANAGER
 
             }
 
-            if (FilterType_comboBox4.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox4.Text == "DEPENDABILITY")
             {
                 //Dependable ComboBox
-                DependableQtyPR_comboBoxFilter4.DataSource = db.DependableQuantities.OrderBy(o => o.DependableQuantityName).ToList();
+                DependableQtyPR_comboBoxFilter4.DataSource = db.Dependabilities.OrderBy(o => o.DependableQuantityName).ToList();
                 DependableQtyPR_comboBoxFilter4.ValueMember = "id";
                 DependableQtyPR_comboBoxFilter4.DisplayMember = "DependableQuantityName";
 
             }
 
-            else if (FilterType_comboBox4.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox4.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter4.SelectedValue = -1;
 
@@ -1615,13 +1618,13 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox1.Text == "JOINER QTY")
-            {
-                Filter1_Visibility();
-                Load_ParameterSelect1();
-                Load_DependableQuantityORRenamingExpression1();
-                Load_Quantity1();
-            }
+            //else if (FilterType_comboBox1.Text == "JOINER QTY")
+            //{
+            //    Filter1_Visibility();
+            //    Load_ParameterSelect1();
+            //    Load_DependableQuantityORRenamingExpression1();
+            //    Load_Quantity1();
+            //}
 
             else if (FilterType_comboBox1.Text == "JOINER")
             {
@@ -1631,15 +1634,15 @@ namespace BOM_MANAGER
                 Load_Quantity1();
             }
 
-            else if (FilterType_comboBox1.Text == "ENDCAP QTY")
-            {
-                Filter1_Visibility();
-                Load_ParameterSelect1();
-                Load_DependableQuantityORRenamingExpression1();
-                Load_Quantity1();
-            }
+            //else if (FilterType_comboBox1.Text == "ENDCAP QTY")
+            //{
+            //    Filter1_Visibility();
+            //    Load_ParameterSelect1();
+            //    Load_DependableQuantityORRenamingExpression1();
+            //    Load_Quantity1();
+            //}
 
-            else if (FilterType_comboBox1.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            else if (FilterType_comboBox1.Text == "DEPENDABILITY")//&& styles.Count == 3)
             {
                 Filter1_Visibility();
                 Load_ParameterSelect1();
@@ -1712,13 +1715,13 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox2.Text == "JOINER QTY")
-            {
-                Filter2_Visibility();
-                Load_ParameterSelect2();
-                Load_DependableQuantityORRenamingExpression2();
-                Load_Quantity2();
-            }
+            //else if (FilterType_comboBox2.Text == "JOINER QTY")
+            //{
+            //    Filter2_Visibility();
+            //    Load_ParameterSelect2();
+            //    Load_DependableQuantityORRenamingExpression2();
+            //    Load_Quantity2();
+            //}
 
             else if (FilterType_comboBox2.Text == "JOINER")
             {
@@ -1728,15 +1731,15 @@ namespace BOM_MANAGER
                 Load_Quantity2();
             }
 
-            else if (FilterType_comboBox2.Text == "ENDCAP QTY")
-            {
-                Filter2_Visibility();
-                Load_ParameterSelect2();
-                Load_DependableQuantityORRenamingExpression2();
-                Load_Quantity2();
-            }
+            //else if (FilterType_comboBox2.Text == "ENDCAP QTY")
+            //{
+            //    Filter2_Visibility();
+            //    Load_ParameterSelect2();
+            //    Load_DependableQuantityORRenamingExpression2();
+            //    Load_Quantity2();
+            //}
 
-            else if (FilterType_comboBox2.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            else if (FilterType_comboBox2.Text == "DEPENDABILITY")//&& styles.Count == 3)
             {
                 Filter2_Visibility();
                 Load_ParameterSelect2();
@@ -1811,13 +1814,13 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox3.Text == "JOINER QTY")
-            {
-                Filter3_Visibility();
-                Load_ParameterSelect3();
-                Load_DependableQuantityORRenamingExpression3();
-                Load_Quantity3();
-            }
+            //else if (FilterType_comboBox3.Text == "JOINER QTY")
+            //{
+            //    Filter3_Visibility();
+            //    Load_ParameterSelect3();
+            //    Load_DependableQuantityORRenamingExpression3();
+            //    Load_Quantity3();
+            //}
 
             else if (FilterType_comboBox3.Text == "JOINER")
             {
@@ -1827,15 +1830,15 @@ namespace BOM_MANAGER
                 Load_Quantity3();
             }
 
-            else if (FilterType_comboBox3.Text == "ENDCAP QTY")
-            {
-                Filter3_Visibility();
-                Load_ParameterSelect3();
-                Load_DependableQuantityORRenamingExpression3();
-                Load_Quantity3();
-            }
+            //else if (FilterType_comboBox3.Text == "ENDCAP QTY")
+            //{
+            //    Filter3_Visibility();
+            //    Load_ParameterSelect3();
+            //    Load_DependableQuantityORRenamingExpression3();
+            //    Load_Quantity3();
+            //}
 
-            else if (FilterType_comboBox3.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            else if (FilterType_comboBox3.Text == "DEPENDABILITY")//&& styles.Count == 3)
             {
                 Filter3_Visibility();
                 Load_ParameterSelect3();
@@ -1907,13 +1910,13 @@ namespace BOM_MANAGER
                 Load_Quantity4();
             }
 
-            else if (FilterType_comboBox4.Text == "JOINER QTY")
-            {
-                Filter4_Visibility();
-                Load_ParameterSelect4();
-                Load_DependableQuantityORRenamingExpression4();
-                Load_Quantity4();
-            }
+            //else if (FilterType_comboBox4.Text == "JOINER QTY")
+            //{
+            //    Filter4_Visibility();
+            //    Load_ParameterSelect4();
+            //    Load_DependableQuantityORRenamingExpression4();
+            //    Load_Quantity4();
+            //}
 
             else if (FilterType_comboBox4.Text == "JOINER")
             {
@@ -1923,15 +1926,15 @@ namespace BOM_MANAGER
                 Load_Quantity4();
             }
 
-            else if (FilterType_comboBox4.Text == "ENDCAP QTY")
-            {
-                Filter4_Visibility();
-                Load_ParameterSelect4();
-                Load_DependableQuantityORRenamingExpression4();
-                Load_Quantity4();
-            }
+            //else if (FilterType_comboBox4.Text == "ENDCAP QTY")
+            //{
+            //    Filter4_Visibility();
+            //    Load_ParameterSelect4();
+            //    Load_DependableQuantityORRenamingExpression4();
+            //    Load_Quantity4();
+            //}
 
-            else if (FilterType_comboBox4.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            else if (FilterType_comboBox4.Text == "DEPENDABILITY")//&& styles.Count == 3)
             {
                 Filter4_Visibility();
                 Load_ParameterSelect4();
@@ -2192,11 +2195,11 @@ namespace BOM_MANAGER
         private void Load_DependableQuantityORRenamingExpression1()
         {
 
-            if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox1.Text == "DEPENDABILITY")
             {
                 try
                 {
-                    DependableQtyPR_comboBoxFilter1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().DependableQuantityID;
+                    DependableQtyPR_comboBoxFilter1.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 1).First().DependabilityID;
 
                 }
                 catch
@@ -2204,7 +2207,7 @@ namespace BOM_MANAGER
 
                 }
             }
-            else if (FilterType_comboBox1.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox1.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter1.SelectedValue = -1;
 
@@ -2232,11 +2235,11 @@ namespace BOM_MANAGER
 
         private void Load_DependableQuantityORRenamingExpression2()
         {
-            if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox2.Text == "DEPENDABILITY")
             {
                 try
                 {
-                    DependableQtyPR_comboBoxFilter2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().DependableQuantityID;
+                    DependableQtyPR_comboBoxFilter2.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 2).First().DependabilityID;
 
                 }
                 catch
@@ -2244,7 +2247,7 @@ namespace BOM_MANAGER
 
                 }
             }
-            else if (FilterType_comboBox2.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox2.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter2.SelectedValue = -1;
 
@@ -2272,11 +2275,11 @@ namespace BOM_MANAGER
 
         private void Load_DependableQuantityORRenamingExpression3()
         {
-            if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox3.Text == "DEPENDABILITY")
             {
                 try
                 {
-                    DependableQtyPR_comboBoxFilter3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().DependableQuantityID;
+                    DependableQtyPR_comboBoxFilter3.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 3).First().DependabilityID;
 
                 }
                 catch
@@ -2284,7 +2287,7 @@ namespace BOM_MANAGER
 
                 }
             }
-            else if (FilterType_comboBox3.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox3.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter3.SelectedValue = -1;
 
@@ -2312,11 +2315,11 @@ namespace BOM_MANAGER
 
         private void Load_DependableQuantityORRenamingExpression4()
         {
-            if (FilterType_comboBox4.Text == "DEPENDABLE QTY")
+            if (FilterType_comboBox4.Text == "DEPENDABILITY")
             {
                 try
                 {
-                    DependableQtyPR_comboBoxFilter4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().DependableQuantityID;
+                    DependableQtyPR_comboBoxFilter4.SelectedValue = db.PartRulesFilters.Where(o => (o.PartID == part_Index && o.AssemblyID == assembly_Index) && o.ProductID == Filter_ProductIdIndex && o.OrderOfExecution == 4).First().DependabilityID;
 
                 }
                 catch
@@ -2324,7 +2327,7 @@ namespace BOM_MANAGER
 
                 }
             }
-            else if (FilterType_comboBox4.Text != "DEPENDABLE QTY")
+            else if (FilterType_comboBox4.Text != "DEPENDABILITY")
             {
                 DependableQtyPR_comboBoxFilter4.SelectedValue = -1;
 
@@ -2375,7 +2378,7 @@ namespace BOM_MANAGER
                 DataGridView_Rules.Columns["RenamingExpression"].Visible = false;
                 DataGridView_Rules.Columns["Part"].Visible = false;
                 DataGridView_Rules.Columns["Assembly"].Visible = false;
-                DataGridView_Rules.Columns["DependableQuantity"].Visible = false;
+                DataGridView_Rules.Columns["Dependability"].Visible = false;
 
                 DataGridView_Rules.AutoResizeColumns();
                 DataGridView_Rules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -2534,7 +2537,7 @@ namespace BOM_MANAGER
 
                 if (FilterExists1)
                 {
-                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution && o.ProductCode == productID_comboBox_PR.Text).First();
                 }
                 else
                 {
@@ -2567,7 +2570,7 @@ namespace BOM_MANAGER
                     newPartRule.FilterBehaviorID = selected_FilterDependency;
                     newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
+                    newPartRule.DependabilityID = selected_DependableQuantityID;
 
                     try
                     {
@@ -2686,7 +2689,7 @@ namespace BOM_MANAGER
 
                 if (FilterExists2)
                 {
-                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(o => (o.Part.Name == selected_PartName && o.Assembly.Name == selected_AssemblyName) && o.OrderOfExecution == orderOfExecution && o.ProductCode == productID_comboBox_PR.Text).First();
                 }
                 else
                 {
@@ -2719,7 +2722,7 @@ namespace BOM_MANAGER
                     newPartRule.FilterBehaviorID = selected_FilterDependency;
                     newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
+                    newPartRule.DependabilityID = selected_DependableQuantityID;
 
 
                     try
@@ -2837,7 +2840,7 @@ namespace BOM_MANAGER
 
                 if (FilterExists3)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution && p.ProductCode == productID_comboBox_PR.Text).First();
                 }
                 else
                 {
@@ -2870,7 +2873,7 @@ namespace BOM_MANAGER
                     newPartRule.FilterBehaviorID = selected_FilterDependency;
                     newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
+                    newPartRule.DependabilityID = selected_DependableQuantityID;
 
 
                     try
@@ -2988,7 +2991,7 @@ namespace BOM_MANAGER
 
                 if (FilterExists4)
                 {
-                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution).First();
+                    newPartRule = db.PartRulesFilters.Where(p => (p.Part.Name == selected_PartName && p.Assembly.Name == selected_AssemblyName) && p.OrderOfExecution == orderOfExecution && p.ProductCode == productID_comboBox_PR.Text).First();
                 }
                 else
                 {
@@ -3021,7 +3024,7 @@ namespace BOM_MANAGER
                     newPartRule.FilterBehaviorID = selected_FilterDependency;
                     newPartRule.RenamingExpressionID = selected_RenamingExpression;
                     newPartRule.Quantity = selected_Quantity;
-                    newPartRule.DependableQuantityID = selected_DependableQuantityID;
+                    newPartRule.DependabilityID = selected_DependableQuantityID;
 
 
                     try
@@ -3221,19 +3224,19 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox1.Text == "JOINER QTY")
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox1.Text == "JOINER QTY")
+            //{
+            //    FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                RE_TableLayOut1.Visible = false;
-            }
+            //    FILTER1_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut1.Visible = false;
+            //    Qty_TableLayOut1.Visible = false;
+            //    EX_TableLayOut1.Visible = false;
+            //    RE_TableLayOut1.Visible = false;
+            //}
 
             else if (FilterType_comboBox1.Text == "JOINER")
             {
@@ -3249,21 +3252,21 @@ namespace BOM_MANAGER
                 RE_TableLayOut1.Visible = false;
             }
 
-            else if (FilterType_comboBox1.Text == "ENDCAP QTY")
-            {
-                FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox1.Text == "ENDCAP QTY")
+            //{
+            //    FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER1_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER1_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut1.Visible = false;
-                Qty_TableLayOut1.Visible = false;
-                EX_TableLayOut1.Visible = false;
-                RE_TableLayOut1.Visible = false;
-            }
+            //    FILTER1_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut1.Visible = false;
+            //    Qty_TableLayOut1.Visible = false;
+            //    EX_TableLayOut1.Visible = false;
+            //    RE_TableLayOut1.Visible = false;
+            //}
 
-            else if (FilterType_comboBox1.Text == "DEPENDABLE QTY")
+            else if (FilterType_comboBox1.Text == "DEPENDABILITY")
             {
                 FILTER1_TableLayoutPanel.RowStyles[0].Height = 0;
                 FILTER1_TableLayoutPanel.RowStyles[1].Height = 0;
@@ -3335,20 +3338,20 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox2.Text == "JOINER QTY")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox2.Text == "JOINER QTY")
+            //{
+            //    FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                RE_TableLayOut2.Visible = false;
+            //    FILTER2_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut2.Visible = false;
+            //    Qty_TableLayOut2.Visible = false;
+            //    EX_TableLayOut2.Visible = false;
+            //    RE_TableLayOut2.Visible = false;
 
-            }
+            //}
 
             else if (FilterType_comboBox2.Text == "JOINER")
             {
@@ -3365,22 +3368,22 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox2.Text == "ENDCAP QTY")
-            {
-                FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox2.Text == "ENDCAP QTY")
+            //{
+            //    FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER2_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER2_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut2.Visible = false;
-                Qty_TableLayOut2.Visible = false;
-                EX_TableLayOut2.Visible = false;
-                RE_TableLayOut2.Visible = false;
+            //    FILTER2_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut2.Visible = false;
+            //    Qty_TableLayOut2.Visible = false;
+            //    EX_TableLayOut2.Visible = false;
+            //    RE_TableLayOut2.Visible = false;
 
-            }
+            //}
 
-            else if (FilterType_comboBox2.Text == "DEPENDABLE QTY")
+            else if (FilterType_comboBox2.Text == "DEPENDABILITY")
             {
                 FILTER2_TableLayoutPanel.RowStyles[0].Height = 0;
                 FILTER2_TableLayoutPanel.RowStyles[1].Height = 0;
@@ -3452,20 +3455,20 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox3.Text == "JOINER QTY")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox3.Text == "JOINER QTY")
+            //{
+            //    FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                RE_TableLayOut3.Visible = false;
+            //    FILTER3_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut3.Visible = false;
+            //    Qty_TableLayOut3.Visible = false;
+            //    EX_TableLayOut3.Visible = false;
+            //    RE_TableLayOut3.Visible = false;
 
-            }
+            //}
 
             else if (FilterType_comboBox3.Text == "JOINER")
             {
@@ -3482,22 +3485,22 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox3.Text == "ENDCAP QTY")
-            {
-                FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox3.Text == "ENDCAP QTY")
+            //{
+            //    FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER3_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER3_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut3.Visible = false;
-                Qty_TableLayOut3.Visible = false;
-                EX_TableLayOut3.Visible = false;
-                RE_TableLayOut3.Visible = false;
+            //    FILTER3_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut3.Visible = false;
+            //    Qty_TableLayOut3.Visible = false;
+            //    EX_TableLayOut3.Visible = false;
+            //    RE_TableLayOut3.Visible = false;
 
-            }
+            //}
 
-            else if (FilterType_comboBox3.Text == "DEPENDABLE QTY")
+            else if (FilterType_comboBox3.Text == "DEPENDABILITY")
             {
                 FILTER3_TableLayoutPanel.RowStyles[0].Height = 0;
                 FILTER3_TableLayoutPanel.RowStyles[1].Height = 0;
@@ -3569,20 +3572,20 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox4.Text == "JOINER QTY")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox4.Text == "JOINER QTY")
+            //{
+            //    FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                RE_TableLayOut4.Visible = false;
+            //    FILTER4_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut4.Visible = false;
+            //    Qty_TableLayOut4.Visible = false;
+            //    EX_TableLayOut4.Visible = false;
+            //    RE_TableLayOut4.Visible = false;
 
-            }
+            //}
 
             else if (FilterType_comboBox4.Text == "JOINER")
             {
@@ -3599,22 +3602,22 @@ namespace BOM_MANAGER
 
             }
 
-            else if (FilterType_comboBox4.Text == "ENDCAP QTY")
-            {
-                FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
-                FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
+            //else if (FilterType_comboBox4.Text == "ENDCAP QTY")
+            //{
+            //    FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[2].Height = 0;
+            //    FILTER4_TableLayoutPanel.RowStyles[3].Height = 0;
 
-                FILTER4_TableLayoutPanel.Visible = true;
-                PACAF_TableLayOut4.Visible = false;
-                Qty_TableLayOut4.Visible = false;
-                EX_TableLayOut4.Visible = false;
-                RE_TableLayOut4.Visible = false;
+            //    FILTER4_TableLayoutPanel.Visible = true;
+            //    PACAF_TableLayOut4.Visible = false;
+            //    Qty_TableLayOut4.Visible = false;
+            //    EX_TableLayOut4.Visible = false;
+            //    RE_TableLayOut4.Visible = false;
 
-            }
+            //}
 
-            else if (FilterType_comboBox4.Text == "DEPENDABLE QTY")//&& styles.Count == 3)
+            else if (FilterType_comboBox4.Text == "DEPENDABILITY")//&& styles.Count == 3)
             {
                 FILTER4_TableLayoutPanel.RowStyles[0].Height = 0;
                 FILTER4_TableLayoutPanel.RowStyles[1].Height = 0;
@@ -3729,9 +3732,7 @@ namespace BOM_MANAGER
             NewBOM = new _BOM(FixtureSetupCode_TextBox.Text, db);
 
             ApplicableParts.NewMessage().SetSpaceAfter(0).AddBoldText("Bill Of Material selected Code: ").AddBoldText(_FixtureSetupCode).NewLine().Log();
-
-
-            NewBOM.FlatBOMList();
+                    
             NewBOM.SummarizeExistingComponentIntoRTB_FB(ApplicableParts);
             NewBOM.SummarizeNonExistingComponentIntoRTB(NonApplicablePartSummary);
 

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AXISAutomation.Tools.Logging;
 using System.Windows.Forms;
+using BOM_MANAGER;
 
-namespace BOM_MANAGER
+namespace AXISAutomation.Solvers.BOM
 {
-    public class _Assembly
+    public class _Assembly : IBOMItem
     {
         AssemblyView DbData;
         _BOMSection _MyBOMSection;
@@ -19,7 +20,7 @@ namespace BOM_MANAGER
 
         TreeNode _MyTreeNode;
         public Boolean Exists;
-        public Int32? Quantity = 1;
+        public Int32 Quantity { get; set; } = 1;
         String _EpicorName = null;
 
 
@@ -34,33 +35,32 @@ namespace BOM_MANAGER
         }
 
         
-
         public Int32 ID => DbData.id;
         public String Name{ get { return  IsRootNode ? MyBOMSection.Name : DbData.AssemblyName; }  }
         public String EpicorName { get { return _EpicorName ?? Name; } } 
-        public String Type => DbData.AssemblyTypeName;
+        public String EpicorType => DbData.AssemblyTypeName;
+        public Boolean IsIndented => IsRootNode;
+        public Boolean IsRootNode => DbData.ParentIDAtAssyAtAssy == null;
         public String MyFixtureCode => MyBOMSection.MyFixtureCode;
         public Decimal IndentationDepth => IsRootNode ? 0m : ParentAssy.IndentationDepth + 1m;
         public Decimal TabSize => MyBOM.TabSize;
-        public Boolean AssemblyExists
+        public Boolean EpicorExists
         {
             set => Exists = value;
             get => Exists && Quantity > 0;
 
         }
-        //public Int32 Id => DbData.id;
+
+       
+        public Int32 FilterCount => _Filters.Count;
 
         public AXIS_AutomationEntitiesBOM DbConn => MyBOMSection.DbConn;
         public _BOM MyBOM => MyBOMSection.MyBOM;
         public _BOMSection MyBOMSection => _MyBOMSection;
         public _Assembly ParentAssy => _ParentAssy;
-
-
         public TreeNode MyTreeNode => _MyTreeNode;
-
         public List<_Assembly> Assemblies => _Assemblies;
 
-        public Boolean IsRootNode => DbData.ParentIDAtAssyAtAssy == null;
 
 
         private void InitChildren()
@@ -130,7 +130,7 @@ namespace BOM_MANAGER
             {
                 if (Exists)
                 {
-                    ApplicableParts.CurrentMessage.Tab(0.2m).AddBoldText(EpicorName).Tab(2.6m).AddText(Type).Tab(4.2m).AddText(Quantity.ToString()).Log();
+                    ApplicableParts.CurrentMessage.Tab(0.2m).AddBoldText(EpicorName).Tab(2.6m).AddText(EpicorType).Tab(4.2m).AddText(Quantity.ToString()).Log();
 
                 }
               

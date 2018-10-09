@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BOM_MANAGER;
 
-
-namespace BOM_MANAGER
+namespace AXISAutomation.Solvers.BOM
 {
     public class _Filter
     {
@@ -33,17 +33,17 @@ namespace BOM_MANAGER
         {
             get
             {
-                return IsAssembly ? _MyAssembly.AssemblyExists : _MyPart.PartExists;
+                return IsAssembly ? _MyAssembly.EpicorExists : _MyPart.EpicorExists;
             }
             set
             {
                 if (IsAssembly)
                 {
-                    _MyAssembly.AssemblyExists = value;
+                    _MyAssembly.EpicorExists = value;
                 }
                 else
                 {
-                    _MyPart.PartExists = value;
+                    _MyPart.EpicorExists = value;
                 }
             }
         }
@@ -69,10 +69,10 @@ namespace BOM_MANAGER
         {
             get
             {
-                return IsAssembly ? MyAssembly.Type : MyPart.Type;
+                return IsAssembly ? MyAssembly.EpicorType : MyPart.EpicorType;
             }
         }
-        public Int32? ComponentQuantity
+        public Int32 ComponentQuantity
         {
             get
             {
@@ -309,6 +309,11 @@ namespace BOM_MANAGER
             {
                 ComponentExist = true;
             }
+            else if(IsEnd)
+            {
+                ComponentExist = false;
+                ComponentQuantity = 0;
+            }
         }
 
         private void ProcessAsJoinerQTY()
@@ -323,7 +328,15 @@ namespace BOM_MANAGER
 
         private void ProcessAsQuantity()
         {
-            ComponentQuantity = FilterQuantity;
+            if (ComponentExist)
+            {
+                ComponentQuantity = (Int32)FilterQuantity;
+
+            }
+            else
+            {
+                ComponentQuantity = 0;
+            }
         }
 
         private void ProcessAsEndCapQTY()
@@ -339,6 +352,7 @@ namespace BOM_MANAGER
             else if (IsMiddle)
             {
                 ComponentExist = false;
+                ComponentQuantity = 0;
             }
 
         }

@@ -38,11 +38,11 @@
   <ItemGroup>
     <Reference Include="AXISAutomation, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.10\AXISAutomation.dll</HintPath>
+      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.13\AXISAutomation.dll</HintPath>
     </Reference>
     <Reference Include="DBConnection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.10\DBConnection.dll</HintPath>
+      <HintPath>..\..\AXIS Automation\AXIS Automation\bin\Release 0.13\DBConnection.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\BOM Data Manager\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -67,69 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyAtAssembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyTypeAtAssembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyView1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AvailableAssemblyType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AvailablePartType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BOM.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DependableQuantity.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Fixture.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Part.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartAtAssembly.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartTypeAtPart.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartView.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RenamingExpression.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BOM Solver\_Assembly.cs" />
     <Compile Include="AssemblyTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AssemblyTypeForm.Designer.cs">
       <DependentUpon>AssemblyTypeForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyView.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyView.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyView.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="AssemblyView.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AssemblyView.edmx</DependentUpon>
     </Compile>
     <Compile Include="BOM MANAGER.cs">
       <SubType>Form</SubType>
@@ -143,33 +85,6 @@
     <Compile Include="Assembly_CreatOrEditForm.Designer.cs">
       <DependentUpon>Assembly_CreatOrEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Category.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CategoryAtFixture.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FilterBehavior.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FilterType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FixtureApplicationType.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="FixtureDirectionality.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Parameter.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ParameterAtCategoryAtFixture.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PartRulesFilter.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="PartTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,22 +97,14 @@
     <Compile Include="Part_CreateOrEditForm.Designer.cs">
       <DependentUpon>Part_CreateOrEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProductTemplate.cs">
-      <DependentUpon>AssemblyView.tt</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BOM Solver\_FlatBOM.cs" />
     <Compile Include="Rules_EditForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Rules_EditForm.Designer.cs">
       <DependentUpon>Rules_EditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BOM Solver\_BOM.cs" />
-    <Compile Include="BOM Solver\_BOMSection.cs" />
-    <Compile Include="BOM Solver\_Filter.cs" />
-    <Compile Include="BOM Solver\_Part.cs" />
     <EmbeddedResource Include="AssemblyTypeForm.resx">
       <DependentUpon>AssemblyTypeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,13 +133,6 @@
     <EmbeddedResource Include="Rules_EditForm.resx">
       <DependentUpon>Rules_EditForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EntityDeploy Include="AssemblyView.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AssemblyView.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="AssemblyView.edmx.diagram">
-      <DependentUpon>AssemblyView.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -254,20 +154,16 @@
     <None Include="Images\ordering code manager logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AssemblyView.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AssemblyView.Context.cs</LastGenOutput>
-      <DependentUpon>AssemblyView.edmx</DependentUpon>
-    </Content>
-    <Content Include="AssemblyView.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AssemblyView.edmx</DependentUpon>
-      <LastGenOutput>AssemblyView1.cs</LastGenOutput>
-    </Content>
     <None Include="Images\BOM data Manager image.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BOM CLASS\BOM CLASS.csproj">
+      <Project>{f7ece64c-450f-4eb8-81d9-a48ae2c84ab4}</Project>
+      <Name>BOM CLASS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a348bfd2c3c14a07b4284487396003c3" Name="Diagram1" ZoomLevel="55">
+        <EntityTypeShape EntityType="Model.FilterBehavior" Width="1.5" PointX="1" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.FilterType" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RenamingExpression" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Assembly" Width="3.25" PointX="10.875" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyAtAssembly" Width="1.5" PointX="12.125" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AvailableAssemblyType" Width="2.125" PointX="15.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AvailablePartType" Width="2.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PartAtAssembly" Width="2.625" PointX="11.625" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Part" Width="2.25" PointX="6.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyTypeAtAssembly" Width="2.375" PointX="19.5" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.AssemblyView" Width="2.5" PointX="23.5" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.BOM" Width="3" PointX="27.625" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PartTypeAtPart" Width="2.5" PointX="19.375" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PartView" Width="2.5" PointX="23.375" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_Assemblies_AvailableAssemblyTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Assemblies" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_AssemblyAtAssembly_Assemblies1" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_PartAtAssembly_Assemblies" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Parts_PartTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_PartAtAssembly_Parts" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="Model.FixtureApplicationType" Width="2.5" PointX="0.5" PointY="19.125" />
+        <EntityTypeShape EntityType="Model.FixtureDirectionality" Width="2.25" PointX="0.5" PointY="16.625" />
+        <EntityTypeShape EntityType="Model.Category" Width="1.5" PointX="13.25" PointY="17.875" />
+        <EntityTypeShape EntityType="Model.CategoryAtFixture" Width="3" PointX="8.625" PointY="16.875" />
+        <EntityTypeShape EntityType="Model.Fixture" Width="1.5" PointX="4.375" PointY="16.5" />
+        <EntityTypeShape EntityType="Model.ParameterAtCategoryAtFixture" Width="3.375" PointX="8.625" PointY="13.25" />
+        <AssociationConnector Association="Model.FK_Fixtures_FixtureApplicationTypes" />
+        <AssociationConnector Association="Model.FK_Fixtures_FixtureDirectionality" />
+        <AssociationConnector Association="Model.FK_OrderingCode_CategoryBelonging" />
+        <AssociationConnector Association="Model.FK_CategoryAtFixture_ParameterAtCategoryAtFixture" />
+        <AssociationConnector Association="Model.FK_OrderingCode_FixtureBelonging" />
+        <AssociationConnector Association="Model.FK_ParameterAtCategoryAtFixture_CategoryID" />
+        <EntityTypeShape EntityType="Model.Parameter" Width="2.75" PointX="3.5" PointY="13.25" />
+        <AssociationConnector Association="Model.FK_ParameterAtCategoryAtFixture_ParameterID" />
+        <EntityTypeShape EntityType="Model.ProductTemplate" Width="2.75" PointX="27.5" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.Dependability" Width="2.375" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="Model.PartRulesFilter" Width="3.375" PointX="5.75" PointY="2.625" />
+        <AssociationConnector Association="Model.FK_PartRulesFilter_DependableQuantity" />
+        <AssociationConnector Association="Model.FK_FilterBehavior_PartRulesFilter" />
+        <AssociationConnector Association="Model.FK_PartRulesFilter_FilterType" />
+        <AssociationConnector Association="Model.FK_PartRules_Parts" />
+        <AssociationConnector Association="Model.FK_PartRulesFilter_Assembly" />
+        <AssociationConnector Association="Model.FK_PartRulesFilter_RenamingExpression" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

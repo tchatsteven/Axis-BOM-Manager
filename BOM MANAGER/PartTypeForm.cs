@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BOM_CLASS;
 
 namespace BOM_MANAGER
 {
     public partial class PartTypeForm : Form
     {
-        AXIS_AutomationEntitiesBOM db = new AXIS_AutomationEntitiesBOM();
+        AutomationEntitiesBOM db = new AutomationEntitiesBOM();
         public PartTypeForm()
         {
             InitializeComponent();

@@ -11,8 +11,10 @@ using AXISAutomation.Solvers.LightingEmittersLayout.SCRTape;
 using AXISAutomation.Solvers.LightingEmittersLayout.BEAMCartridges.Exceptions;
 using AXISAutomation.Solvers.FixtureSetupCodeParser;
 using AXISAutomation.Tools.DBConnection;
+using BOM_MANAGER;
 
-namespace BOM_MANAGER
+
+namespace AXISAutomation.Solvers.BOM
 {
     public class _BOM
     {
@@ -20,13 +22,12 @@ namespace BOM_MANAGER
         _FixtureConfiguration _fixtureConfiguration;
         String _FullOrderingCode;
         List<_BOMSection> BOM_Sections = new List<_BOMSection>();
-        List<_FlatBOM> FlatBOM = new List<_FlatBOM>();
-        List<_FlatBOM> Final_FlatBOM = new List<_FlatBOM>();
-
+        List<IBOMItem> FlatBOM = new List<IBOMItem>();
+      
         AXIS_AutomationEntities FixtureConfigurtorDBConn = new AXIS_AutomationEntities();
         public Decimal TabSize = 0.25m;
 
-        public _BOM(String _fixtureCode, AXIS_AutomationEntitiesBOM dbConn )
+        public _BOM(String _fixtureCode, AXIS_AutomationEntitiesBOM dbConn)
         {
 
             _FullOrderingCode = _fixtureCode;
@@ -51,7 +52,7 @@ namespace BOM_MANAGER
         public Int32 SectionCount => FixtureConfiguration.Sections.Items.Count;
 
         private void InitBOMSections()
-        { 
+        {
             foreach (_FixtureConfiguration._Section CurrentSolverSection in FixtureConfiguration.Sections.Items)
             {
                 BOM_Sections.Add(new _BOMSection(this, CurrentSolverSection));
@@ -65,46 +66,56 @@ namespace BOM_MANAGER
             {
                 foreach (_Assembly AssemblyItems in BomSectionItems._RootAssembly._Assemblies)
                 {
-                    FlatBOM.Add(new _FlatBOM(AssemblyItems));
+                    FlatBOM.Add((IBOMItem)AssemblyItems);
 
                     foreach (_Part PartItems in AssemblyItems._Parts)
                     {
-                        FlatBOM.Add(new _FlatBOM(PartItems));
+                        FlatBOM.Add((IBOMItem)PartItems);
                     }
                 }
                 //Add Part(s) at root assembly
                 foreach (_Part PartItems in BomSectionItems._RootAssembly._Parts)
                 {
-                    FlatBOM.Add(new _FlatBOM(PartItems));
+                    FlatBOM.Add((IBOMItem)PartItems);
                 }
             }
         }
 
         public void SummarizeExistingComponentInToRTB_IN(_RTFMessenger ApplicableParts)
         {
-           
+
             foreach (_BOMSection BOMSectionItems in BOM_Sections)
             {
                 BOMSectionItems.SummarizeExistingComponentInToRTB(ApplicableParts);
             }
-            
+
         }
 
-        public void SummarizeExistingComponentIntoRTB_FB(_RTFMessenger ApplicableParts)
+        public List<IBOMItem> CollapsedSectionsBOM
         {
-            var ApplicableFlatBOM  = FlatBOM.Where(S => S.Exist == true).GroupBy(G => G.EpicorName).Select(P => new { EpicorName = P.Key, Quantity = P.Sum(Q => Q.Quantity), EpicorType = P.First().EpicorType, IsIndented = P.First().IsIndented, FilterCount = P.First().FilterCount });
-
-            var NonApplicableFlatBOM = FlatBOM.Where(S => S.Exist == false).GroupBy(G => G.EpicorName).Select(P => new { EpicorName = P.Key, EpicorType = P.First().EpicorType, IsIndented = P.First().IsIndented, FilterCount = P.First().FilterCount });
-
-            foreach (var App in ApplicableFlatBOM)
+            get
             {
-                if (!App.IsIndented)
+
+                List<IBOMItem> ApplicableFlatBOM = FlatBOM.Where(S => S.EpicorExists == true).GroupBy(G => G.EpicorName).Select(gr => gr.First()).ToList();
+                ApplicableFlatBOM.Where(o=> !o.IsIndented ).ToList().ForEach(i => i.Quantity = FlatBOM.Where(o => o.EpicorName == i.EpicorName).Select(oo => oo.Quantity).Sum());
+                return ApplicableFlatBOM;
+            }
+        }
+
+
+
+
+        public void SummarizeExistingComponentIntoRTB_FB(_RTFMessenger ApplicableParts)
+        {            
+            foreach (IBOMItem BOMItems in CollapsedSectionsBOM)
+            {
+                if (!BOMItems.IsIndented)
                 {
-                    ApplicableParts.NewMessage().AddText(App.EpicorName).Tab(2.6m).AddText(App.EpicorType).Tab(4.2m).AddText(App.Quantity.ToString()).Log();
+                    ApplicableParts.NewMessage().AddText(BOMItems.EpicorName).Tab(2.6m).AddText(BOMItems.EpicorType).Tab(4.2m).AddText(BOMItems.Quantity.ToString()).Log();
                 }
                 else
                 {
-                    ApplicableParts.NewMessage().Tab(0.25m).AddText(App.EpicorName).Tab(2.6m).AddText(App.EpicorType).Tab(4.2m).AddText(App.Quantity.ToString()).Log();
+                    ApplicableParts.NewMessage().Tab(0.25m).AddText(BOMItems.EpicorName).Tab(2.6m).AddText(BOMItems.EpicorType).Tab(4.2m).AddText(BOMItems.Quantity.ToString()).Log();
                 }
             }
 
